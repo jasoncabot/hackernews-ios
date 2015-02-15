@@ -16,6 +16,7 @@
 		F6E21C331A910AE000AF25EF /* CommentListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E21C321A910AE000AF25EF /* CommentListViewController.swift */; };
 		F6E21C361A91172100AF25EF /* StoriesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E21C351A91172100AF25EF /* StoriesDataSource.swift */; };
 		F6E21C391A91226C00AF25EF /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E21C381A91226C00AF25EF /* Story.swift */; };
+		F6E21C3C1A91301300AF25EF /* StoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E21C3B1A91301300AF25EF /* StoryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 		F6E21C321A910AE000AF25EF /* CommentListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentListViewController.swift; sourceTree = "<group>"; };
 		F6E21C351A91172100AF25EF /* StoriesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoriesDataSource.swift; sourceTree = "<group>"; };
 		F6E21C381A91226C00AF25EF /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
+		F6E21C3B1A91301300AF25EF /* StoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				F6E21C2E1A910AC700AF25EF /* MenuViewController.swift */,
 				F6E21C301A910AD700AF25EF /* StoryListViewController.swift */,
 				F6E21C321A910AE000AF25EF /* CommentListViewController.swift */,
+				F6E21C3B1A91301300AF25EF /* StoryViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				F6E21C2F1A910AC700AF25EF /* MenuViewController.swift in Sources */,
 				F6E21C0F1A91087A00AF25EF /* AppDelegate.swift in Sources */,
 				F6E21C361A91172100AF25EF /* StoriesDataSource.swift in Sources */,
+				F6E21C3C1A91301300AF25EF /* StoryViewController.swift in Sources */,
 				F6E21C391A91226C00AF25EF /* Story.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

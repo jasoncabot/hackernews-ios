@@ -194,10 +194,10 @@
             </objects>
             <point key="canvasLocation" x="1046" y="-699"/>
         </scene>
-        <!--View Controller-->
+        <!--Story View Controller-->
         <scene sceneID="Oje-6w-rkh">
             <objects>
-                <viewController id="Qu2-N6-eFe" sceneMemberID="viewController">
+                <viewController id="Qu2-N6-eFe" customClass="StoryViewController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="J78-zC-EMt"/>
                         <viewControllerLayoutGuide type="bottom" id="iue-qg-FCR"/>
@@ -205,8 +205,21 @@
                     <view key="view" contentMode="scaleToFill" id="GAt-0b-evK">
                         <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uVO-Fa-f3m">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Qu2-N6-eFe" id="2Oc-pc-7V8"/>
+                                </connections>
+                            </webView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="view" destination="GAt-0b-evK" id="Viu-5y-Ul5"/>
+                        <outlet property="webView" destination="uVO-Fa-f3m" id="klL-ai-A56"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cf8-Ye-u6L" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
