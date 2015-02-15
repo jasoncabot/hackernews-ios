@@ -45,28 +45,9 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("StoryCellIdentifier", forIndexPath: indexPath) as UITableViewCell
+        var cell:StoryCell = tableView.dequeueReusableCellWithIdentifier("StoryCellIdentifier", forIndexPath: indexPath) as StoryCell
 
-        if self.type != nil {
-            switch (self.type!) {
-
-            case .FrontPage:
-                cell.textLabel?.text = "Front Page Story"
-                
-            case .New:
-                cell.textLabel?.text = "New Story"
-                
-            case .Show:
-                cell.textLabel?.text = "Show Story"
-                
-            case .Ask:
-                cell.textLabel?.text = "Ask Story"
-                
-            default:
-                cell.textLabel?.text = "Unknown Story"
-                
-            }
-        }
+        cell.updateWithStory(self.findStory(indexPath.row))
         
         return cell;
     }

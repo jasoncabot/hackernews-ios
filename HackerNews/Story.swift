@@ -9,5 +9,9 @@
 import Foundation
 
 class Story {
-    
+    var title: String? // default is nil
+
+    init() {
+        title = "Story"
+    }
 }
