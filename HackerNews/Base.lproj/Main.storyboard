@@ -253,7 +253,7 @@
             </objects>
             <point key="canvasLocation" x="1985" y="-699"/>
         </scene>
-        <!--Comment List View Controller-->
+        <!--Comments-->
         <scene sceneID="h3c-4S-guS">
             <objects>
                 <viewController id="Vr6-ry-Tfa" customClass="CommentListViewController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
@@ -278,7 +278,7 @@
                             <constraint firstItem="yeb-j5-dtD" firstAttribute="leading" secondItem="mCQ-wp-5KC" secondAttribute="leadingMargin" constant="-16" id="xoh-tr-ICl"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="LVp-WN-gQD">
+                    <navigationItem key="navigationItem" title="Comments" id="LVp-WN-gQD">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="bsU-7b-4Dg">
                             <connections>
                                 <action selector="dismiss:" destination="Vr6-ry-Tfa" id="tco-ZR-0ey"/>
