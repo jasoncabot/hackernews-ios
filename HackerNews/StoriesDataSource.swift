@@ -60,4 +60,12 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         return Story();
     }
     
+    func findStory(key:String) -> Story {
+        return Story()
+    }
+    
+    func retrieveComments(story: Story) -> NSArray {
+        return NSArray()
+    }
+    
 }

@@ -10,6 +10,8 @@ import UIKit
 
 class CommentListViewController: UIViewController {
     
+    var comments: NSArray?
+    
     @IBAction func dismiss(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }

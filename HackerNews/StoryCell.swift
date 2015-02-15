@@ -9,8 +9,18 @@
 import UIKit
 
 class StoryCell: UITableViewCell {
+    
+    @IBOutlet var storyTitleLabel: UILabel!;
+    @IBOutlet var subtitleLabel: UILabel!;
+    @IBOutlet var viewCommentsButton: ViewCommentsButton!;
 
     func updateWithStory(story: Story) {
-        self.textLabel?.text = story.title
+        self.storyTitleLabel.text = story.title
+        self.subtitleLabel.text = makeTitle(story)
+        self.viewCommentsButton.key = story.id
+    }
+    
+    private func makeTitle(story:Story) -> String {
+        return ""
     }
 }

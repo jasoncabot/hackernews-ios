@@ -154,15 +154,33 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="95m-HK-iFj" id="p4r-GY-uBv">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yu0-EE-nbS">
+                                                    <rect key="frame" x="279" y="11" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Story" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tZE-Pu-Fsj">
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d8D-OL-ZEh" customClass="ViewCommentsButton" customModule="HackerNews" customModuleProvider="target">
+                                                    <rect key="frame" x="277" y="7" width="46" height="30"/>
+                                                    <state key="normal" title="Button">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <segue destination="vF2-xN-q65" kind="presentation" identifier="ShowComments" id="wbG-d0-Ezm"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="storyTitleLabel" destination="Yu0-EE-nbS" id="jVl-8t-aRN"/>
+                                            <outlet property="subtitleLabel" destination="tZE-Pu-Fsj" id="39w-Ld-PHL"/>
+                                            <outlet property="viewCommentsButton" destination="d8D-OL-ZEh" id="u0o-fD-DfU"/>
                                             <segue destination="Qu2-N6-eFe" kind="show" identifier="ShowStory" id="AMR-Rb-vlL"/>
                                         </connections>
                                     </tableViewCell>
@@ -239,7 +257,7 @@
                     <navigationItem key="navigationItem" id="Dkp-XD-llE">
                         <barButtonItem key="rightBarButtonItem" title="Comments" id="qUe-aF-INP">
                             <connections>
-                                <segue destination="vF2-xN-q65" kind="presentation" id="4Jo-QO-uJ2"/>
+                                <segue destination="vF2-xN-q65" kind="presentation" identifier="ShowComments" id="4Jo-QO-uJ2"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -326,5 +344,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="HsG-pr-k34"/>
+        <segue reference="4Jo-QO-uJ2"/>
     </inferredMetricsTieBreakers>
 </document>

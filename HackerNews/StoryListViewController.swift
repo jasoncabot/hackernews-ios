@@ -25,22 +25,28 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        let path = storiesTableView.indexPathForSelectedRow();
-        
-        if path != nil {
-            
-            let index = (path?.row)!
-            
-            if let id = segue.identifier {
-                switch id {
-                    
-                case "ShowStory":
+        if let id = segue.identifier {
+            switch id {
+                
+            case "ShowStory":
+                let path = storiesTableView.indexPathForSelectedRow();
+                
+                if path != nil {
+                    let index = (path?.row)!
+                    (segue.destinationViewController as StoryViewController).storiesSource = storiesSource
                     (segue.destinationViewController as StoryViewController).story = storiesSource.findStory(index)
-                    
-                default:
-                    break
-                    
                 }
+                
+            case "ShowComments":
+                var story:Story = storiesSource.findStory((sender as ViewCommentsButton).key!)
+                let navigationController:UINavigationController = segue.destinationViewController as UINavigationController;
+                let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
+                
+                commentsViewController.comments = storiesSource!.retrieveComments(story)
+                
+            default:
+                break
+                
             }
         }
     }

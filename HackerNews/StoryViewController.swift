@@ -11,7 +11,8 @@ import UIKit
 class StoryViewController : UIViewController, UIWebViewDelegate {
     @IBOutlet var webView:UIWebView!
 
-    var story:Story?;
+    var story:Story?
+    var storiesSource:StoriesDataSource?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,4 +33,25 @@ class StoryViewController : UIViewController, UIWebViewDelegate {
             UIApplication.sharedApplication().openURL(externalURL!)
         }
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if let id = segue.identifier {
+            switch id {
+                
+            case "ShowComments":
+                var story:Story = self.story!
+                if storiesSource != nil {
+                    let navigationController:UINavigationController = segue.destinationViewController as UINavigationController;
+                    let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
+                    
+                    commentsViewController.comments = storiesSource!.retrieveComments(story)
+                }
+                
+            default:
+                break
+            }
+        }
+    }
+
 }
