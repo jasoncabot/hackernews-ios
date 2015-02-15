@@ -18,6 +18,12 @@ class StoryCell: UITableViewCell {
         self.storyTitleLabel.text = story.title
         self.subtitleLabel.text = makeTitle(story)
         self.viewCommentsButton.key = story.id
+        
+        if story.unread {
+            self.storyTitleLabel.font = UIFont.systemFontOfSize(self.storyTitleLabel.font.pointSize)
+        } else {
+            self.storyTitleLabel.font = UIFont.boldSystemFontOfSize(self.storyTitleLabel.font.pointSize)
+        }
     }
     
     private func makeTitle(story:Story) -> String {
