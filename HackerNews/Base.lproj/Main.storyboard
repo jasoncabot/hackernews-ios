@@ -10,7 +10,7 @@
             <objects>
                 <tableViewController id="ZjJ-xU-e0F" customClass="MenuViewController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="IWG-Hr-QqT">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -141,7 +141,7 @@
                         <viewControllerLayoutGuide type="bottom" id="MrZ-fq-fm3"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="x0Z-B7-Y3b">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="fX8-Vm-Roo">
@@ -162,9 +162,13 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="Qu2-N6-eFe" kind="show" identifier="ShowStory" id="AMR-Rb-vlL"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
+                                    <outlet property="dataSource" destination="mcU-4K-LFO" id="Twt-nC-8Im"/>
                                     <outlet property="delegate" destination="CjD-1p-D4e" id="xgb-zG-EPE"/>
                                 </connections>
                             </tableView>
@@ -177,13 +181,36 @@
                             <constraint firstItem="fX8-Vm-Roo" firstAttribute="leading" secondItem="x0Z-B7-Y3b" secondAttribute="leadingMargin" constant="-16" id="wTe-dU-hdW"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="tMT-Ug-W6J">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="bxc-a7-6W1"/>
+                    </navigationItem>
                     <connections>
+                        <outlet property="storiesSource" destination="mcU-4K-LFO" id="6sa-Rk-6HE"/>
                         <outlet property="storiesTableView" destination="fX8-Vm-Roo" id="60n-Oi-Oe1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hw7-aW-hGx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="mcU-4K-LFO" userLabel="StoriesDataSource" customClass="StoriesDataSource" customModule="HackerNews" customModuleProvider="target"/>
             </objects>
             <point key="canvasLocation" x="1046" y="-699"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="Oje-6w-rkh">
+            <objects>
+                <viewController id="Qu2-N6-eFe" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="J78-zC-EMt"/>
+                        <viewControllerLayoutGuide type="bottom" id="iue-qg-FCR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="GAt-0b-evK">
+                        <rect key="frame" x="0.0" y="64" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cf8-Ye-u6L" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1985" y="-699"/>
         </scene>
         <!--Comment List View Controller-->
         <scene sceneID="h3c-4S-guS">
@@ -219,6 +246,7 @@
         <scene sceneID="a1a-wA-T9Y">
             <objects>
                 <navigationController id="80q-Ix-oBT" sceneMemberID="viewController">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="AL7-cZ-IYR">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

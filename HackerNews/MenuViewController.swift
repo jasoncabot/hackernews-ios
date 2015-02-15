@@ -15,19 +15,19 @@ class MenuViewController: UITableViewController {
             switch id {
 
             case "FrontPage":
-                (segue.destinationViewController as StoryListViewController).dataSource = StoriesDataSource(type: StoryType.FrontPage)
+                (segue.destinationViewController as StoryListViewController).storiesSource.load(StoryType.FrontPage)
 
             case "New":
-                (segue.destinationViewController as StoryListViewController).dataSource = StoriesDataSource(type: StoryType.New)
+                (segue.destinationViewController as StoryListViewController).storiesSource.load(StoryType.New)
                 
             case "Show":
-                (segue.destinationViewController as StoryListViewController).dataSource = StoriesDataSource(type: StoryType.Show)
+                (segue.destinationViewController as StoryListViewController).storiesSource.load(StoryType.Show)
                 
             case "Ask":
-                (segue.destinationViewController as StoryListViewController).dataSource = StoriesDataSource(type: StoryType.Ask)
+                (segue.destinationViewController as StoryListViewController).storiesSource.load(StoryType.Ask)
                 
             default:
-                println("Boo")
+                break
             
             }
         }

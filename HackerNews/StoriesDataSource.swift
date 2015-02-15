@@ -17,50 +17,55 @@ enum StoryType {
 
 class StoriesDataSource: NSObject, UITableViewDataSource {
     
-    var type:StoryType
+    var type:StoryType?
     
-    init(type: StoryType) {
+    func load(type: StoryType) {
         self.type = type
     }
     
     func title() -> String {
-        switch (type) {
-            
-        case .FrontPage:
-            return "Front Page"
-            
-        case .New:
-            return "New"
-            
-        case .Show:
-            return "Show HN"
-            
-        case .Ask:
-            return "Ask HN"
-            
-        default:
-            return "Stories"
-            
+        if self.type != nil {
+            switch (self.type!) {
+            case .FrontPage:
+                return "Front Page"
+                
+            case .New:
+                return "New"
+                
+            case .Show:
+                return "Show HN"
+                
+            case .Ask:
+                return "Ask HN"
+                
+            }
         }
+        
+        return "Stories"
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("StoryCellIdentifier", forIndexPath: indexPath) as UITableViewCell
 
-        switch (type) {
+        if self.type != nil {
+            switch (self.type!) {
 
-        case .FrontPage:
-            cell.textLabel?.text = "Front Page Story"
-        
-        case .New:
-            cell.textLabel?.text = "New Story"
-        
-        case .Show:
-            cell.textLabel?.text = "Show Story"
-
-        case .Ask:
-            cell.textLabel?.text = "Ask Story"
-
+            case .FrontPage:
+                cell.textLabel?.text = "Front Page Story"
+                
+            case .New:
+                cell.textLabel?.text = "New Story"
+                
+            case .Show:
+                cell.textLabel?.text = "Show Story"
+                
+            case .Ask:
+                cell.textLabel?.text = "Ask Story"
+                
+            default:
+                cell.textLabel?.text = "Unknown Story"
+                
+            }
         }
         
         return cell;

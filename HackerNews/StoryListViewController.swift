@@ -10,33 +10,16 @@ import UIKit
 
 class StoryListViewController: UIViewController, UITableViewDelegate {
 
-    var dataSource:StoriesDataSource?
-    
     @IBOutlet var storiesTableView: UITableView!
+    @IBOutlet var storiesSource:StoriesDataSource!
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.storiesTableView.dataSource = dataSource
-        
-        self.title = dataSource?.title()
+        self.title = storiesSource.title()
 
         if storiesTableView.indexPathForSelectedRow() != nil {
             storiesTableView.deselectRowAtIndexPath(storiesTableView.indexPathForSelectedRow()!, animated: animated)
-        }
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        self.dataSource = nil
-    }
-
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        var story:Story? = self.dataSource?.findStory(indexPath.row)
-        
-        if story != nil {
-            println(story)
         }
     }
 
