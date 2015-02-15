@@ -9,9 +9,11 @@
 import Foundation
 
 class Story {
-    var title: String? // default is nil
+    var title: String
+    var url: NSURL?
 
     init() {
-        title = "Story"
+        title = "Google";
+        url = NSURL(string: "http://www.google.com/")
     }
 }

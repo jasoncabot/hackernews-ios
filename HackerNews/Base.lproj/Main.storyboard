@@ -206,15 +206,34 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uVO-Fa-f3m">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uVO-Fa-f3m">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="delegate" destination="Qu2-N6-eFe" id="2Oc-pc-7V8"/>
                                 </connections>
                             </webView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tgj-24-wkj">
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                                <items>
+                                    <barButtonItem title="Open in Safari" id="aOT-fe-YyT">
+                                        <connections>
+                                            <action selector="openInSafari:" destination="Qu2-N6-eFe" id="reF-mo-4Fs"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="tgj-24-wkj" secondAttribute="trailing" constant="-16" id="Acw-9P-z68"/>
+                            <constraint firstItem="uVO-Fa-f3m" firstAttribute="top" secondItem="GAt-0b-evK" secondAttribute="topMargin" id="bkG-HW-WcE"/>
+                            <constraint firstItem="tgj-24-wkj" firstAttribute="leading" secondItem="GAt-0b-evK" secondAttribute="leadingMargin" constant="-16" id="cOc-1z-cn4"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="uVO-Fa-f3m" secondAttribute="trailing" constant="-16" id="eBC-25-0sW"/>
+                            <constraint firstItem="tgj-24-wkj" firstAttribute="top" secondItem="uVO-Fa-f3m" secondAttribute="bottom" id="hHX-DC-79X"/>
+                            <constraint firstItem="uVO-Fa-f3m" firstAttribute="leading" secondItem="GAt-0b-evK" secondAttribute="leadingMargin" constant="-16" id="oPk-Ai-LzV"/>
+                            <constraint firstItem="tgj-24-wkj" firstAttribute="bottom" secondItem="GAt-0b-evK" secondAttribute="bottomMargin" id="sPN-un-j5V"/>
+                        </constraints>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="Dkp-XD-llE">

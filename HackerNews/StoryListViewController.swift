@@ -22,5 +22,27 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
             storiesTableView.deselectRowAtIndexPath(storiesTableView.indexPathForSelectedRow()!, animated: animated)
         }
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        let path = storiesTableView.indexPathForSelectedRow();
+        
+        if path != nil {
+            
+            let index = (path?.row)!
+            
+            if let id = segue.identifier {
+                switch id {
+                    
+                case "ShowStory":
+                    (segue.destinationViewController as StoryViewController).story = storiesSource.findStory(index)
+                    
+                default:
+                    break
+                    
+                }
+            }
+        }
+    }
 
 }
