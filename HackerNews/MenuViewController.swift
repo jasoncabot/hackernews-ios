@@ -8,10 +8,28 @@
 
 import UIKit
 
-class MenuViewController: UIViewController {
+class MenuViewController: UITableViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let id = segue.identifier {
+            switch id {
+
+            case "FrontPage":
+                (segue.destinationViewController as StoryListViewController).dataSource = StoriesDataSource(type: StoryType.FrontPage)
+
+            case "New":
+                (segue.destinationViewController as StoryListViewController).dataSource = StoriesDataSource(type: StoryType.New)
+                
+            case "Show":
+                (segue.destinationViewController as StoryListViewController).dataSource = StoriesDataSource(type: StoryType.Show)
+                
+            case "Ask":
+                (segue.destinationViewController as StoryListViewController).dataSource = StoriesDataSource(type: StoryType.Ask)
+                
+            default:
+                println("Boo")
+            
+            }
+        }
     }
-    
 }

@@ -14,6 +14,8 @@
 		F6E21C2F1A910AC700AF25EF /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E21C2E1A910AC700AF25EF /* MenuViewController.swift */; };
 		F6E21C311A910AD700AF25EF /* StoryListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E21C301A910AD700AF25EF /* StoryListViewController.swift */; };
 		F6E21C331A910AE000AF25EF /* CommentListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E21C321A910AE000AF25EF /* CommentListViewController.swift */; };
+		F6E21C361A91172100AF25EF /* StoriesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E21C351A91172100AF25EF /* StoriesDataSource.swift */; };
+		F6E21C391A91226C00AF25EF /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E21C381A91226C00AF25EF /* Story.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +40,8 @@
 		F6E21C2E1A910AC700AF25EF /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		F6E21C301A910AD700AF25EF /* StoryListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryListViewController.swift; sourceTree = "<group>"; };
 		F6E21C321A910AE000AF25EF /* CommentListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentListViewController.swift; sourceTree = "<group>"; };
+		F6E21C351A91172100AF25EF /* StoriesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoriesDataSource.swift; sourceTree = "<group>"; };
+		F6E21C381A91226C00AF25EF /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +84,9 @@
 			isa = PBXGroup;
 			children = (
 				F6E21C0E1A91087A00AF25EF /* AppDelegate.swift */,
-				F6E21C341A910AEC00AF25EF /* View */,
+				F6E21C3A1A91227100AF25EF /* Model */,
+				F6E21C371A9119F500AF25EF /* DataSources */,
+				F6E21C341A910AEC00AF25EF /* ViewControllers */,
 				F6E21C121A91087A00AF25EF /* Main.storyboard */,
 				F6E21C151A91087A00AF25EF /* Images.xcassets */,
 				F6E21C171A91087A00AF25EF /* LaunchScreen.xib */,
@@ -113,14 +119,30 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		F6E21C341A910AEC00AF25EF /* View */ = {
+		F6E21C341A910AEC00AF25EF /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				F6E21C2E1A910AC700AF25EF /* MenuViewController.swift */,
 				F6E21C301A910AD700AF25EF /* StoryListViewController.swift */,
 				F6E21C321A910AE000AF25EF /* CommentListViewController.swift */,
 			);
-			name = View;
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		F6E21C371A9119F500AF25EF /* DataSources */ = {
+			isa = PBXGroup;
+			children = (
+				F6E21C351A91172100AF25EF /* StoriesDataSource.swift */,
+			);
+			name = DataSources;
+			sourceTree = "<group>";
+		};
+		F6E21C3A1A91227100AF25EF /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F6E21C381A91226C00AF25EF /* Story.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,6 +250,8 @@
 				F6E21C331A910AE000AF25EF /* CommentListViewController.swift in Sources */,
 				F6E21C2F1A910AC700AF25EF /* MenuViewController.swift in Sources */,
 				F6E21C0F1A91087A00AF25EF /* AppDelegate.swift in Sources */,
+				F6E21C361A91172100AF25EF /* StoriesDataSource.swift in Sources */,
+				F6E21C391A91226C00AF25EF /* Story.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
