@@ -18,9 +18,22 @@ enum StoryType {
 class StoriesDataSource: NSObject, UITableViewDataSource {
     
     var type:StoryType?
-    
-    func load(type: StoryType) {
-        self.type = type
+    var stories:Array<Story> = []
+
+    func load(completion:dispatch_block_t?) {
+        
+        stories.append(Story())
+        stories.append(Story())
+        stories.append(Story())
+        stories.append(Story())
+        stories.append(Story())
+        stories.append(Story())
+        stories.append(Story())
+        stories.append(Story())
+        
+        if let onComplete = completion {
+            onComplete()
+        }
     }
     
     func title() -> String {
@@ -47,25 +60,36 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell:StoryCell = tableView.dequeueReusableCellWithIdentifier("StoryCellIdentifier", forIndexPath: indexPath) as StoryCell
 
-        cell.updateWithStory(self.findStory(indexPath.row))
+        
+        if let story = self.findStory(indexPath.row) {
+            cell.updateWithStory(story)
+        }
         
         return cell;
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10;
+        return stories.count
     }
     
-    func findStory(index:Int) -> Story {
-        return Story();
+    func findStory(index:Int) -> Story? {
+        if stories.count > index {
+            return stories[index]
+        }
+        return nil
     }
     
-    func findStory(key:String) -> Story {
-        return Story()
+    func findStory(key:String) -> Story? {
+        for story in stories {
+            if key == story.id {
+                return story
+            }
+        }
+        return nil
     }
     
     func retrieveComments(story: Story) -> NSArray {
-        return NSArray()
+        return []
     }
     
 }

@@ -13,13 +13,26 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
     @IBOutlet var storiesTableView: UITableView!
     @IBOutlet var storiesSource:StoriesDataSource!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.title = storiesSource.title()
+
+        storiesSource.load { () -> Void in
+            self.storiesTableView.reloadData()
+        }
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.title = storiesSource.title()
-
-        if storiesTableView.indexPathForSelectedRow() != nil {
-            storiesTableView.deselectRowAtIndexPath(storiesTableView.indexPathForSelectedRow()!, animated: animated)
+        if let path = storiesTableView.indexPathForSelectedRow() {
+            storiesTableView.deselectRowAtIndexPath(path, animated: animated)
+            
+            let after = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
+            dispatch_after(after, dispatch_get_main_queue(), { () -> Void in
+                self.storiesTableView.reloadRowsAtIndexPaths([path], withRowAnimation: .Fade)
+            })
         }
     }
     
@@ -29,26 +42,39 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
             switch id {
                 
             case "ShowStory":
-                let path = storiesTableView.indexPathForSelectedRow();
-                
-                if path != nil {
-                    let index = (path?.row)!
-                    (segue.destinationViewController as StoryViewController).storiesSource = storiesSource
-                    (segue.destinationViewController as StoryViewController).story = storiesSource.findStory(index)
+
+                if let path = storiesTableView.indexPathForSelectedRow() {
+
+                    if let story = storiesSource.findStory(path.row) {
+                        
+                        (segue.destinationViewController as StoryViewController).story = story
+                        (segue.destinationViewController as StoryViewController).storiesSource = storiesSource
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.onViewStory(story, indexPath: path)
+                        })
+                    }
                 }
                 
             case "ShowComments":
-                var story:Story = storiesSource.findStory((sender as ViewCommentsButton).key!)
-                let navigationController:UINavigationController = segue.destinationViewController as UINavigationController;
-                let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
+                let storyId = (sender as ViewCommentsButton).key!
                 
-                commentsViewController.comments = storiesSource!.retrieveComments(story)
+                if let story:Story = storiesSource.findStory(storyId) {
+                    let navigationController:UINavigationController = segue.destinationViewController as UINavigationController;
+                    let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
+                    
+                    commentsViewController.comments = storiesSource!.retrieveComments(story)
+                }
                 
             default:
                 break
                 
             }
         }
+    }
+    
+    private func onViewStory(story:Story, indexPath:NSIndexPath) {
+        story.unread = false
     }
 
 }

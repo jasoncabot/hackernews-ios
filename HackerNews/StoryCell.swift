@@ -16,17 +16,19 @@ class StoryCell: UITableViewCell {
 
     func updateWithStory(story: Story) {
         self.storyTitleLabel.text = story.title
-        self.subtitleLabel.text = makeTitle(story)
+        self.subtitleLabel.text = makeSubtitle(story)
         self.viewCommentsButton.key = story.id
         
         if story.unread {
-            self.storyTitleLabel.font = UIFont.systemFontOfSize(self.storyTitleLabel.font.pointSize)
-        } else {
+            self.storyTitleLabel.textColor = UIColor.blackColor()
             self.storyTitleLabel.font = UIFont.boldSystemFontOfSize(self.storyTitleLabel.font.pointSize)
+        } else {
+            self.storyTitleLabel.textColor = UIColor.darkGrayColor()
+            self.storyTitleLabel.font = UIFont.systemFontOfSize(self.storyTitleLabel.font.pointSize)
         }
     }
     
-    private func makeTitle(story:Story) -> String {
+    private func makeSubtitle(story:Story) -> String {
         return ""
     }
 }
