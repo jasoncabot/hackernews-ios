@@ -18,9 +18,11 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
         
         self.title = storiesSource.title()
 
-        storiesSource.load { () -> Void in
-            self.storiesTableView.reloadData()
-        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            self.storiesSource.load {
+                self.storiesTableView.reloadData()
+            }
+        })
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -29,7 +31,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
         if let path = storiesTableView.indexPathForSelectedRow() {
             storiesTableView.deselectRowAtIndexPath(path, animated: animated)
             
-            let after = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
+            let after = dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC)))
             dispatch_after(after, dispatch_get_main_queue(), { () -> Void in
                 self.storiesTableView.reloadRowsAtIndexPaths([path], withRowAnimation: .Fade)
             })

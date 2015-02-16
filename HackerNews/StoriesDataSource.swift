@@ -32,7 +32,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         stories.append(Story())
         
         if let onComplete = completion {
-            onComplete()
+            dispatch_async(dispatch_get_main_queue(), onComplete)
         }
     }
     
