@@ -22,23 +22,80 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
 
     func load(completion:dispatch_block_t?) {
         
-        stories.append(Story())
-        stories.append(Story())
-        stories.append(Story())
-        stories.append(Story())
-        stories.append(Story())
-        stories.append(Story())
-        stories.append(Story())
-        stories.append(Story())
-        
-        if let onComplete = completion {
-            dispatch_async(dispatch_get_main_queue(), onComplete)
-        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+
+            let url = NSURL(string: self.endpoint())
+            
+            let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {(data, response, error) in
+
+                self.stories = self.parseStories(data)
+
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+
+                if let onComplete = completion {
+                    dispatch_async(dispatch_get_main_queue(), onComplete)
+                }
+            }
+            
+            task.resume()
+        })
     }
     
+    private func parseStories(data:NSData) -> Array<Story> {
+        var parseError: NSError?
+        let parsedObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(data,
+            options: NSJSONReadingOptions.AllowFragments,
+            error:&parseError)
+        var parsed:Array<Story> = []
+        if let storiesData = parsedObject as? NSArray {
+            for storyData in storiesData {
+                var s = Story()
+                if let x = storyData as? NSDictionary{
+                    s.id = x["id"] as Int
+                    s.title = x["title"] as String
+                    s.points = x["score"] as Int
+                    s.by = x["by"] as String
+                    s.timeAgo = x["when"] as String
+                    if let numComments = x["comments"] as? Int {
+                        s.numberOfComments = numComments
+                    }
+                    s.url = NSURL(string: x["url"] as String)
+                    s.unread = true
+
+                    parsed.append(s)
+                }
+            }
+        }
+        return parsed
+    }
+    
+    func endpoint() -> String {
+        if let storyType = type {
+            switch storyType {
+                
+            case .FrontPage:
+                return "http://hncabot.appspot.com/fp"
+                
+            case .New:
+                return "http://hncabot.appspot.com/new"
+                
+            case .Show:
+                return "http://hncabot.appspot.com/show"
+                
+            case .Ask:
+                return "http://hncabot.appspot.com/ask"
+                
+            }
+        }
+        return ""
+    }
+        
     func title() -> String {
-        if self.type != nil {
-            switch (self.type!) {
+        if let storyType = type {
+            switch storyType {
+                
             case .FrontPage:
                 return "Front Page"
                 
@@ -81,7 +138,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
     
     func findStory(key:String) -> Story? {
         for story in stories {
-            if key == story.id {
+            if key == String(story.id) {
                 return story
             }
         }

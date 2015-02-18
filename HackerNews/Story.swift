@@ -9,14 +9,15 @@
 import Foundation
 
 class Story {
-    var id: String
-    var title: String
+    var id: Int = 0
+    var title: String = ""
+    var points: Int = 0
+    var by: String = ""
+    var timeAgo: String = ""
+    var numberOfComments: Int = 0
     var url: NSURL?
     var unread = true
-
+    
     init() {
-        id = "1"
-        title = "Google";
-        url = NSURL(string: "http://www.google.com/")
     }
 }

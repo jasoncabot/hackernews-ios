@@ -18,11 +18,9 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
         
         self.title = storiesSource.title()
 
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            self.storiesSource.load {
-                self.storiesTableView.reloadData()
-            }
-        })
+        self.storiesSource.load {
+            self.storiesTableView.reloadData()
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
