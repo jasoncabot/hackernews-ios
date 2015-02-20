@@ -10,6 +10,14 @@ import UIKit
 
 class MenuViewController: UITableViewController {
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let path = tableView.indexPathForSelectedRow() {
+            tableView.deselectRowAtIndexPath(path, animated: animated)
+        }
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let id = segue.identifier {
             switch id {
