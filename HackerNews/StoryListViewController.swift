@@ -29,10 +29,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
         if let path = storiesTableView.indexPathForSelectedRow() {
             storiesTableView.deselectRowAtIndexPath(path, animated: animated)
             
-            let after = dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC)))
-            dispatch_after(after, dispatch_get_main_queue(), { () -> Void in
-                self.storiesTableView.reloadRowsAtIndexPaths([path], withRowAnimation: .Fade)
-            })
+            self.storiesTableView.reloadRowsAtIndexPaths([path], withRowAnimation: .Automatic)
         }
     }
     
