@@ -334,7 +334,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Zxs-dG-jf8">
             <objects>
-                <navigationController storyboardIdentifier="ModalNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vF2-xN-q65" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ModalNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" hidesBarsOnSwipe="YES" id="vF2-xN-q65" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gnE-Ev-SPM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -358,7 +358,7 @@
         <!--Navigation Controller-->
         <scene sceneID="a1a-wA-T9Y">
             <objects>
-                <navigationController id="80q-Ix-oBT" sceneMemberID="viewController">
+                <navigationController hidesBarsOnSwipe="YES" id="80q-Ix-oBT" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="AL7-cZ-IYR">
