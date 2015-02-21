@@ -13,6 +13,8 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
     @IBOutlet var storiesTableView: UITableView!
     @IBOutlet var storiesSource:StoriesDataSource!
     
+    var currentPage:Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -67,6 +69,23 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
                 break
                 
             }
+        }
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if self.storiesSource.isLoading {
+            return
+        }
+        
+        var percentScrolled = scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.size.height)
+        if percentScrolled > 0.9 {
+            
+            self.currentPage++
+            
+            self.storiesSource.load(self.currentPage, completion: { () -> Void in
+                self.storiesTableView.reloadData()
+                self.storiesTableView.flashScrollIndicators()
+            })
         }
     }
     

@@ -19,21 +19,32 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
     
     var type:StoryType?
     var stories:Array<Story> = []
+    var isLoading:Bool = false
 
     func load(completion:dispatch_block_t?) {
+        load(1, completion: completion)
+    }
+
+    func load(page: Int, completion:dispatch_block_t?) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             
+            self.isLoading = true
             (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(true)
-
-            let url = NSURL(string: self.endpointForPage(1))
+            
+            let url = NSURL(string: self.endpointForPage(page))
             
             let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {(data, response, error) in
-
-                self.stories = self.parseStories(data)
-
+                
+                if page == 1 {
+                    self.stories = self.parseStories(data)
+                } else {
+                    self.stories = self.stories + self.parseStories(data)
+                }
+                
+                self.isLoading = false
                 (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(false)
-
+                
                 if let onComplete = completion {
                     dispatch_async(dispatch_get_main_queue(), onComplete)
                 }
@@ -42,7 +53,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
             task.resume()
         })
     }
-    
+
     private func parseStories(data:NSData) -> Array<Story> {
         var parseError: NSError?
         let parsedObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(data,
