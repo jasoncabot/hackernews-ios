@@ -239,7 +239,8 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="fX8-Vm-Roo" secondAttribute="trailing" constant="-16" id="7ag-1Y-7RZ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="6gs-XS-gd0" secondAttribute="trailing" constant="-16" id="8we-j4-DwU"/>
@@ -286,7 +287,8 @@
                                 </connections>
                             </webView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="uVO-Fa-f3m" firstAttribute="top" secondItem="GAt-0b-evK" secondAttribute="topMargin" id="8tw-ly-ddS"/>
                             <constraint firstItem="uVO-Fa-f3m" firstAttribute="leading" secondItem="GAt-0b-evK" secondAttribute="leadingMargin" constant="-16" id="LZx-Zx-x9z"/>
@@ -336,7 +338,8 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="yeb-j5-dtD" secondAttribute="trailing" constant="-16" id="ZLi-kt-uAt"/>
                             <constraint firstItem="GdR-Bq-LBg" firstAttribute="top" secondItem="yeb-j5-dtD" secondAttribute="bottom" id="aO8-n2-AhV"/>
