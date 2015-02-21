@@ -30,6 +30,6 @@ class StoryCell: UITableViewCell {
     }
     
     private func makeSubtitle(story:Story) -> String {
-        return "\(story.points) points by \(story.by) \(story.timeAgo) ago"
+        return "\(story.points) points by \(story.by) \(story.timeAgo)"
     }
 }
