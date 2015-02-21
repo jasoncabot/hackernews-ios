@@ -13,11 +13,11 @@ class StoryCell: UITableViewCell {
     @IBOutlet var storyTitleLabel: UILabel!;
     @IBOutlet var subtitleLabel: UILabel!;
     @IBOutlet var viewCommentsButton: ViewCommentsButton!;
-
+    
     func updateWithStory(story: Story) {
         self.storyTitleLabel.text = story.title
         self.subtitleLabel.text = makeSubtitle(story)
-        self.viewCommentsButton.key = story.id
+        self.viewCommentsButton.key = String(story.id)
         
         if story.unread {
             self.storyTitleLabel.textColor = UIColor.blackColor()
@@ -29,6 +29,6 @@ class StoryCell: UITableViewCell {
     }
     
     private func makeSubtitle(story:Story) -> String {
-        return ""
+        return "\(story.points) points by \(story.by) \(story.timeAgo) ago | \(story.numberOfComments) comments"
     }
 }

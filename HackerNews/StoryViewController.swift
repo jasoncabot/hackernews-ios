@@ -19,18 +19,16 @@ class StoryViewController : UIViewController, UIWebViewDelegate {
         
         self.title = self.story?.title
         
-        if self.story?.url != nil {
-            var request = NSURLRequest(URL: (self.story?.url)!)
+        if let storyUrl = self.story?.url {
+            var request = NSURLRequest(URL: storyUrl)
             
             self.webView.loadRequest(request);
         }
     }
     
     @IBAction func openInSafari(sender: UIBarButtonItem) {
-        if self.story?.url != nil {
-            let externalURL = self.story?.url
-            
-            UIApplication.sharedApplication().openURL(externalURL!)
+        if let storyUrl = self.story?.url {
+            UIApplication.sharedApplication().openURL(storyUrl)
         }
     }
     
@@ -52,5 +50,17 @@ class StoryViewController : UIViewController, UIWebViewDelegate {
                 break
             }
         }
+    }
+
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
+        (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(false)
+    }
+
+    func webViewDidStartLoad(webView: UIWebView) {
+        (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(true)
+    }
+
+    func webViewDidFinishLoad(webView: UIWebView) {
+        (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(false)
     }
 }
