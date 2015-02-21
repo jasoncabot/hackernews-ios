@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F61DF1B41A9805A30077BFA2 /* NetworkIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1B31A9805A30077BFA2 /* NetworkIndicator.swift */; };
 		F6E21C0F1A91087A00AF25EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E21C0E1A91087A00AF25EF /* AppDelegate.swift */; };
 		F6E21C141A91087A00AF25EF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F6E21C121A91087A00AF25EF /* Main.storyboard */; };
 		F6E21C161A91087A00AF25EF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F6E21C151A91087A00AF25EF /* Images.xcassets */; };
@@ -32,6 +33,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F61DF1B31A9805A30077BFA2 /* NetworkIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkIndicator.swift; sourceTree = "<group>"; };
 		F6E21C091A91087A00AF25EF /* HackerNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6E21C0D1A91087A00AF25EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F6E21C0E1A91087A00AF25EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -68,6 +70,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F61DF1B21A9805940077BFA2 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				F61DF1B31A9805A30077BFA2 /* NetworkIndicator.swift */,
+			);
+			name = Util;
+			sourceTree = "<group>";
+		};
 		F6E21C001A91087900AF25EF = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +104,7 @@
 				F6E21C371A9119F500AF25EF /* DataSources */,
 				F6E21C341A910AEC00AF25EF /* ViewControllers */,
 				F6E21C3D1A91336000AF25EF /* View */,
+				F61DF1B21A9805940077BFA2 /* Util */,
 				F6E21C121A91087A00AF25EF /* Main.storyboard */,
 				F6E21C151A91087A00AF25EF /* Images.xcassets */,
 				F6E21C171A91087A00AF25EF /* LaunchScreen.xib */,
@@ -265,6 +276,7 @@
 			files = (
 				F6E21C311A910AD700AF25EF /* StoryListViewController.swift in Sources */,
 				F6E21C331A910AE000AF25EF /* CommentListViewController.swift in Sources */,
+				F61DF1B41A9805A30077BFA2 /* NetworkIndicator.swift in Sources */,
 				F6E21C2F1A910AC700AF25EF /* MenuViewController.swift in Sources */,
 				F6E21C3F1A91337000AF25EF /* StoryCell.swift in Sources */,
 				F6E21C0F1A91087A00AF25EF /* AppDelegate.swift in Sources */,
@@ -464,6 +476,7 @@
 				F6E21C2A1A91087A00AF25EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F6E21C2B1A91087A00AF25EF /* Build configuration list for PBXNativeTarget "HackerNewsTests" */ = {
 			isa = XCConfigurationList;
@@ -472,6 +485,7 @@
 				F6E21C2D1A91087A00AF25EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -24,7 +24,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(true)
 
             let url = NSURL(string: self.endpoint())
             
@@ -32,7 +32,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
 
                 self.stories = self.parseStories(data)
 
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(false)
 
                 if let onComplete = completion {
                     dispatch_async(dispatch_get_main_queue(), onComplete)
