@@ -35,6 +35,11 @@ class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbar
         }
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        webView.stopLoading()
+        super.viewWillDisappear(animated)
+    }
+    
     func shouldDisplayToolbar() -> Bool {
         return true;
     }
