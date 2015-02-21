@@ -26,7 +26,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
             
             (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(true)
 
-            let url = NSURL(string: self.endpoint())
+            let url = NSURL(string: self.endpointForPage(1))
             
             let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {(data, response, error) in
 
@@ -71,21 +71,21 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         return parsed
     }
     
-    func endpoint() -> String {
+    func endpointForPage(page: Int) -> String {
         if let storyType = type {
             switch storyType {
                 
             case .FrontPage:
-                return "http://hncabot.appspot.com/fp"
+                return "http://hncabot.appspot.com/fp?p=\(page)"
                 
             case .New:
-                return "http://hncabot.appspot.com/new"
+                return "http://hncabot.appspot.com/new?p=\(page)"
                 
             case .Show:
-                return "http://hncabot.appspot.com/show"
+                return "http://hncabot.appspot.com/show?p=\(page)"
                 
             case .Ask:
-                return "http://hncabot.appspot.com/ask"
+                return "http://hncabot.appspot.com/ask?p=\(page)"
                 
             }
         }
