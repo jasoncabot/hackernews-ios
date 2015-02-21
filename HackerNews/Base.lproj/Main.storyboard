@@ -217,12 +217,36 @@
                                     <outlet property="delegate" destination="CjD-1p-D4e" id="xgb-zG-EPE"/>
                                 </connections>
                             </tableView>
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6gs-XS-gd0" userLabel="Loading View">
+                                <rect key="frame" x="0.0" y="550" width="600" height="50"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="8ue-T5-S5P">
+                                        <rect key="frame" x="15" y="15" width="20" height="20"/>
+                                    </activityIndicatorView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IPW-kE-vNr">
+                                        <rect key="frame" x="43" y="0.0" width="557" height="50"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="8ue-T5-S5P" firstAttribute="top" secondItem="6gs-XS-gd0" secondAttribute="top" constant="15" id="0LW-d6-naS"/>
+                                    <constraint firstAttribute="bottom" secondItem="8ue-T5-S5P" secondAttribute="bottom" constant="15" id="3wq-ph-sHG"/>
+                                    <constraint firstItem="8ue-T5-S5P" firstAttribute="leading" secondItem="6gs-XS-gd0" secondAttribute="leading" constant="15" id="VzT-Ud-GV3"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="fX8-Vm-Roo" secondAttribute="trailing" constant="-16" id="7ag-1Y-7RZ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="6gs-XS-gd0" secondAttribute="trailing" constant="-16" id="8we-j4-DwU"/>
                             <constraint firstAttribute="bottomMargin" secondItem="fX8-Vm-Roo" secondAttribute="bottom" id="Cqc-eg-Bco"/>
                             <constraint firstItem="fX8-Vm-Roo" firstAttribute="top" secondItem="x0Z-B7-Y3b" secondAttribute="topMargin" id="fdf-4w-mMe"/>
+                            <constraint firstItem="MrZ-fq-fm3" firstAttribute="top" secondItem="6gs-XS-gd0" secondAttribute="bottom" id="g3y-XS-US6"/>
+                            <constraint firstItem="6gs-XS-gd0" firstAttribute="leading" secondItem="x0Z-B7-Y3b" secondAttribute="leadingMargin" constant="-16" id="v0e-3h-Wzy"/>
                             <constraint firstItem="fX8-Vm-Roo" firstAttribute="leading" secondItem="x0Z-B7-Y3b" secondAttribute="leadingMargin" constant="-16" id="wTe-dU-hdW"/>
                         </constraints>
                     </view>
@@ -230,6 +254,7 @@
                         <barButtonItem key="backBarButtonItem" title="Back" id="bxc-a7-6W1"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="loadingView" destination="6gs-XS-gd0" id="gRu-lx-GwO"/>
                         <outlet property="storiesSource" destination="mcU-4K-LFO" id="6sa-Rk-6HE"/>
                         <outlet property="storiesTableView" destination="fX8-Vm-Roo" id="60n-Oi-Oe1"/>
                     </connections>
@@ -390,6 +415,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="HsG-pr-k34"/>
-        <segue reference="4Jo-QO-uJ2"/>
+        <segue reference="wbG-d0-Ezm"/>
     </inferredMetricsTieBreakers>
 </document>
