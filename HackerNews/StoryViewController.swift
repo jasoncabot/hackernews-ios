@@ -10,6 +10,7 @@ import UIKit
 
 class StoryViewController : UIViewController, UIWebViewDelegate {
     @IBOutlet var webView:UIWebView!
+    @IBOutlet var safariButton: UIBarButtonItem!
 
     var story:Story?
     var storiesSource:StoriesDataSource?
@@ -18,12 +19,22 @@ class StoryViewController : UIViewController, UIWebViewDelegate {
         super.viewDidLoad()
         
         self.title = self.story?.title
-        
+
         if let storyUrl = self.story?.url {
             var request = NSURLRequest(URL: storyUrl)
             
             self.webView.loadRequest(request);
         }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.toolbarHidden = false
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        self.navigationController?.toolbarHidden = true
+        super.viewWillDisappear(animated)
     }
     
     @IBAction func openInSafari(sender: UIBarButtonItem) {

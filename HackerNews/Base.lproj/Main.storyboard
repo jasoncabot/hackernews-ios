@@ -144,9 +144,10 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="fX8-Vm-Roo">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="fX8-Vm-Roo">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryCellIdentifier" id="95m-HK-iFj" customClass="StoryCell" customModule="HackerNews" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -154,22 +155,29 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="95m-HK-iFj" id="p4r-GY-uBv">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yu0-EE-nbS" userLabel="Title">
-                                                    <rect key="frame" x="15" y="2" width="475" height="25"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="This is a story title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yu0-EE-nbS" userLabel="Title">
+                                                    <rect key="frame" x="15" y="1" width="533" height="40"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBh-2e-Jwh" userLabel="Subtitle">
-                                                    <rect key="frame" x="16" y="26" width="474" height="19"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="8888 points by WWWWW 88 wwww ago" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBh-2e-Jwh" userLabel="Subtitle">
+                                                    <rect key="frame" x="16" y="41" width="532" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d8D-OL-ZEh" customClass="ViewCommentsButton" customModule="HackerNews" customModuleProvider="target">
-                                                    <rect key="frame" x="498" y="1" width="104" height="44"/>
-                                                    <state key="normal" title="Comments">
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="characterWrap" translatesAutoresizingMaskIntoConstraints="NO" id="d8D-OL-ZEh" customClass="ViewCommentsButton" customModule="HackerNews" customModuleProvider="target">
+                                                    <rect key="frame" x="538" y="12" width="44" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="44" id="ZaM-Dj-UOl"/>
+                                                        <constraint firstAttribute="height" constant="44" id="rtC-nM-kuE"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                                    <inset key="titleEdgeInsets" minX="0.0" minY="-8" maxX="0.0" maxY="0.0"/>
+                                                    <state key="normal" title="8888" backgroundImage="comment">
+                                                        <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
                                                         <segue destination="vF2-xN-q65" kind="presentation" identifier="ShowComments" id="wbG-d0-Ezm"/>
@@ -177,9 +185,25 @@
                                                 </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="d8D-OL-ZEh" secondAttribute="trailing" id="7HK-lh-EzI"/>
+                                                <constraint firstItem="d8D-OL-ZEh" firstAttribute="leading" secondItem="FBh-2e-Jwh" secondAttribute="trailing" constant="3" id="DQt-3h-z9P"/>
+                                                <constraint firstItem="Yu0-EE-nbS" firstAttribute="leading" secondItem="p4r-GY-uBv" secondAttribute="leading" constant="15" id="HQ6-k0-FO3"/>
+                                                <constraint firstItem="Yu0-EE-nbS" firstAttribute="top" secondItem="p4r-GY-uBv" secondAttribute="topMargin" constant="1" id="LBF-9s-3vf"/>
+                                                <constraint firstItem="Yu0-EE-nbS" firstAttribute="leading" secondItem="p4r-GY-uBv" secondAttribute="leadingMargin" constant="7" id="Qa0-LI-p8Z"/>
+                                                <constraint firstItem="d8D-OL-ZEh" firstAttribute="leading" secondItem="Yu0-EE-nbS" secondAttribute="trailing" constant="49" id="RIK-F3-dgQ"/>
+                                                <constraint firstItem="FBh-2e-Jwh" firstAttribute="leading" secondItem="p4r-GY-uBv" secondAttribute="leadingMargin" constant="8" id="ZPP-rK-1Aw"/>
+                                                <constraint firstItem="d8D-OL-ZEh" firstAttribute="leading" secondItem="Yu0-EE-nbS" secondAttribute="trailing" constant="8" id="fdX-OS-t3S"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="d8D-OL-ZEh" secondAttribute="trailing" constant="3" id="t6X-Yl-9qF"/>
+                                                <constraint firstAttribute="centerY" secondItem="d8D-OL-ZEh" secondAttribute="centerY" id="uKB-ID-H17"/>
+                                                <constraint firstItem="FBh-2e-Jwh" firstAttribute="top" secondItem="Yu0-EE-nbS" secondAttribute="bottom" constant="3" id="z01-HI-Lxb"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="Qa0-LI-p8Z"/>
+                                                    <exclude reference="RIK-F3-dgQ"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
+                                        <color key="tintColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="storyTitleLabel" destination="Yu0-EE-nbS" id="jVl-8t-aRN"/>
                                             <outlet property="subtitleLabel" destination="FBh-2e-Jwh" id="hbg-sV-2Ad"/>
@@ -213,7 +237,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hw7-aW-hGx" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <customObject id="mcU-4K-LFO" userLabel="StoriesDataSource" customClass="StoriesDataSource" customModule="HackerNews" customModuleProvider="target"/>
             </objects>
-            <point key="canvasLocation" x="1046" y="-705"/>
+            <point key="canvasLocation" x="1046" y="-707"/>
         </scene>
         <!--Story View Controller-->
         <scene sceneID="Oje-6w-rkh">
@@ -228,35 +252,30 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uVO-Fa-f3m">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <dataDetectorType key="dataDetectorTypes"/>
                                 <connections>
                                     <outlet property="delegate" destination="Qu2-N6-eFe" id="2Oc-pc-7V8"/>
                                 </connections>
                             </webView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tgj-24-wkj">
-                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
-                                <items>
-                                    <barButtonItem title="Open in Safari" id="aOT-fe-YyT">
-                                        <connections>
-                                            <action selector="openInSafari:" destination="Qu2-N6-eFe" id="reF-mo-4Fs"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </items>
-                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="tgj-24-wkj" secondAttribute="trailing" constant="-16" id="Acw-9P-z68"/>
-                            <constraint firstItem="uVO-Fa-f3m" firstAttribute="top" secondItem="GAt-0b-evK" secondAttribute="topMargin" id="bkG-HW-WcE"/>
-                            <constraint firstItem="tgj-24-wkj" firstAttribute="leading" secondItem="GAt-0b-evK" secondAttribute="leadingMargin" constant="-16" id="cOc-1z-cn4"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="uVO-Fa-f3m" secondAttribute="trailing" constant="-16" id="eBC-25-0sW"/>
-                            <constraint firstItem="tgj-24-wkj" firstAttribute="top" secondItem="uVO-Fa-f3m" secondAttribute="bottom" id="hHX-DC-79X"/>
-                            <constraint firstItem="uVO-Fa-f3m" firstAttribute="leading" secondItem="GAt-0b-evK" secondAttribute="leadingMargin" constant="-16" id="oPk-Ai-LzV"/>
-                            <constraint firstItem="tgj-24-wkj" firstAttribute="bottom" secondItem="GAt-0b-evK" secondAttribute="bottomMargin" id="sPN-un-j5V"/>
+                            <constraint firstItem="uVO-Fa-f3m" firstAttribute="top" secondItem="GAt-0b-evK" secondAttribute="topMargin" id="8tw-ly-ddS"/>
+                            <constraint firstItem="uVO-Fa-f3m" firstAttribute="leading" secondItem="GAt-0b-evK" secondAttribute="leadingMargin" constant="-16" id="LZx-Zx-x9z"/>
+                            <constraint firstItem="uVO-Fa-f3m" firstAttribute="bottom" secondItem="GAt-0b-evK" secondAttribute="bottomMargin" id="LsT-EZ-gzK"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="uVO-Fa-f3m" secondAttribute="trailing" constant="-16" id="q2N-fT-HGR"/>
                         </constraints>
                     </view>
-                    <toolbarItems/>
+                    <toolbarItems>
+                        <barButtonItem title="Open in Safari" id="aOT-fe-YyT">
+                            <connections>
+                                <action selector="openInSafari:" destination="Qu2-N6-eFe" id="reF-mo-4Fs"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" id="Dkp-XD-llE">
                         <barButtonItem key="rightBarButtonItem" title="Comments" id="qUe-aF-INP">
                             <connections>
@@ -266,6 +285,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="safariButton" destination="aOT-fe-YyT" id="BV4-k5-9Uf"/>
                         <outlet property="view" destination="GAt-0b-evK" id="Viu-5y-Ul5"/>
                         <outlet property="webView" destination="uVO-Fa-f3m" id="klL-ai-A56"/>
                     </connections>
@@ -318,7 +338,15 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gnE-Ev-SPM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.99607843137254903" green="0.99607843137254903" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="yhf-a0-iLP">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="Vr6-ry-Tfa" kind="relationship" relationship="rootViewController" id="3Xl-F6-Auw"/>
                     </connections>
@@ -331,11 +359,23 @@
         <scene sceneID="a1a-wA-T9Y">
             <objects>
                 <navigationController id="80q-Ix-oBT" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="AL7-cZ-IYR">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.99607843137254903" green="0.99607843137254903" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="rf9-SS-U29">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" red="0.99607843139999996" green="0.99607843139999996" blue="0.99607843139999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </toolbar>
                     <connections>
                         <segue destination="ZjJ-xU-e0F" kind="relationship" relationship="rootViewController" id="EUp-Xc-vc7"/>
                     </connections>
@@ -345,8 +385,11 @@
             <point key="canvasLocation" x="-651" y="-699"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="comment" width="44" height="44"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="HsG-pr-k34"/>
-        <segue reference="wbG-d0-Ezm"/>
+        <segue reference="4Jo-QO-uJ2"/>
     </inferredMetricsTieBreakers>
 </document>

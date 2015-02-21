@@ -17,6 +17,7 @@ class StoryCell: UITableViewCell {
     func updateWithStory(story: Story) {
         self.storyTitleLabel.text = story.title
         self.subtitleLabel.text = makeSubtitle(story)
+        self.viewCommentsButton.setTitle("\(story.numberOfComments)", forState: .Normal)
         self.viewCommentsButton.key = String(story.id)
         
         if story.unread {
@@ -29,6 +30,6 @@ class StoryCell: UITableViewCell {
     }
     
     private func makeSubtitle(story:Story) -> String {
-        return "\(story.points) points by \(story.by) \(story.timeAgo) ago | \(story.numberOfComments) comments"
+        return "\(story.points) points by \(story.by) \(story.timeAgo) ago"
     }
 }
