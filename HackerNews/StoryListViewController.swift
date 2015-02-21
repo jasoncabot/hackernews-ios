@@ -60,9 +60,9 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
                         (segue.destinationViewController as StoryViewController).story = story
                         (segue.destinationViewController as StoryViewController).storiesSource = storiesSource
                         
-                        dispatch_async(dispatch_get_main_queue(), {
+                        dispatch_async(dispatch_get_main_queue()) {
                             self.onViewStory(story, indexPath: path)
-                        })
+                        }
                     }
                 }
                 
@@ -73,7 +73,9 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
                     let navigationController:UINavigationController = segue.destinationViewController as UINavigationController;
                     let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
                     
-                    commentsViewController.comments = storiesSource!.retrieveComments(story)
+                    storiesSource!.retrieveComments(story) { comments in
+                        commentsViewController.onCommentsLoaded(comments)
+                    }
                 }
                 
             default:

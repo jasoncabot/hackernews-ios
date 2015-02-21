@@ -61,7 +61,9 @@ class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbar
                     let navigationController:UINavigationController = segue.destinationViewController as UINavigationController;
                     let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
                     
-                    commentsViewController.comments = storiesSource!.retrieveComments(story)
+                    storiesSource!.retrieveComments(story) { comments in
+                        commentsViewController.onCommentsLoaded(comments)
+                    }
                 }
                 
             default:

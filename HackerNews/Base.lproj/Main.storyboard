@@ -359,10 +359,10 @@
             </objects>
             <point key="canvasLocation" x="1985" y="133"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Headed Navigation Controller-->
         <scene sceneID="Zxs-dG-jf8">
             <objects>
-                <navigationController storyboardIdentifier="ModalNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" hidesBarsOnSwipe="YES" id="vF2-xN-q65" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ModalNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" hidesBarsOnSwipe="YES" id="vF2-xN-q65" customClass="HeadedNavigationController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gnE-Ev-SPM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -376,9 +376,16 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
+                        <outlet property="statusBarBackground" destination="Dkj-qK-KRb" id="9yr-tV-9fB"/>
                         <segue destination="Vr6-ry-Tfa" kind="relationship" relationship="rootViewController" id="3Xl-F6-Auw"/>
                     </connections>
                 </navigationController>
+                <view alpha="0.0" contentMode="scaleToFill" id="Dkj-qK-KRb" userLabel="StatusBarBackground">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="tintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </view>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GtC-eq-hF6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1046" y="133"/>

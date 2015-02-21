@@ -20,6 +20,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
     var type:StoryType?
     var stories:Array<Story> = []
     var isLoading:Bool = false
+    let adapter:ModelAdapter = ModelAdapter()
 
     func load(completion:dispatch_block_t?) {
         load(1, completion: completion)
@@ -62,20 +63,24 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         var parsed:Array<Story> = []
         if let storiesData = parsedObject as? NSArray {
             for storyData in storiesData {
-                var s = Story()
-                if let x = storyData as? NSDictionary{
-                    s.id = x["id"] as Int
-                    s.title = x["title"] as String
-                    s.points = x["score"] as Int
-                    s.by = x["by"] as String
-                    s.timeAgo = x["when"] as String
-                    if let numComments = x["comments"] as? Int {
-                        s.numberOfComments = numComments
-                    }
-                    s.url = NSURL(string: x["url"] as String)
-                    s.unread = true
-
-                    parsed.append(s)
+                if let dataDict = storyData as? NSDictionary{
+                    parsed.append(adapter.storyForData(dataDict))
+                }
+            }
+        }
+        return parsed
+    }
+    
+    private func parseComments(data:NSData) -> Array<Comment> {
+        var parseError: NSError?
+        let parsedObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(data,
+            options: NSJSONReadingOptions.AllowFragments,
+            error:&parseError)
+        var parsed:Array<Comment> = []
+        if let allCommentData = parsedObject as? NSArray {
+            for commentData in allCommentData {
+                if let dataDict = commentData as? NSDictionary{
+                    parsed.append(adapter.commentForData(dataDict))
                 }
             }
         }
@@ -101,6 +106,10 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
             }
         }
         return ""
+    }
+    
+    func endpointForComments(storyId: Int) -> String {
+        return "http://hncabot.appspot.com/c?id=\(storyId)"
     }
         
     func title() -> String {
@@ -156,8 +165,28 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         return nil
     }
     
-    func retrieveComments(story: Story) -> NSArray {
-        return []
+    func retrieveComments(story: Story, completion: (Array<Comment>) -> Void) -> Void {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            
+            self.isLoading = true
+            (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(true)
+            
+            let url = NSURL(string: self.endpointForComments(story.id))
+            
+            let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {(data, response, error) in
+                
+                self.isLoading = false
+                (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(false)
+                
+                let comments = self.parseComments(data)
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    completion(comments)
+                }
+            }
+            
+            task.resume()
+        })
     }
     
 }

@@ -10,7 +10,9 @@ import UIKit
 
 class CommentListViewController: UIViewController {
     
-    var comments: NSArray?
+    func onCommentsLoaded(comments:Array<Comment>) {
+        println("Loaded \(comments.count) comments")
+    }
     
     @IBAction func dismiss(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
