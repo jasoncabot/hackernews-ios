@@ -333,9 +333,60 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="yeb-j5-dtD">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="68" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="yeb-j5-dtD">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CommentCellIdentifier" id="vye-jw-Tdh" customClass="CommentCell" customModule="HackerNews" customModuleProvider="target">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vye-jw-Tdh" id="GrQ-jg-e72">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WWWWWWWWWWW" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sep-lz-Iy8">
+                                                    <rect key="frame" x="16" y="8" width="110" height="13"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="11"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="88 minutes ago" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H45-lG-LpB">
+                                                    <rect key="frame" x="131" y="8" width="74" height="13"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="11"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is a comment" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rf9-DG-fhO">
+                                                    <rect key="frame" x="16" y="22" width="568" height="37"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="sep-lz-Iy8" firstAttribute="top" secondItem="GrQ-jg-e72" secondAttribute="topMargin" id="5W1-xk-pE2"/>
+                                                <constraint firstItem="rf9-DG-fhO" firstAttribute="leading" secondItem="sep-lz-Iy8" secondAttribute="leading" id="7Xl-1A-7Zb"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="rf9-DG-fhO" secondAttribute="trailing" constant="8" id="Hq7-cA-4R3"/>
+                                                <constraint firstItem="rf9-DG-fhO" firstAttribute="bottom" secondItem="GrQ-jg-e72" secondAttribute="bottomMargin" id="Mfj-nG-Z6t"/>
+                                                <constraint firstItem="sep-lz-Iy8" firstAttribute="leading" secondItem="GrQ-jg-e72" secondAttribute="leadingMargin" constant="8" id="ZUA-Sg-ZED"/>
+                                                <constraint firstItem="rf9-DG-fhO" firstAttribute="top" secondItem="GrQ-jg-e72" secondAttribute="topMargin" constant="14" id="daq-Z8-t8J"/>
+                                                <constraint firstItem="H45-lG-LpB" firstAttribute="leading" secondItem="sep-lz-Iy8" secondAttribute="trailing" constant="5" id="ma8-KS-1E9"/>
+                                                <constraint firstItem="H45-lG-LpB" firstAttribute="top" secondItem="GrQ-jg-e72" secondAttribute="topMargin" id="mcR-9Z-W6W"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.99607843139999996" green="0.99607843139999996" blue="0.99607843139999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="tintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <outlet property="commentLabel" destination="rf9-DG-fhO" id="hIv-K1-H7h"/>
+                                            <outlet property="indentationConstraint" destination="ZUA-Sg-ZED" id="xRZ-Mk-efe"/>
+                                            <outlet property="timeAgoLabel" destination="H45-lG-LpB" id="eEL-Po-Adr"/>
+                                            <outlet property="userLabel" destination="sep-lz-Iy8" id="z4x-6b-KRy"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <sections/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Vr6-ry-Tfa" id="UE6-hq-W6N"/>
+                                    <outlet property="delegate" destination="Vr6-ry-Tfa" id="I3F-Dr-nks"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -354,10 +405,13 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="commentsTableView" destination="yeb-j5-dtD" id="K0T-PO-ZwA"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wRM-TI-i9q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1985" y="133"/>
+            <point key="canvasLocation" x="1985" y="130"/>
         </scene>
         <!--Headed Navigation Controller-->
         <scene sceneID="Zxs-dG-jf8">
