@@ -16,8 +16,12 @@ class MenuViewController: UITableViewController {
         if let path = tableView.indexPathForSelectedRow() {
             tableView.deselectRowAtIndexPath(path, animated: animated)
         }
+
+        if let nav = self.navigationController {
+            nav.setToolbarHidden(true, animated: animated)
+        }
     }
-    
+
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let id = segue.identifier {
             switch id {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StoryListViewController: UIViewController, UITableViewDelegate {
+class StoryListViewController: UIViewController, UITableViewDelegate, OptionalToolbarViewController {
 
     @IBOutlet var storiesTableView: UITableView!
     @IBOutlet var storiesSource:StoriesDataSource!
@@ -36,8 +36,16 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
             
             self.storiesTableView.reloadRowsAtIndexPaths([path], withRowAnimation: .Automatic)
         }
+        
+        if let nav = self.navigationController {
+            nav.setToolbarHidden(true, animated: animated)
+        }
     }
-    
+
+    func shouldDisplayToolbar() -> Bool {
+        return false;
+    }
+
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if let id = segue.identifier {
@@ -80,18 +88,18 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
             return
         }
         
-        var percentScrolled = scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.size.height)
+        var percentScrolled = scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.height)
         if percentScrolled > 0.9 {
             
             self.displayLoadingActivity(true)
             
             self.currentPage++
             
-            self.storiesSource.load(self.currentPage, completion: { () -> Void in
+            self.storiesSource.load(self.currentPage) {
                 self.storiesTableView.reloadData()
                 self.storiesTableView.flashScrollIndicators()
                 self.displayLoadingActivity(false)
-            })
+            }
         }
     }
     
@@ -101,9 +109,9 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
         self.storiesTableView.contentInset = inset
         
         loadingView.alpha = show ? 0 : 1
-        UIView.animateWithDuration(0.25, animations: { () -> Void in
+        UIView.animateWithDuration(0.25) {
             self.loadingView.alpha = show ? 1.0 : 0.0
-        })
+        }
     }
     
     private func onViewStory(story:Story, indexPath:NSIndexPath) {

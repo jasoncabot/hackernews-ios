@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StoryViewController : UIViewController, UIWebViewDelegate {
+class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbarViewController {
     @IBOutlet var webView:UIWebView!
     @IBOutlet var safariButton: UIBarButtonItem!
 
@@ -19,7 +19,7 @@ class StoryViewController : UIViewController, UIWebViewDelegate {
         super.viewDidLoad()
         
         self.title = self.story?.title
-
+        
         if let storyUrl = self.story?.url {
             var request = NSURLRequest(URL: storyUrl)
             
@@ -29,12 +29,14 @@ class StoryViewController : UIViewController, UIWebViewDelegate {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.toolbarHidden = false
+        
+        if let nav = self.navigationController {
+            nav.setToolbarHidden(nav.navigationBarHidden, animated: animated)
+        }
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        self.navigationController?.toolbarHidden = true
-        super.viewWillDisappear(animated)
+    func shouldDisplayToolbar() -> Bool {
+        return true;
     }
     
     @IBAction func openInSafari(sender: UIBarButtonItem) {
