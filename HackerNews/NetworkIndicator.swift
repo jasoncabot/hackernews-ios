@@ -17,7 +17,7 @@ class NetworkIndicator {
             if (display) {
                 self.numberOfNetworkRequests++
             } else {
-                self.numberOfNetworkRequests = min(0, self.numberOfNetworkRequests - 1)
+                self.numberOfNetworkRequests = max(0, self.numberOfNetworkRequests - 1)
             }
             UIApplication.sharedApplication().networkActivityIndicatorVisible = self.numberOfNetworkRequests > 0
         })
