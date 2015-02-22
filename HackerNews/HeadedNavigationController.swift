@@ -11,10 +11,14 @@ import UIKit
 class HeadedNavigationController : UINavigationController {
     @IBOutlet var statusBarBackground: UIView!
     var orientationObserver: NSObjectProtocol?
+    
+    var startingAlpha: CGFloat! = 1
 
     override func viewDidLoad() {
         super.viewDidLoad()
         barHideOnSwipeGestureRecognizer.addTarget(self, action: "onBarsToggled:")
+        startingAlpha = statusBarBackground.alpha
+        statusBarBackground.alpha = 0
         view.addSubview(statusBarBackground)
         UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
     }
@@ -43,7 +47,7 @@ class HeadedNavigationController : UINavigationController {
         }
 
         UIView.animateWithDuration(0.25) {
-            self.statusBarBackground.alpha = self.navigationBarHidden ? 1 : 0
+            self.statusBarBackground.alpha = self.navigationBarHidden ? self.startingAlpha : 0
         }
     }
     
