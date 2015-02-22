@@ -89,7 +89,7 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Contact" id="cfZ-K9-awd">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="jPO-sU-jtp" detailTextLabel="RVt-gg-1qW" style="IBUITableViewCellStyleValue1" id="MPs-ab-dxH">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="jPO-sU-jtp" detailTextLabel="RVt-gg-1qW" style="IBUITableViewCellStyleValue1" id="MPs-ab-dxH">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MPs-ab-dxH" id="usf-U8-pyF">
                                             <autoresizingMask key="autoresizingMask"/>
