@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Story {
+class Story : Equatable {
     var id: Int = 0
     var title: String = ""
     var points: Int = 0
@@ -20,4 +20,8 @@ class Story {
     
     init() {
     }
+}
+
+func ==(a:Story, b:Story) -> Bool {
+    return a.id == b.id
 }

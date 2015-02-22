@@ -57,26 +57,30 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
 
                 if let path = storiesTableView.indexPathForSelectedRow() {
 
-                    if let story = storiesSource.findStory(path.row) {
+                    if let story = storiesSource.storyForIndexPath(path) {
                         
                         (segue.destinationViewController as StoryViewController).story = story
                         (segue.destinationViewController as StoryViewController).storiesSource = storiesSource
                         
                         dispatch_async(dispatch_get_main_queue()) {
-                            self.onViewStory(story, indexPath: path)
+                            self.onViewStory(story)
                         }
                     }
                 }
                 
             case "ShowComments":
                 let storyId = (sender as ViewCommentsButton).key!
-                
+
                 if let story:Story = storiesSource.findStory(storyId) {
                     let navigationController:UINavigationController = segue.destinationViewController as UINavigationController;
                     let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
                     
                     storiesSource!.retrieveComments(story) { comments in
                         commentsViewController.onCommentsLoaded(comments)
+                    }
+
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.onViewStory(story)
                     }
                 }
                 
@@ -118,8 +122,12 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
         }
     }
     
-    private func onViewStory(story:Story, indexPath:NSIndexPath) {
+    private func onViewStory(story:Story) {
         story.unread = false
+        
+        if let path = storiesSource.indexPathForStory(story) {
+            storiesTableView.reloadRowsAtIndexPaths([path], withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
     }
 
 }

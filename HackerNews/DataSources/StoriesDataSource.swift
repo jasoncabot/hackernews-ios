@@ -137,8 +137,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell:StoryCell = tableView.dequeueReusableCellWithIdentifier("StoryCellIdentifier", forIndexPath: indexPath) as StoryCell
 
-        
-        if let story = self.findStory(indexPath.row) {
+        if let story = self.storyForIndexPath(indexPath) {
             cell.updateWithStory(story)
         }
         
@@ -149,9 +148,16 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         return stories.count
     }
     
-    func findStory(index:Int) -> Story? {
-        if stories.count > index {
-            return stories[index]
+    func indexPathForStory(story:Story) -> NSIndexPath? {
+        if let row = find(stories, story) {
+            return NSIndexPath(forRow: row, inSection: 0)
+        }
+        return nil
+    }
+    
+    func storyForIndexPath(path:NSIndexPath) -> Story? {
+        if stories.count > path.row {
+            return stories[path.row]
         }
         return nil
     }
