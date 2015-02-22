@@ -8,20 +8,26 @@
 
 import UIKit
 
-class CommentListViewController: UIViewController {
+class CommentListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var commentsTableView: UITableView!
     
+    var story:Story?
     var comments:Array<Comment>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         commentsTableView.estimatedRowHeight = 68
         commentsTableView.rowHeight = UITableViewAutomaticDimension
+        
+        UITableViewHeaderFooterView.appearance().textLabel.backgroundColor = UIColor.redColor()
     }
 
-    func onCommentsLoaded(receivedComments:Array<Comment>) {
+    func onCommentsLoaded(story:Story, receivedComments:Array<Comment>) {
+        self.story = story
         self.comments = receivedComments
+        
         commentsTableView.reloadData()
     }
     
@@ -40,6 +46,20 @@ class CommentListViewController: UIViewController {
             return c.count
         }
         return 0
+    }
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if let s = story {
+            return s.title
+        }
+        return nil
+    }
+    
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let header = view as? UITableViewHeaderFooterView {
+            header.textLabel.shadowOffset = CGSize.zeroSize
+            header.textLabel.font = UIFont.systemFontOfSize(12)
+        }
     }
     
     func commentForRow(index:Int) -> Comment? {

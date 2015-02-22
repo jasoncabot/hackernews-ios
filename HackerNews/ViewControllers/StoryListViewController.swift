@@ -76,7 +76,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
                     let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
                     
                     storiesSource!.retrieveComments(story) { comments in
-                        commentsViewController.onCommentsLoaded(comments)
+                        commentsViewController.onCommentsLoaded(story, receivedComments: comments)
                     }
 
                     dispatch_async(dispatch_get_main_queue()) {

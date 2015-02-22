@@ -64,7 +64,7 @@ class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbar
                     let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
                     
                     storiesSource!.retrieveComments(story) { comments in
-                        commentsViewController.onCommentsLoaded(comments)
+                        commentsViewController.onCommentsLoaded(story, receivedComments: comments)
                     }
                 }
                 
