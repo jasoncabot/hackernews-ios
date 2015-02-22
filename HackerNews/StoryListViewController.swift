@@ -20,6 +20,8 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
         super.viewDidLoad()
         
         self.title = storiesSource.title()
+        storiesTableView.estimatedRowHeight = 60
+        storiesTableView.rowHeight = UITableViewAutomaticDimension
 
         displayLoadingActivity(true)
         self.storiesSource.load {

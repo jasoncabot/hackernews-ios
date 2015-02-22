@@ -12,7 +12,8 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="IWG-Hr-QqT">
                         <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="sectionIndexBackgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <sections>
                             <tableViewSection id="6ea-Be-KQN">
                                 <cells>
@@ -144,7 +145,7 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="fX8-Vm-Roo">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="fX8-Vm-Roo">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
@@ -154,15 +155,15 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="95m-HK-iFj" id="p4r-GY-uBv">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is a story title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yu0-EE-nbS" userLabel="Title">
-                                                    <rect key="frame" x="15" y="9" width="522" height="20"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is a story title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yu0-EE-nbS" userLabel="Title">
+                                                    <rect key="frame" x="15" y="9" width="522" height="17"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="13"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8888 points by WWWWW 88 wwww ago" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBh-2e-Jwh" userLabel="Subtitle">
-                                                    <rect key="frame" x="16" y="32" width="526" height="15"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <rect key="frame" x="16" y="29" width="201" height="13"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="11"/>
                                                     <color key="textColor" red="0.50980392156862742" green="0.50980392156862742" blue="0.50980392156862742" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
@@ -175,8 +176,8 @@
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                                     <inset key="titleEdgeInsets" minX="0.0" minY="-8" maxX="0.0" maxY="0.0"/>
                                                     <state key="normal" title="8888" backgroundImage="comment">
-                                                        <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <color key="titleShadowColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
                                                         <segue destination="vF2-xN-q65" kind="presentation" identifier="ShowComments" id="wbG-d0-Ezm"/>
@@ -185,20 +186,31 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="d8D-OL-ZEh" firstAttribute="leading" secondItem="FBh-2e-Jwh" secondAttribute="trailing" constant="3" id="DQt-3h-z9P"/>
+                                                <constraint firstItem="FBh-2e-Jwh" firstAttribute="top" secondItem="Yu0-EE-nbS" secondAttribute="bottom" constant="3" id="F4s-EM-ZDF"/>
+                                                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="d8D-OL-ZEh" secondAttribute="bottom" id="GYX-te-DyI"/>
                                                 <constraint firstItem="Yu0-EE-nbS" firstAttribute="leading" secondItem="p4r-GY-uBv" secondAttribute="leading" constant="15" id="HQ6-k0-FO3"/>
                                                 <constraint firstItem="Yu0-EE-nbS" firstAttribute="top" secondItem="p4r-GY-uBv" secondAttribute="topMargin" constant="1" id="LBF-9s-3vf"/>
                                                 <constraint firstItem="Yu0-EE-nbS" firstAttribute="leading" secondItem="p4r-GY-uBv" secondAttribute="leadingMargin" constant="7" id="Qa0-LI-p8Z"/>
                                                 <constraint firstItem="d8D-OL-ZEh" firstAttribute="leading" secondItem="Yu0-EE-nbS" secondAttribute="trailing" constant="49" id="RIK-F3-dgQ"/>
+                                                <constraint firstItem="d8D-OL-ZEh" firstAttribute="top" secondItem="p4r-GY-uBv" secondAttribute="topMargin" constant="4" id="Uml-hu-Yw1"/>
                                                 <constraint firstItem="FBh-2e-Jwh" firstAttribute="leading" secondItem="p4r-GY-uBv" secondAttribute="leadingMargin" constant="8" id="ZPP-rK-1Aw"/>
                                                 <constraint firstItem="d8D-OL-ZEh" firstAttribute="leading" secondItem="Yu0-EE-nbS" secondAttribute="trailing" constant="8" id="fdX-OS-t3S"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="d8D-OL-ZEh" secondAttribute="trailing" constant="3" id="hDQ-kp-zzt"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Yu0-EE-nbS" secondAttribute="bottom" constant="25" id="kwy-bv-Y0W"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="d8D-OL-ZEh" secondAttribute="trailing" constant="3" id="t6X-Yl-9qF"/>
                                                 <constraint firstAttribute="centerY" secondItem="d8D-OL-ZEh" secondAttribute="centerY" id="uKB-ID-H17"/>
                                                 <constraint firstItem="FBh-2e-Jwh" firstAttribute="top" secondItem="Yu0-EE-nbS" secondAttribute="bottom" constant="3" id="z01-HI-Lxb"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Yu0-EE-nbS" secondAttribute="trailing" constant="55" id="zSk-uy-TL9"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="Qa0-LI-p8Z"/>
+                                                    <exclude reference="z01-HI-Lxb"/>
+                                                    <exclude reference="DQt-3h-z9P"/>
                                                     <exclude reference="RIK-F3-dgQ"/>
+                                                    <exclude reference="fdX-OS-t3S"/>
+                                                    <exclude reference="t6X-Yl-9qF"/>
+                                                    <exclude reference="uKB-ID-H17"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -263,7 +275,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hw7-aW-hGx" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <customObject id="mcU-4K-LFO" userLabel="StoriesDataSource" customClass="StoriesDataSource" customModule="HackerNews" customModuleProvider="target"/>
             </objects>
-            <point key="canvasLocation" x="1046" y="-707"/>
+            <point key="canvasLocation" x="1046" y="-708"/>
         </scene>
         <!--Story View Controller-->
         <scene sceneID="Oje-6w-rkh">
@@ -279,7 +291,7 @@
                         <subviews>
                             <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uVO-Fa-f3m">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <dataDetectorType key="dataDetectorTypes"/>
                                 <connections>
