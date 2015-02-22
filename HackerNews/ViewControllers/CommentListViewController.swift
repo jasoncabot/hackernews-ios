@@ -19,13 +19,7 @@ class CommentListViewController: UIViewController {
         commentsTableView.estimatedRowHeight = 68
         commentsTableView.rowHeight = UITableViewAutomaticDimension
     }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        commentsTableView.reloadData()
 
-    }
-    
     func onCommentsLoaded(receivedComments:Array<Comment>) {
         self.comments = receivedComments
         commentsTableView.reloadData()
