@@ -23,6 +23,8 @@ class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbar
         if let storyUrl = self.story?.url {
             var request = NSURLRequest(URL: storyUrl)
             
+            self.webView.hidden = true
+            
             self.webView.loadRequest(request);
         }
     }
@@ -81,6 +83,7 @@ class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbar
     }
 
     func webViewDidFinishLoad(webView: UIWebView) {
+        webView.hidden = false
         (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(false)
     }
 }
