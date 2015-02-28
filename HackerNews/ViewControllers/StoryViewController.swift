@@ -63,7 +63,9 @@ class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbar
                     let navigationController:UINavigationController = segue.destinationViewController as UINavigationController;
                     let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
                     
+                    showNetworkIndicator(true)
                     storiesSource!.retrieveComments(story) { comments in
+                        self.showNetworkIndicator(false)
                         commentsViewController.onCommentsLoaded(story, receivedComments: comments)
                     }
                 }
@@ -75,15 +77,19 @@ class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbar
     }
 
     func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
-        (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(false)
+        showNetworkIndicator(false)
     }
 
     func webViewDidStartLoad(webView: UIWebView) {
-        (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(true)
+        showNetworkIndicator(true)
     }
 
     func webViewDidFinishLoad(webView: UIWebView) {
         webView.hidden = false
-        (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(false)
+        showNetworkIndicator(false)
+    }
+    
+    private func showNetworkIndicator(show:Bool) {
+        (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(show)
     }
 }

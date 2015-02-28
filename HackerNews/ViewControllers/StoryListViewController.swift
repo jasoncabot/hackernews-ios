@@ -75,7 +75,9 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
                     let navigationController:UINavigationController = segue.destinationViewController as UINavigationController;
                     let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
                     
+                    showNetworkIndicator(true)
                     storiesSource!.retrieveComments(story) { comments in
+                        self.showNetworkIndicator(false)
                         commentsViewController.onCommentsLoaded(story, receivedComments: comments)
                     }
 
@@ -92,18 +94,15 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if self.storiesSource.isLoading {
+        if storiesSource.isLoading {
             return
         }
         
         var percentScrolled = scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.height)
         if percentScrolled > 0.9 {
             
-            self.displayLoadingActivity(true)
-            
-            self.currentPage++
-            
-            self.storiesSource.load(self.currentPage) {
+            displayLoadingActivity(true)
+            storiesSource.load(currentPage++) {
                 self.storiesTableView.reloadData()
                 self.storiesTableView.flashScrollIndicators()
                 self.displayLoadingActivity(false)
@@ -111,10 +110,16 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
         }
     }
     
-    private func displayLoadingActivity(show:Bool) -> Void {
-        var inset = self.storiesTableView.contentInset
+    private func showNetworkIndicator(show:Bool) {
+        (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(show)
+    }
+    
+    private func displayLoadingActivity(show:Bool) {
+        showNetworkIndicator(show)
+
+        var inset = storiesTableView.contentInset
         inset.bottom = show ? loadingView.bounds.size.height : 0
-        self.storiesTableView.contentInset = inset
+        storiesTableView.contentInset = inset
         
         loadingView.alpha = show ? 0 : 1
         UIView.animateWithDuration(0.25) {
