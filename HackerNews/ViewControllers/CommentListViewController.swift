@@ -59,6 +59,10 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel.shadowOffset = CGSize.zeroSize
             header.textLabel.font = UIFont.systemFontOfSize(12)
+            
+            if let nav = self.navigationController as? HeadedNavigationController {
+                header.alpha = nav.startingAlpha
+            }
         }
     }
     
