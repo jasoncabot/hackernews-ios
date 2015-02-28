@@ -130,7 +130,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         var cell:StoryCell = tableView.dequeueReusableCellWithIdentifier("StoryCellIdentifier", forIndexPath: indexPath) as StoryCell
 
         if let story = self.storyForIndexPath(indexPath) {
-            cell.updateWithStory(story)
+            cell.updateWithStory(indexPath.row + 1, story: story)
         }
         
         return cell;
