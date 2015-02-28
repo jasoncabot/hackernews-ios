@@ -73,7 +73,12 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
         return nil
     }
     
+    var onDismissed:dispatch_block_t?
+    
     @IBAction func dismiss(sender: AnyObject) {
+        if let closed = onDismissed {
+            closed()
+        }
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     

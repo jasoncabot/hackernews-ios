@@ -62,9 +62,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
                         (segue.destinationViewController as StoryViewController).story = story
                         (segue.destinationViewController as StoryViewController).storiesSource = storiesSource
                         
-                        dispatch_async(dispatch_get_main_queue()) {
-                            self.onViewStory(story)
-                        }
+                        story.unread = false
                     }
                 }
                 
@@ -75,15 +73,20 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
                     let navigationController:UINavigationController = segue.destinationViewController as UINavigationController;
                     let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
                     
+                    commentsViewController.onDismissed = {
+                        commentsViewController.onDismissed = nil
+                        if let path = self.storiesSource.indexPathForStory(story) {
+                            self.storiesTableView.reloadRowsAtIndexPaths([path], withRowAnimation: UITableViewRowAnimation.Automatic)
+                        }
+                    }
+                    
                     showNetworkIndicator(true)
                     storiesSource!.retrieveComments(story) { comments in
                         self.showNetworkIndicator(false)
                         commentsViewController.onCommentsLoaded(story, receivedComments: comments)
                     }
 
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.onViewStory(story)
-                    }
+                    story.unread = false
                 }
                 
             default:
@@ -124,14 +127,6 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
         loadingView.alpha = show ? 0 : 1
         UIView.animateWithDuration(0.25) {
             self.loadingView.alpha = show ? 1.0 : 0.0
-        }
-    }
-    
-    private func onViewStory(story:Story) {
-        story.unread = false
-        
-        if let path = storiesSource.indexPathForStory(story) {
-            storiesTableView.reloadRowsAtIndexPaths([path], withRowAnimation: UITableViewRowAnimation.Automatic)
         }
     }
 
