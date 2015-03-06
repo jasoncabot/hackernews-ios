@@ -48,6 +48,22 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
     func shouldDisplayToolbar() -> Bool {
         return false;
     }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        if !storiesSource.isLoading {
+            let shouldLoadMore = indexPath.row >= storiesSource.stories.count - 10
+
+            if shouldLoadMore {
+                
+                displayLoadingActivity(true)
+                storiesSource.load(++currentPage) {
+                    self.storiesTableView.reloadData()
+                    self.storiesTableView.flashScrollIndicators()
+                    self.displayLoadingActivity(false)
+                }
+            }
+        }
+    }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
@@ -96,24 +112,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
             }
         }
     }
-    
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        if storiesSource.isLoading {
-            return
-        }
-        
-        var percentScrolled = scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.height)
-        if percentScrolled > 0.9 {
-            
-            displayLoadingActivity(true)
-            storiesSource.load(++currentPage) {
-                self.storiesTableView.reloadData()
-                self.storiesTableView.flashScrollIndicators()
-                self.displayLoadingActivity(false)
-            }
-        }
-    }
-    
+
     private func showNetworkIndicator(show:Bool) {
         (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(show)
     }
