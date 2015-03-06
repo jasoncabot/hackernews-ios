@@ -25,6 +25,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
 
         displayLoadingActivity(true)
         self.storiesSource.load {
+            self.currentPage = 1
             self.displayLoadingActivity(false)
             self.storiesTableView.reloadData()
         }
@@ -105,7 +106,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
         if percentScrolled > 0.9 {
             
             displayLoadingActivity(true)
-            storiesSource.load(currentPage++) {
+            storiesSource.load(++currentPage) {
                 self.storiesTableView.reloadData()
                 self.storiesTableView.flashScrollIndicators()
                 self.displayLoadingActivity(false)
