@@ -152,7 +152,7 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is a story title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yu0-EE-nbS" userLabel="Title">
                                                     <rect key="frame" x="15" y="9" width="522" height="17"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="13"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
@@ -474,8 +474,8 @@
         <image name="comment" width="44" height="44"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="HsG-pr-k34"/>
         <segue reference="EUp-Xc-vc7"/>
-        <segue reference="4Jo-QO-uJ2"/>
+        <segue reference="HsG-pr-k34"/>
+        <segue reference="wbG-d0-Ezm"/>
     </inferredMetricsTieBreakers>
 </document>
