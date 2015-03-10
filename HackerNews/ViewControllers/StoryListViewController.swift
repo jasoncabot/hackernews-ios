@@ -22,6 +22,10 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
         self.title = storiesSource.title()
         storiesTableView.estimatedRowHeight = 60
         storiesTableView.rowHeight = UITableViewAutomaticDimension
+        
+        var refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: "refreshStories:", forControlEvents: .ValueChanged)
+        storiesTableView.addSubview(refreshControl);
 
         displayLoadingActivity(true)
         self.storiesSource.load {
@@ -31,6 +35,25 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
         }
     }
     
+    @IBAction func refreshStories(sender: UIRefreshControl) {
+        
+        // fade out our old stories
+        UIView.animateWithDuration(1, animations: { () -> Void in
+            self.storiesTableView.alpha = 0.2
+        })
+        
+        // load in our new ones
+        storiesSource.refresh {
+            sender.endRefreshing()
+            self.currentPage = 1
+            self.storiesTableView.reloadData()
+            self.storiesTableView.flashScrollIndicators()
+            UIView.animateWithDuration(0.25, animations: { () -> Void in
+                self.storiesTableView.alpha = 1
+            })
+        }
+    }
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 

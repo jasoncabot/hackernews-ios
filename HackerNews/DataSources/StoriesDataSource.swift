@@ -46,6 +46,11 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
             task.resume()
         })
     }
+    
+    func refresh(completion:dispatch_block_t) {
+        stories = []
+        load(completion);
+    }
 
     private func parseStories(data:NSData) -> Array<Story> {
         var parseError: NSError?
