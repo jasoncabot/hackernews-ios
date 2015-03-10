@@ -25,7 +25,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
         
         var refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: "refreshStories:", forControlEvents: .ValueChanged)
-        storiesTableView.addSubview(refreshControl);
+        storiesTableView.insertSubview(refreshControl, atIndex: 0)
 
         displayLoadingActivity(true)
         self.storiesSource.load {
