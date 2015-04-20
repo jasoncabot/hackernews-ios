@@ -41,6 +41,27 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
         return cell;
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if let comment = commentForRow(indexPath.row) {
+            
+            if comment.externalLinks.count > 0 {
+                let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+                
+                alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+
+                for externalLink in comment.externalLinks {
+                    alertController.addAction(UIAlertAction(title: externalLink.title, style: .Default, handler: { (action:UIAlertAction!) -> Void in
+                        if let url = NSURL(string: externalLink.url) {
+                            UIApplication.sharedApplication().openURL(url)
+                        }
+                    }))
+                }
+                
+                self.presentViewController(alertController, animated: true, completion: nil)
+            }
+        }
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let c = comments {
             return c.count
