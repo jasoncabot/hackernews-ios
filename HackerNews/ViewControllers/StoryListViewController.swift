@@ -99,19 +99,19 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
 
                     if let story = storiesSource.storyForIndexPath(path) {
                         
-                        (segue.destinationViewController as StoryViewController).story = story
-                        (segue.destinationViewController as StoryViewController).storiesSource = storiesSource
+                        (segue.destinationViewController as! StoryViewController).story = story
+                        (segue.destinationViewController as! StoryViewController).storiesSource = storiesSource
                         
                         story.unread = false
                     }
                 }
                 
             case "ShowComments":
-                let storyId = (sender as ViewCommentsButton).key!
+                let storyId = (sender as! ViewCommentsButton).key!
 
                 if let story:Story = storiesSource.findStory(storyId) {
-                    let navigationController:UINavigationController = segue.destinationViewController as UINavigationController;
-                    let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
+                    let navigationController:UINavigationController = segue.destinationViewController as! UINavigationController;
+                    let commentsViewController:CommentListViewController = navigationController.viewControllers.first as! CommentListViewController;
                     
                     commentsViewController.onDismissed = {
                         commentsViewController.onDismissed = nil
@@ -137,7 +137,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
     }
 
     private func showNetworkIndicator(show:Bool) {
-        (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(show)
+        (UIApplication.sharedApplication().delegate as! AppDelegate).networkIndicator.displayNetworkIndicator(show)
     }
     
     private func displayLoadingActivity(show:Bool) {

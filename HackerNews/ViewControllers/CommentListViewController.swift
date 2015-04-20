@@ -32,7 +32,7 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:CommentCell = tableView.dequeueReusableCellWithIdentifier("CommentCellIdentifier", forIndexPath: indexPath) as CommentCell
+        var cell:CommentCell = tableView.dequeueReusableCellWithIdentifier("CommentCellIdentifier", forIndexPath: indexPath) as! CommentCell
 
         if let comment = self.commentForRow(indexPath.row) {
             cell.updateWithComment(comment)

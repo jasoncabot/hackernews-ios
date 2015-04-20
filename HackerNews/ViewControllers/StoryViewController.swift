@@ -60,8 +60,8 @@ class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbar
             case "ShowComments":
                 var story:Story = self.story!
                 if storiesSource != nil {
-                    let navigationController:UINavigationController = segue.destinationViewController as UINavigationController;
-                    let commentsViewController:CommentListViewController = navigationController.viewControllers.first as CommentListViewController;
+                    let navigationController:UINavigationController = segue.destinationViewController as! UINavigationController;
+                    let commentsViewController:CommentListViewController = navigationController.viewControllers.first as! CommentListViewController;
                     
                     showNetworkIndicator(true)
                     storiesSource!.retrieveComments(story) { comments in
@@ -90,6 +90,6 @@ class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbar
     }
     
     private func showNetworkIndicator(show:Bool) {
-        (UIApplication.sharedApplication().delegate as AppDelegate).networkIndicator.displayNetworkIndicator(show)
+        (UIApplication.sharedApplication().delegate as! AppDelegate).networkIndicator.displayNetworkIndicator(show)
     }
 }
