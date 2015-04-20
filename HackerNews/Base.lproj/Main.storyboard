@@ -405,7 +405,7 @@
         <!--Headed Navigation Controller-->
         <scene sceneID="Zxs-dG-jf8">
             <objects>
-                <navigationController storyboardIdentifier="ModalNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" hidesBarsOnSwipe="YES" hidesBarsOnTap="YES" id="vF2-xN-q65" customClass="HeadedNavigationController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ModalNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vF2-xN-q65" customClass="HeadedNavigationController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gnE-Ev-SPM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -436,7 +436,7 @@
         <!--Headed Navigation Controller-->
         <scene sceneID="a1a-wA-T9Y">
             <objects>
-                <navigationController hidesBarsOnSwipe="YES" id="80q-Ix-oBT" customClass="HeadedNavigationController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="80q-Ix-oBT" customClass="HeadedNavigationController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="AL7-cZ-IYR">
