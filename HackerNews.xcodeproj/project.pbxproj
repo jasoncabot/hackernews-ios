@@ -22,6 +22,7 @@
 		F61DF1DF1A9A29CF0077BFA2 /* StoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1DB1A9A29CF0077BFA2 /* StoryCell.swift */; };
 		F61DF1E01A9A29CF0077BFA2 /* ViewCommentsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1DC1A9A29CF0077BFA2 /* ViewCommentsButton.swift */; };
 		F61DF1E21A9A29DB0077BFA2 /* NetworkIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1E11A9A29DB0077BFA2 /* NetworkIndicator.swift */; };
+		F69BB5C01AE583A10022DC2C /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69BB5BF1AE583A10022DC2C /* Link.swift */; };
 		F6E21C0F1A91087A00AF25EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E21C0E1A91087A00AF25EF /* AppDelegate.swift */; };
 		F6E21C141A91087A00AF25EF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F6E21C121A91087A00AF25EF /* Main.storyboard */; };
 		F6E21C161A91087A00AF25EF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F6E21C151A91087A00AF25EF /* Images.xcassets */; };
@@ -54,6 +55,7 @@
 		F61DF1DB1A9A29CF0077BFA2 /* StoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoryCell.swift; path = View/StoryCell.swift; sourceTree = "<group>"; };
 		F61DF1DC1A9A29CF0077BFA2 /* ViewCommentsButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewCommentsButton.swift; path = View/ViewCommentsButton.swift; sourceTree = "<group>"; };
 		F61DF1E11A9A29DB0077BFA2 /* NetworkIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkIndicator.swift; path = Util/NetworkIndicator.swift; sourceTree = "<group>"; };
+		F69BB5BF1AE583A10022DC2C /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Link.swift; path = Model/Link.swift; sourceTree = "<group>"; };
 		F6E21C091A91087A00AF25EF /* HackerNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6E21C0D1A91087A00AF25EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F6E21C0E1A91087A00AF25EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				F61DF1C51A9A29B00077BFA2 /* Comment.swift */,
 				F61DF1C61A9A29B00077BFA2 /* ModelAdapter.swift */,
 				F61DF1C71A9A29B00077BFA2 /* Story.swift */,
+				F69BB5BF1AE583A10022DC2C /* Link.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F69BB5C01AE583A10022DC2C /* Link.swift in Sources */,
 				F61DF1E01A9A29CF0077BFA2 /* ViewCommentsButton.swift in Sources */,
 				F61DF1DD1A9A29CF0077BFA2 /* CommentCell.swift in Sources */,
 				F61DF1D31A9A29C50077BFA2 /* CommentListViewController.swift in Sources */,

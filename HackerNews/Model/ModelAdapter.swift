@@ -31,7 +31,15 @@ class ModelAdapter {
         comment.by = data["by"] as! String
         comment.timeAgo = data["when"] as! String
         comment.indent = data["indent"] as! Int
+        comment.externalLinks = (data["external_links"] as! Array).map(toLink)
         return comment
+    }
+    
+    func toLink(data:NSDictionary) -> Link {
+        var link = Link()
+        link.title = data["name"] as! String
+        link.url = data["value"] as! String
+        return link
     }
 }
 

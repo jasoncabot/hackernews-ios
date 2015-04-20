@@ -14,6 +14,7 @@ class Comment {
     var by: String = ""
     var timeAgo: String = ""
     var indent: Int = 0
+    var externalLinks: Array<Link> = []
 
     init() {
     }
