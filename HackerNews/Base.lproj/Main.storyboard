@@ -335,33 +335,37 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WWWWWWWWWWW" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sep-lz-Iy8">
-                                                    <rect key="frame" x="16" y="8" width="110" height="13"/>
+                                                    <rect key="frame" x="8" y="8" width="110" height="13"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="11"/>
                                                     <color key="textColor" red="0.50980392156862742" green="0.50980392156862742" blue="0.50980392156862742" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="88 minutes ago" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H45-lG-LpB">
-                                                    <rect key="frame" x="131" y="8" width="74" height="13"/>
+                                                    <rect key="frame" x="123" y="8" width="74" height="13"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="11"/>
                                                     <color key="textColor" red="0.50980392156862742" green="0.50980392156862742" blue="0.50980392156862742" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is a comment" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rf9-DG-fhO">
-                                                    <rect key="frame" x="16" y="22" width="568" height="37"/>
+                                                    <rect key="frame" x="8" y="22" width="584" height="37"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="sep-lz-Iy8" firstAttribute="top" secondItem="GrQ-jg-e72" secondAttribute="topMargin" id="5W1-xk-pE2"/>
-                                                <constraint firstItem="rf9-DG-fhO" firstAttribute="leading" secondItem="sep-lz-Iy8" secondAttribute="leading" id="7Xl-1A-7Zb"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="rf9-DG-fhO" secondAttribute="trailing" constant="8" id="Hq7-cA-4R3"/>
-                                                <constraint firstItem="rf9-DG-fhO" firstAttribute="bottom" secondItem="GrQ-jg-e72" secondAttribute="bottomMargin" id="Mfj-nG-Z6t"/>
-                                                <constraint firstItem="sep-lz-Iy8" firstAttribute="leading" secondItem="GrQ-jg-e72" secondAttribute="leadingMargin" constant="8" id="ZUA-Sg-ZED"/>
-                                                <constraint firstItem="rf9-DG-fhO" firstAttribute="top" secondItem="GrQ-jg-e72" secondAttribute="topMargin" constant="14" id="daq-Z8-t8J"/>
-                                                <constraint firstItem="H45-lG-LpB" firstAttribute="leading" secondItem="sep-lz-Iy8" secondAttribute="trailing" constant="5" id="ma8-KS-1E9"/>
-                                                <constraint firstItem="H45-lG-LpB" firstAttribute="top" secondItem="GrQ-jg-e72" secondAttribute="topMargin" id="mcR-9Z-W6W"/>
+                                                <constraint firstItem="rf9-DG-fhO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GrQ-jg-e72" secondAttribute="leadingMargin" id="7Ql-gA-sIG"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="rf9-DG-fhO" secondAttribute="bottom" id="E1S-O2-SKN"/>
+                                                <constraint firstItem="H45-lG-LpB" firstAttribute="top" secondItem="GrQ-jg-e72" secondAttribute="topMargin" id="FAV-d3-DEM"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="rf9-DG-fhO" secondAttribute="trailing" id="PNK-jB-mww"/>
+                                                <constraint firstItem="rf9-DG-fhO" firstAttribute="top" secondItem="GrQ-jg-e72" secondAttribute="topMargin" constant="14" id="RCR-xi-ZhV"/>
+                                                <constraint firstItem="H45-lG-LpB" firstAttribute="leading" secondItem="sep-lz-Iy8" secondAttribute="trailing" constant="5" id="SVK-4b-M9U"/>
+                                                <constraint firstItem="rf9-DG-fhO" firstAttribute="top" secondItem="sep-lz-Iy8" secondAttribute="bottom" constant="1" id="Wrx-YI-RvU"/>
+                                                <constraint firstItem="sep-lz-Iy8" firstAttribute="leading" secondItem="GrQ-jg-e72" secondAttribute="leadingMargin" id="ZUA-Sg-ZED"/>
+                                                <constraint firstItem="H45-lG-LpB" firstAttribute="leading" secondItem="sep-lz-Iy8" secondAttribute="trailing" constant="5" id="j70-VF-U89"/>
+                                                <constraint firstItem="rf9-DG-fhO" firstAttribute="top" secondItem="H45-lG-LpB" secondAttribute="bottom" constant="1" id="lxk-K0-oPK"/>
+                                                <constraint firstItem="sep-lz-Iy8" firstAttribute="top" secondItem="GrQ-jg-e72" secondAttribute="topMargin" id="u16-IN-1fz"/>
+                                                <constraint firstItem="sep-lz-Iy8" firstAttribute="leading" secondItem="rf9-DG-fhO" secondAttribute="leading" id="uo1-ec-y9u"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -384,10 +388,10 @@
                         <color key="backgroundColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="yeb-j5-dtD" secondAttribute="trailing" constant="-16" id="ZLi-kt-uAt"/>
-                            <constraint firstItem="GdR-Bq-LBg" firstAttribute="top" secondItem="yeb-j5-dtD" secondAttribute="bottom" id="aO8-n2-AhV"/>
-                            <constraint firstItem="yeb-j5-dtD" firstAttribute="top" secondItem="mCQ-wp-5KC" secondAttribute="topMargin" id="pkD-Vm-Oha"/>
-                            <constraint firstItem="yeb-j5-dtD" firstAttribute="leading" secondItem="mCQ-wp-5KC" secondAttribute="leadingMargin" constant="-16" id="xoh-tr-ICl"/>
+                            <constraint firstItem="yeb-j5-dtD" firstAttribute="top" secondItem="mCQ-wp-5KC" secondAttribute="topMargin" id="S7q-dP-fJw"/>
+                            <constraint firstItem="yeb-j5-dtD" firstAttribute="leading" secondItem="mCQ-wp-5KC" secondAttribute="leadingMargin" constant="-16" id="Ytz-jt-zva"/>
+                            <constraint firstItem="GdR-Bq-LBg" firstAttribute="top" secondItem="yeb-j5-dtD" secondAttribute="bottom" id="fga-dM-Eei"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="yeb-j5-dtD" secondAttribute="trailing" constant="-16" id="i64-u5-fUC"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Comments" id="LVp-WN-gQD">
@@ -479,6 +483,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="HsG-pr-k34"/>
         <segue reference="EUp-Xc-vc7"/>
-        <segue reference="wbG-d0-Ezm"/>
+        <segue reference="4Jo-QO-uJ2"/>
     </inferredMetricsTieBreakers>
 </document>
