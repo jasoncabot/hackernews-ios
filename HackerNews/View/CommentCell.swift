@@ -15,7 +15,7 @@ class CommentCell : UITableViewCell {
     @IBOutlet weak var timeAgoLabel: UILabel!
     @IBOutlet weak var commentLabel: UILabel!
     
-    var defaultLeading: CGFloat = 0
+    var defaultLeading: CGFloat!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,7 +27,7 @@ class CommentCell : UITableViewCell {
         userLabel.text = comment.by
         timeAgoLabel.text = comment.timeAgo
         commentLabel.text = comment.text
-        var indent = 10 * CGFloat(comment.indent)
+        let indent = defaultLeading * CGFloat(comment.indent)
         indentationConstraint.constant = defaultLeading + indent
     }
 

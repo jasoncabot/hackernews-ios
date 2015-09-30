@@ -13,13 +13,13 @@ class NetworkIndicator {
     private var numberOfNetworkRequests = 0
 
     func displayNetworkIndicator(display:Bool) -> Void {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        dispatch_async(dispatch_get_main_queue()) { [unowned self] in
             if (display) {
                 self.numberOfNetworkRequests++
             } else {
                 self.numberOfNetworkRequests = max(0, self.numberOfNetworkRequests - 1)
             }
             UIApplication.sharedApplication().networkActivityIndicatorVisible = self.numberOfNetworkRequests > 0
-        })
+        }
     }
 }

@@ -13,7 +13,7 @@ class MenuViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let path = tableView.indexPathForSelectedRow() {
+        if let path = tableView.indexPathForSelectedRow {
             tableView.deselectRowAtIndexPath(path, animated: animated)
         }
 
@@ -23,25 +23,15 @@ class MenuViewController: UITableViewController {
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let id = segue.identifier {
-            switch id {
-
-            case "FrontPage":
-                (segue.destinationViewController as! StoryListViewController).storiesSource.type = StoryType.FrontPage
-
-            case "New":
-                (segue.destinationViewController as! StoryListViewController).storiesSource.type = StoryType.New
-                
-            case "Show":
-                (segue.destinationViewController as! StoryListViewController).storiesSource.type = StoryType.Show
-                
-            case "Ask":
-                (segue.destinationViewController as! StoryListViewController).storiesSource.type = StoryType.Ask
-                
-            default:
-                break
-            
-            }
+        
+        guard let id = segue.identifier where ["FrontPage", "New", "Show", "Ask"].contains(id) else {
+            return
         }
+        
+        guard let type = StoryType(rawValue: id) else {
+            return
+        }
+        
+        (segue.destinationViewController as! StoryListViewController).storiesSource = StoriesDataSource(type: type)
     }
 }

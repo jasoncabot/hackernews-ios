@@ -18,7 +18,7 @@ class StoryCell: UITableViewCell {
         self.storyTitleLabel.text = "\(position). \(story.title)"
         self.subtitleLabel.text = makeSubtitle(story)
         self.viewCommentsButton.setTitle("\(story.numberOfComments)", forState: .Normal)
-        self.viewCommentsButton.key = String(story.id)
+        self.viewCommentsButton.key = story.id
         
         if story.unread {
             self.storyTitleLabel.textColor = UIColor.blackColor()

@@ -21,7 +21,7 @@ class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbar
         self.title = self.story?.title
         
         if let storyUrl = self.story?.url {
-            var request = NSURLRequest(URL: storyUrl)
+            let request = NSURLRequest(URL: storyUrl)
             
             self.webView.hidden = true
             
@@ -58,7 +58,7 @@ class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbar
             switch id {
                 
             case "ShowComments":
-                var story:Story = self.story!
+                let story:Story = self.story!
                 if storiesSource != nil {
                     let navigationController:UINavigationController = segue.destinationViewController as! UINavigationController;
                     let commentsViewController:CommentListViewController = navigationController.viewControllers.first as! CommentListViewController;
@@ -76,7 +76,7 @@ class StoryViewController : UIViewController, UIWebViewDelegate, OptionalToolbar
         }
     }
 
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
         showNetworkIndicator(false)
     }
 

@@ -13,15 +13,13 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var commentsTableView: UITableView!
     
     var story:Story?
-    var comments:Array<Comment>?
+    var comments:[Comment]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         commentsTableView.estimatedRowHeight = 68
         commentsTableView.rowHeight = UITableViewAutomaticDimension
-        
-        UITableViewHeaderFooterView.appearance().textLabel.backgroundColor = UIColor.redColor()
     }
 
     func onCommentsLoaded(story:Story, receivedComments:Array<Comment>) {
@@ -32,7 +30,7 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:CommentCell = tableView.dequeueReusableCellWithIdentifier("CommentCellIdentifier", forIndexPath: indexPath) as! CommentCell
+        let cell:CommentCell = tableView.dequeueReusableCellWithIdentifier("CommentCellIdentifier", forIndexPath: indexPath) as! CommentCell
 
         if let comment = self.commentForRow(indexPath.row) {
             cell.updateWithComment(comment)
@@ -50,7 +48,7 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
                 alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
 
                 for externalLink in comment.externalLinks {
-                    alertController.addAction(UIAlertAction(title: externalLink.title, style: .Default, handler: { (action:UIAlertAction!) -> Void in
+                    alertController.addAction(UIAlertAction(title: externalLink.title, style: .Default, handler: { (action:UIAlertAction) -> Void in
                         if let url = NSURL(string: externalLink.url) {
                             UIApplication.sharedApplication().openURL(url)
                         }
@@ -63,23 +61,17 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let c = comments {
-            return c.count
-        }
-        return 0
+        return (comments ?? []).count
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if let s = story {
-            return s.title
-        }
-        return nil
+        return story?.title
     }
     
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
-            header.textLabel.shadowOffset = CGSize.zeroSize
-            header.textLabel.font = UIFont.systemFontOfSize(12)
+            header.textLabel!.shadowOffset = CGSizeZero
+            header.textLabel!.font = UIFont.systemFontOfSize(12)
             
             if let nav = self.navigationController as? HeadedNavigationController {
                 header.alpha = nav.startingAlpha
@@ -88,10 +80,7 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func commentForRow(index:Int) -> Comment? {
-        if let c = comments {
-            return c[index]
-        }
-        return nil
+        return comments?[index]
     }
     
     var onDismissed:dispatch_block_t?

@@ -8,10 +8,16 @@
 
 import Foundation
 
-class Link {
-    var url: String = ""
-    var title: String = ""
+struct Link {
+    var url: String
+    var title: String
     
-    init() {
+    init?(data: AnyObject) {
+        guard let title = data["name"] as? String, let url = data["value"] as? String else {
+            return nil
+        }
+        
+        self.title = title
+        self.url = url
     }
 }

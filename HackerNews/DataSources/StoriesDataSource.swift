@@ -8,34 +8,47 @@
 
 import UIKit
 
-enum StoryType {
-    case FrontPage
-    case New
-    case Show
-    case Ask
+enum StoryType : String {
+    case FrontPage = "FrontPage"
+    case New = "New"
+    case Show = "Show"
+    case Ask = "Ask"
 }
 
 class StoriesDataSource: NSObject, UITableViewDataSource {
     
-    var type:StoryType?
-    var stories:Array<Story> = []
-    var isLoading:Bool = false
-    let adapter:ModelAdapter = ModelAdapter()
+    var type:StoryType
+    var stories:[Story]
+    var isLoading:Bool
+    
+    init(type:StoryType) {
+        self.type = type
+        self.stories = []
+        self.isLoading = false
+    }
 
     func load(completion:dispatch_block_t) {
         load(1, onComplete: completion)
     }
 
     func load(page: Int, onComplete:dispatch_block_t) {
-        isLoading = true
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+        guard let url = NSURL(string: self.endpointForPage(page)) else {
+            return
+        }
 
-            let url = NSURL(string: self.endpointForPage(page))
-            
-            let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {(data, response, error) in
+        isLoading = true
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { [unowned self] in
+
+            let task = NSURLSession.sharedSession().dataTaskWithURL(url) { (data, _, _) in
                 
-                self.stories += self.parseStories(data)
+                if let result = data {
+                    let x = self.stories.count
+                    self.stories += self.parseStories(result)
+                    let y = self.stories.count
+                    print("Stories went from \(x) to \(y)")
+                }
                 
                 dispatch_async(dispatch_get_main_queue()) {
                     self.isLoading = false
@@ -44,95 +57,66 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
             }
             
             task.resume()
-        })
+        }
     }
     
     func refresh(completion:dispatch_block_t) {
-        stories = []
+        stories.removeAll()
         load(completion);
     }
 
-    private func parseStories(data:NSData) -> Array<Story> {
-        var parseError: NSError?
-        let parsedObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(data,
-            options: NSJSONReadingOptions.AllowFragments,
-            error:&parseError)
-        var parsed:Array<Story> = []
-        if let storiesData = parsedObject as? NSArray {
-            for storyData in storiesData {
-                if let dataDict = storyData as? NSDictionary{
-                    parsed.append(adapter.storyForData(dataDict))
-                }
-            }
+    private func parseStories(data:NSData) -> [Story] {
+        let parsedObject: AnyObject?
+        do {
+            parsedObject = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
+        } catch let error as NSError {
+            print("Received error \(error) parsing \(NSString(data: data, encoding: NSUTF8StringEncoding))")
+            parsedObject = nil
         }
-        return parsed
+        if let storiesData = parsedObject as? [AnyObject] {
+            return storiesData.map() { Story(data: $0) }.filter() { $0 != nil }.map() { $0! }
+        }
+        return []
     }
     
-    private func parseComments(data:NSData) -> Array<Comment> {
-        var parseError: NSError?
-        let parsedObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(data,
-            options: NSJSONReadingOptions.AllowFragments,
-            error:&parseError)
-        var parsed:Array<Comment> = []
-        if let allCommentData = parsedObject as? NSArray {
-            for commentData in allCommentData {
-                if let dataDict = commentData as? NSDictionary{
-                    parsed.append(adapter.commentForData(dataDict))
-                }
-            }
+    private func parseComments(data:NSData) -> [Comment] {
+        let parsedObject: AnyObject?
+        do {
+            parsedObject = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
+        } catch let error as NSError {
+            print("Received error \(error) parsing \(NSString(data: data, encoding: NSUTF8StringEncoding))")
+            parsedObject = nil
         }
-        return parsed
+        if let allCommentData = parsedObject as? [AnyObject] {
+            return allCommentData.map() { Comment(data: $0) }.filter() { $0 != nil }.map() { $0! }
+        }
+        return []
     }
     
     func endpointForPage(page: Int) -> String {
-        if let storyType = type {
-            switch storyType {
-                
-            case .FrontPage:
-                return "http://hncabot.appspot.com/fp?p=\(page)"
-                
-            case .New:
-                return "http://hncabot.appspot.com/new?p=\(page)"
-                
-            case .Show:
-                return "http://hncabot.appspot.com/show?p=\(page)"
-                
-            case .Ask:
-                return "http://hncabot.appspot.com/ask?p=\(page)"
-                
-            }
+        switch type {
+        case .FrontPage: return "https://hncabot.appspot.com/fp?p=\(page)"
+        case .New: return "https://hncabot.appspot.com/new?p=\(page)"
+        case .Show: return "https://hncabot.appspot.com/show?p=\(page)"
+        case .Ask: return "https://hncabot.appspot.com/ask?p=\(page)"
         }
-        return ""
     }
     
     func endpointForComments(storyId: Int) -> String {
-        return "http://hncabot.appspot.com/c?id=\(storyId)"
+        return "https://hncabot.appspot.com/c?id=\(storyId)"
     }
         
-    func title() -> String {
-        if let storyType = type {
-            switch storyType {
-                
-            case .FrontPage:
-                return "Front Page"
-                
-            case .New:
-                return "New"
-                
-            case .Show:
-                return "Show HN"
-                
-            case .Ask:
-                return "Ask HN"
-                
-            }
+    var title: String {
+        switch type {
+        case .FrontPage: return "Front Page"
+        case .New: return "New"
+        case .Show: return "Show HN"
+        case .Ask: return "Ask HN"
         }
-        
-        return "Stories"
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:StoryCell = tableView.dequeueReusableCellWithIdentifier("StoryCellIdentifier", forIndexPath: indexPath) as! StoryCell
+        let cell:StoryCell = tableView.dequeueReusableCellWithIdentifier("StoryCellIdentifier", forIndexPath: indexPath) as! StoryCell
 
         if let story = self.storyForIndexPath(indexPath) {
             cell.updateWithStory(indexPath.row + 1, story: story)
@@ -146,47 +130,50 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
     }
     
     func indexPathForStory(story:Story) -> NSIndexPath? {
-        if let row = find(stories, story) {
+        if let row = stories.indexOf(story) {
             return NSIndexPath(forRow: row, inSection: 0)
         }
         return nil
     }
     
-    func storyForIndexPath(path:NSIndexPath) -> Story? {
-        if stories.count > path.row {
+    func storyForIndexPath(indexPath:NSIndexPath?) -> Story? {
+        if let path = indexPath where stories.count > path.row {
             return stories[path.row]
         }
         return nil
     }
     
-    func findStory(key:String) -> Story? {
+    func findStory(key:Int) -> Story? {
         for story in stories {
-            if key == String(story.id) {
+            if key == story.id {
                 return story
             }
         }
         return nil
     }
     
-    func retrieveComments(story: Story, completion: (Array<Comment>) -> Void) -> Void {
+    func retrieveComments(story: Story, completion: ([Comment]) -> Void) -> Void {
+        
+        guard let url = NSURL(string: self.endpointForComments(story.id)) else {
+            return
+        }
+        
         isLoading = true
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { [unowned self] in
             
-            let url = NSURL(string: self.endpointForComments(story.id))
-            
-            let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {(data, response, error) in
+            let task = NSURLSession.sharedSession().dataTaskWithURL(url) {(data, _, _) in
                 
-                let comments = self.parseComments(data)
+                let comments = data != nil ? self.parseComments(data!) : []
                 
                 dispatch_async(dispatch_get_main_queue()) {
                     self.isLoading = false
                     completion(comments)
                 }
             }
-            
+
             task.resume()
-        })
+        }
     }
     
 }

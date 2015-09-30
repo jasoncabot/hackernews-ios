@@ -9,5 +9,5 @@
 import UIKit
 
 class ViewCommentsButton : UIButton {
-    var key: String?
+    var key: Int = 0
 }
