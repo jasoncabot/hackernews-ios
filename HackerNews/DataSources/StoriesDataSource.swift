@@ -156,7 +156,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                     .stringByReplacingOccurrencesOfString("<[/]?a[^>]+>", withString: "", options: .RegularExpressionSearch, range: nil)
                     .stringByReplacingOccurrencesOfString("<[^>]+>", withString: "\n\n", options: .RegularExpressionSearch, range: nil)
                     .stringByReplacingOccurrencesOfString("\n+", withString: "\n\n", options: .RegularExpressionSearch, range: nil)
-                    .stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()))!
+                    .stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())) ?? ""
 
                 let links = thing.css(".comment a").map({ element -> AnyObject in
                     return [
