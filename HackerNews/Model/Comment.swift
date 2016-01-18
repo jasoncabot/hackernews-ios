@@ -9,7 +9,6 @@
 import Foundation
 
 struct Comment {
-    var id: Int
     var text: String
     var by: String
     var timeAgo: String
@@ -19,7 +18,6 @@ struct Comment {
     init?(data:AnyObject) {
         
         guard
-            let id = data["id"] as? Int,
             let text = data["text"] as? String,
             let by = data["by"] as? String,
             let timeAgo = data["when"] as? String,
@@ -29,7 +27,6 @@ struct Comment {
             return nil
         }
         
-        self.id = id
         self.text = text
         self.by = by
         self.timeAgo = timeAgo

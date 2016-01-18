@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kanna
 
 enum StoryType : String {
     case FrontPage = "FrontPage"
@@ -66,44 +67,131 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
     }
 
     private func parseStories(data:NSData) -> [Story] {
-        let parsedObject: AnyObject?
-        do {
-            parsedObject = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
-        } catch let error as NSError {
-            print("Received error \(error) parsing \(NSString(data: data, encoding: NSUTF8StringEncoding))")
-            parsedObject = nil
+        
+        var stories: [Story] = []
+        if let doc = Kanna.HTML(html: data, encoding: NSUTF8StringEncoding) {
+            
+            let rows = doc.css(".itemlist tr")
+
+            for idx in 0.stride(to: rows.count - 3, by: 3) {
+                
+                let thing = rows[idx]
+                
+                let anchor = thing.css("td.title a").first
+                var url = anchor?["href"] ?? ""
+                
+                if url.hasPrefix("item?id=") {
+                    url = "https://news.ycombinator.com/\(url)"
+                }
+
+                guard let title = anchor?.text else {
+                    continue
+                }
+                
+                let metaThing = rows[idx + 1]
+                
+                let score = (metaThing.css(".score").text?
+                    .stringByReplacingOccurrencesOfString(" points", withString: "")
+                    .stringByReplacingOccurrencesOfString(" point", withString: "") as NSString?)!
+                    .integerValue
+                let timeAgo = metaThing.css(".subtext a:nth-child(3)").text?
+                    .stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+                let author = metaThing.css(".subtext a:nth-child(2)").text?
+                    .stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+                
+                
+                var numComments: Int = 0
+                if let value = metaThing.css(".subtext a:nth-child(4)").text {
+                    numComments = (value
+                        .stringByReplacingOccurrencesOfString(" discuss", withString: "")
+                        .stringByReplacingOccurrencesOfString(" comments", withString: "")
+                        .stringByReplacingOccurrencesOfString(" comment", withString: "") as NSString)
+                        .integerValue
+                    
+                }
+                var identifier: Int = 0
+                if let value = metaThing.css("a").at(1)?["href"] {
+                    identifier = (value
+                        .stringByReplacingOccurrencesOfString("item?id=", withString: "") as NSString)
+                        .integerValue
+                }
+
+                stories.append(Story(id: identifier
+                    , title: title
+                    , points: score
+                    , by: author ?? "unknown"
+                    , timeAgo: timeAgo ?? "a little while ago"
+                    , numberOfComments: numComments
+                    , url: NSURL(string: url)
+                    , unread: true))
+                
+            }
         }
-        if let storiesData = parsedObject as? [AnyObject] {
-            return storiesData.map() { Story(data: $0) }.filter() { $0 != nil }.map() { $0! }
-        }
-        return []
+        
+        return stories
     }
     
     private func parseComments(data:NSData) -> [Comment] {
-        let parsedObject: AnyObject?
-        do {
-            parsedObject = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
-        } catch let error as NSError {
-            print("Received error \(error) parsing \(NSString(data: data, encoding: NSUTF8StringEncoding))")
-            parsedObject = nil
+        var comments: [Comment] = []
+        if let doc = Kanna.HTML(html: data, encoding: NSUTF8StringEncoding) {
+
+            for thing in doc.css(".comment-tree .athing") {
+                
+                var indent = 0
+                if let value = thing.css(".ind img").first?["width"] {
+                     indent = (value as NSString).integerValue / 40
+                }
+                
+                let comhead = thing.css(".comhead a")
+                let by: String = comhead.first?.text ?? "someone"
+                let when: String = comhead.last?.text ?? "a while ago"
+
+                var text = thing.css(".comment").innerHTML ?? ""
+
+                let startOfReply = text.rangeOfString("<div class=\"reply\">")?.startIndex ?? text.endIndex
+                text = (text.stringByReplacingCharactersInRange(Range<String.Index>(start: startOfReply, end: text.endIndex), withString: "")
+                    .stringByRemovingPercentEncoding?
+                    .stringByReplacingOccurrencesOfString("&gt;", withString: ">")
+                    .stringByReplacingOccurrencesOfString("<[/]?([bi]|em)>", withString: "", options: .RegularExpressionSearch, range: nil)
+                    .stringByReplacingOccurrencesOfString("<[/]?a[^>]+>", withString: "", options: .RegularExpressionSearch, range: nil)
+                    .stringByReplacingOccurrencesOfString("<[^>]+>", withString: "\n\n", options: .RegularExpressionSearch, range: nil)
+                    .stringByReplacingOccurrencesOfString("\n+", withString: "\n\n", options: .RegularExpressionSearch, range: nil)
+                    .stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()))!
+
+                let links = thing.css(".comment a").map({ element -> AnyObject in
+                    return [
+                        "name": element.text!,
+                        "value": element["href"]!
+                    ] as NSDictionary
+                })
+                
+                let data: [String: AnyObject] = [
+                    "text": text,
+                    "by": by,
+                    "when": when,
+                    "indent": indent,
+                    "external_links": links
+                ]
+
+                if let comment = Comment(data: data) where !text.isEmpty {
+                    comments.append(comment)
+                }
+            }
         }
-        if let allCommentData = parsedObject as? [AnyObject] {
-            return allCommentData.map() { Comment(data: $0) }.filter() { $0 != nil }.map() { $0! }
-        }
-        return []
+        return comments
     }
-    
+
     func endpointForPage(page: Int) -> String {
         switch type {
-        case .FrontPage: return "https://hncabot.appspot.com/fp?p=\(page)"
-        case .New: return "https://hncabot.appspot.com/new?p=\(page)"
-        case .Show: return "https://hncabot.appspot.com/show?p=\(page)"
-        case .Ask: return "https://hncabot.appspot.com/ask?p=\(page)"
+        case .FrontPage: return "https://news.ycombinator.com/news?p=\(page)"
+        case .New: return "https://news.ycombinator.com/newest?p=\(page)"
+        case .Show: return "https://news.ycombinator.com/show?p=\(page)"
+        case .Ask: return "https://news.ycombinator.com/ask?p=\(page)"
         }
     }
     
     func endpointForComments(storyId: Int) -> String {
-        return "https://hncabot.appspot.com/c?id=\(storyId)"
+        return "https://news.ycombinator.com/item?id=\(storyId)"
     }
         
     var title: String {
