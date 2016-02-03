@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="80q-Ix-oBT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="80q-Ix-oBT">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -183,14 +183,13 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="characterWrap" translatesAutoresizingMaskIntoConstraints="NO" id="d8D-OL-ZEh" customClass="ViewCommentsButton" customModule="HackerNews" customModuleProvider="target">
-                                                    <rect key="frame" x="546" y="32" width="44" height="44"/>
+                                                    <rect key="frame" x="546" y="0.0" width="54" height="108"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="44" id="AnS-wl-Vuy"/>
-                                                        <constraint firstAttribute="width" constant="44" id="QuE-WC-urH"/>
+                                                        <constraint firstAttribute="width" constant="54" id="QuE-WC-urH"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
-                                                    <inset key="titleEdgeInsets" minX="0.0" minY="-8" maxX="0.0" maxY="0.0"/>
-                                                    <state key="normal" title="8888" backgroundImage="comment">
+                                                    <inset key="titleEdgeInsets" minX="-54" minY="-8" maxX="0.0" maxY="0.0"/>
+                                                    <state key="normal" title="8888" image="comment">
                                                         <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
@@ -208,9 +207,16 @@
                                                 <constraint firstItem="Yu0-EE-nbS" firstAttribute="top" secondItem="p4r-GY-uBv" secondAttribute="top" constant="10" id="Qv1-NR-GYF"/>
                                                 <constraint firstItem="FBh-2e-Jwh" firstAttribute="trailing" secondItem="Yu0-EE-nbS" secondAttribute="trailing" id="Soh-Nv-1UD"/>
                                                 <constraint firstItem="d8D-OL-ZEh" firstAttribute="leading" secondItem="Yu0-EE-nbS" secondAttribute="trailing" constant="5" id="hPN-1j-0NJ"/>
-                                                <constraint firstAttribute="trailing" secondItem="d8D-OL-ZEh" secondAttribute="trailing" constant="10" id="ma5-c0-T2K"/>
+                                                <constraint firstItem="d8D-OL-ZEh" firstAttribute="top" secondItem="p4r-GY-uBv" secondAttribute="top" id="mYS-6o-pse"/>
+                                                <constraint firstAttribute="trailing" secondItem="d8D-OL-ZEh" secondAttribute="trailing" id="ma5-c0-T2K"/>
                                                 <constraint firstItem="Yu0-EE-nbS" firstAttribute="width" secondItem="FBh-2e-Jwh" secondAttribute="width" id="pgg-ca-i4l"/>
+                                                <constraint firstAttribute="bottom" secondItem="d8D-OL-ZEh" secondAttribute="bottom" id="qvU-ft-zzv"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="4cR-jq-ra4"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="tintColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -499,6 +505,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="EUp-Xc-vc7"/>
         <segue reference="HsG-pr-k34"/>
-        <segue reference="4Jo-QO-uJ2"/>
+        <segue reference="wbG-d0-Ezm"/>
     </inferredMetricsTieBreakers>
 </document>
