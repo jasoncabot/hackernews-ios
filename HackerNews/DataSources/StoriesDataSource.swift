@@ -144,7 +144,10 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                 
                 let comhead = thing.css(".comhead a")
                 let by: String = comhead.first?.text ?? "someone"
-                let when: String = comhead.last?.text ?? "a while ago"
+                var when: String = "a while ago"
+                if (comhead.count > 1) {
+                    when = comhead.last?.text ?? when
+                }
 
                 var text = thing.css(".comment").innerHTML ?? ""
 
