@@ -155,6 +155,10 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                 text = (text.stringByReplacingCharactersInRange(Range<String.Index>(start: startOfReply, end: text.endIndex), withString: "")
                     .stringByRemovingPercentEncoding?
                     .stringByReplacingOccurrencesOfString("&gt;", withString: ">")
+                    .stringByReplacingOccurrencesOfString("&lt;", withString: "<")
+                    .stringByReplacingOccurrencesOfString("&amp;", withString: "&")
+                    .stringByReplacingOccurrencesOfString("&quot;", withString: "\"")
+                    .stringByReplacingOccurrencesOfString("&apos;", withString: "'")
                     .stringByReplacingOccurrencesOfString("<[/]?([bi]|em)>", withString: "", options: .RegularExpressionSearch, range: nil)
                     .stringByReplacingOccurrencesOfString("<[/]?a[^>]+>", withString: "", options: .RegularExpressionSearch, range: nil)
                     .stringByReplacingOccurrencesOfString("<[^>]+>", withString: "\n\n", options: .RegularExpressionSearch, range: nil)
