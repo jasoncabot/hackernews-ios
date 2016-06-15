@@ -152,7 +152,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                 var text = thing.css(".comment").innerHTML ?? ""
 
                 let startOfReply = text.rangeOfString("<div class=\"reply\">")?.startIndex ?? text.endIndex
-                text = (text.stringByReplacingCharactersInRange(Range<String.Index>(start: startOfReply, end: text.endIndex), withString: "")
+                text = (text.stringByReplacingCharactersInRange(startOfReply ..< text.endIndex, withString: "")
                     .stringByRemovingPercentEncoding?
                     .stringByReplacingOccurrencesOfString("&gt;", withString: ">")
                     .stringByReplacingOccurrencesOfString("&lt;", withString: "<")

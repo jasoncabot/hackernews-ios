@@ -15,7 +15,7 @@ class NetworkIndicator {
     func displayNetworkIndicator(display:Bool) -> Void {
         dispatch_async(dispatch_get_main_queue()) { [unowned self] in
             if (display) {
-                self.numberOfNetworkRequests++
+                self.numberOfNetworkRequests += 1
             } else {
                 self.numberOfNetworkRequests = max(0, self.numberOfNetworkRequests - 1)
             }

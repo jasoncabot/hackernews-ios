@@ -26,7 +26,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
         storiesTableView.dataSource = storiesSource
         
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: "refreshStories:", forControlEvents: .ValueChanged)
+        refreshControl.addTarget(self, action: #selector(StoryListViewController.refreshStories(_:)), forControlEvents: .ValueChanged)
         storiesTableView.insertSubview(refreshControl, atIndex: 0)
 
         displayLoadingActivity(true)
@@ -81,7 +81,8 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
             if shouldLoadMore {
                 
                 displayLoadingActivity(true)
-                storiesSource.load(++currentPage) {
+                currentPage = currentPage + 1
+                storiesSource.load(currentPage) {
                     self.storiesTableView.reloadData()
                     self.storiesTableView.flashScrollIndicators()
                     self.displayLoadingActivity(false)

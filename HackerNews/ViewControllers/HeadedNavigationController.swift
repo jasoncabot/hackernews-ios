@@ -16,8 +16,8 @@ class HeadedNavigationController : UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        barHideOnSwipeGestureRecognizer.addTarget(self, action: "onBarsToggled:")
-        barHideOnTapGestureRecognizer.addTarget(self, action: "onBarsToggled:")
+        barHideOnSwipeGestureRecognizer.addTarget(self, action: #selector(HeadedNavigationController.onBarsToggled(_:)))
+        barHideOnTapGestureRecognizer.addTarget(self, action: #selector(HeadedNavigationController.onBarsToggled(_:)))
         startingAlpha = statusBarBackground.alpha
         statusBarBackground.alpha = 0
         view.addSubview(statusBarBackground)
