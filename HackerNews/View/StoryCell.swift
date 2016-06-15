@@ -27,6 +27,8 @@ class StoryCell: UITableViewCell {
             self.storyTitleLabel.textColor = UIColor.darkGrayColor()
             self.storyTitleLabel.font = UIFont.systemFontOfSize(self.storyTitleLabel.font.pointSize)
         }
+        
+        self.viewCommentsButton.selected = story.commentsUnread
     }
     
     private func makeSubtitle(story:Story) -> String {

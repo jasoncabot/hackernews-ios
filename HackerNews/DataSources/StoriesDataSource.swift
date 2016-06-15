@@ -123,7 +123,8 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                     , timeAgo: timeAgo ?? "a little while ago"
                     , numberOfComments: numComments
                     , url: NSURL(string: url)
-                    , unread: true))
+                    , unread: true
+                    , commentsUnread: true))
                 
             }
         }

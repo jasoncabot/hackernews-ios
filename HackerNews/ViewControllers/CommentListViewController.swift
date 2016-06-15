@@ -22,9 +22,11 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
         commentsTableView.rowHeight = UITableViewAutomaticDimension
     }
 
-    func onCommentsLoaded(story:Story, receivedComments:Array<Comment>) {
+    func onCommentsLoaded(story:Story, receivedComments:[Comment]) {
         self.story = story
         self.comments = receivedComments
+        
+        story.commentsUnread = false
         
         commentsTableView.reloadData()
     }

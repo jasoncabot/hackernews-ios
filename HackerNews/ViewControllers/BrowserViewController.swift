@@ -21,6 +21,12 @@ class BrowserViewController : SFSafariViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Comments", style: .Plain, target: self, action: #selector(BrowserViewController.showComments(_:)))
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.story?.unread = false
+    }
+    
     @IBAction func showComments(sender: UIBarButtonItem) {
         guard let story = self.story, source = self.storiesSource else {
             return

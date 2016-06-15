@@ -17,8 +17,9 @@ class Story : Equatable {
     var numberOfComments: Int!
     var url: NSURL?
     var unread: Bool
+    var commentsUnread: Bool
     
-    init(id: Int, title: String, points: Int, by: String, timeAgo: String, numberOfComments: Int, url: NSURL?, unread: Bool) {
+    init(id: Int, title: String, points: Int, by: String, timeAgo: String, numberOfComments: Int, url: NSURL?, unread: Bool, commentsUnread: Bool) {
         self.id = id
         self.title = title
         self.points = points
@@ -27,6 +28,7 @@ class Story : Equatable {
         self.numberOfComments = numberOfComments
         self.url = url
         self.unread = unread
+        self.commentsUnread = commentsUnread
     }
     
     init?(data: AnyObject) {
@@ -36,7 +38,6 @@ class Story : Equatable {
             let author = data["by"] as? String,
             let timeAgo = data["when"] as? String,
             let urlString = data["url"] as? String else {
-                self.unread = false
                 return nil
         }
         
@@ -48,6 +49,7 @@ class Story : Equatable {
         self.numberOfComments = data["comments"] as? Int ?? 0
         self.url = NSURL(string: urlString)
         self.unread = true
+        self.commentsUnread = true
     }
 }
 

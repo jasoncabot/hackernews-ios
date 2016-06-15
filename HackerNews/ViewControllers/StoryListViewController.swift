@@ -102,8 +102,6 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
         browser.storiesSource = storiesSource
         
         self.navigationController?.pushViewController(browser, animated: true)
-        
-        story.unread = false
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -133,8 +131,6 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
                     self.showNetworkIndicator(false)
                     commentsViewController.onCommentsLoaded(story, receivedComments: comments)
                 }
-
-                story.unread = false
                 
             default:
                 break
