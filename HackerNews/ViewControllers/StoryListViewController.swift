@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StoryListViewController: UIViewController, UITableViewDelegate, OptionalToolbarViewController {
+class StoryListViewController: UIViewController, UITableViewDelegate {
 
     @IBOutlet var storiesTableView: UITableView!
     @IBOutlet weak var loadingView: UIView!
@@ -90,21 +90,26 @@ class StoryListViewController: UIViewController, UITableViewDelegate, OptionalTo
             }
         }
     }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        guard let story = storiesSource.storyForIndexPath(storiesTableView.indexPathForSelectedRow), url = story.url else {
+            return
+        }
+        
+        let browser = BrowserViewController(URL: url, entersReaderIfAvailable: true)
+        
+        browser.story = story
+        browser.storiesSource = storiesSource
+        
+        self.navigationController?.pushViewController(browser, animated: true)
+        
+        story.unread = false
+    }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if let id = segue.identifier {
             switch id {
-                
-            case "ShowStory":
-
-                if let story = storiesSource.storyForIndexPath(storiesTableView.indexPathForSelectedRow) {
-                    
-                    (segue.destinationViewController as! StoryViewController).story = story
-                    (segue.destinationViewController as! StoryViewController).storiesSource = storiesSource
-                    
-                    story.unread = false
-                }
                 
             case "ShowComments":
                 let storyId = (sender as! ViewCommentsButton).key

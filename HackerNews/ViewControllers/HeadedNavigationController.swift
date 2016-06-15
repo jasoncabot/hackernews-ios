@@ -43,10 +43,6 @@ class HeadedNavigationController : UINavigationController {
     func onBarsToggled(swipeGestureRecognizer: UISwipeGestureRecognizer) {
         self.positionStatusBarBackgroundView()
 
-        if let vc = self.topViewController as? OptionalToolbarViewController {
-            self.toolbarHidden = navigationBarHidden || !vc.shouldDisplayToolbar()
-        }
-
         UIView.animateWithDuration(0.25) {
             self.statusBarBackground.alpha = self.navigationBarHidden ? self.startingAlpha : 0
         }

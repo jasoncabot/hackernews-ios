@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="80q-Ix-oBT">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
@@ -224,7 +223,6 @@
                                             <outlet property="storyTitleLabel" destination="Yu0-EE-nbS" id="jVl-8t-aRN"/>
                                             <outlet property="subtitleLabel" destination="FBh-2e-Jwh" id="hbg-sV-2Ad"/>
                                             <outlet property="viewCommentsButton" destination="d8D-OL-ZEh" id="u0o-fD-DfU"/>
-                                            <segue destination="Qu2-N6-eFe" kind="show" identifier="ShowStory" id="AMR-Rb-vlL"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -279,62 +277,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hw7-aW-hGx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1046" y="-708"/>
-        </scene>
-        <!--Story View Controller-->
-        <scene sceneID="Oje-6w-rkh">
-            <objects>
-                <viewController id="Qu2-N6-eFe" customClass="StoryViewController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="J78-zC-EMt"/>
-                        <viewControllerLayoutGuide type="bottom" id="iue-qg-FCR"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="GAt-0b-evK">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uVO-Fa-f3m">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="tintColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <dataDetectorType key="dataDetectorTypes"/>
-                                <connections>
-                                    <outlet property="delegate" destination="Qu2-N6-eFe" id="2Oc-pc-7V8"/>
-                                </connections>
-                            </webView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" red="1" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="uVO-Fa-f3m" secondAttribute="trailing" id="0WN-oZ-WNc"/>
-                            <constraint firstItem="uVO-Fa-f3m" firstAttribute="top" secondItem="GAt-0b-evK" secondAttribute="top" id="Foa-Yc-d0D"/>
-                            <constraint firstAttribute="bottom" secondItem="uVO-Fa-f3m" secondAttribute="bottom" id="hPU-lM-esb"/>
-                            <constraint firstItem="uVO-Fa-f3m" firstAttribute="leading" secondItem="GAt-0b-evK" secondAttribute="leading" id="yjQ-PS-0tj"/>
-                        </constraints>
-                    </view>
-                    <toolbarItems>
-                        <barButtonItem title="Open in Safari" id="aOT-fe-YyT">
-                            <connections>
-                                <action selector="openInSafari:" destination="Qu2-N6-eFe" id="reF-mo-4Fs"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" id="Dkp-XD-llE">
-                        <barButtonItem key="rightBarButtonItem" title="Comments" id="qUe-aF-INP">
-                            <connections>
-                                <segue destination="vF2-xN-q65" kind="presentation" identifier="ShowComments" id="4Jo-QO-uJ2"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="safariButton" destination="aOT-fe-YyT" id="BV4-k5-9Uf"/>
-                        <outlet property="view" destination="GAt-0b-evK" id="Viu-5y-Ul5"/>
-                        <outlet property="webView" destination="uVO-Fa-f3m" id="klL-ai-A56"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cf8-Ye-u6L" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1985" y="-699"/>
         </scene>
         <!--Comments-->
         <scene sceneID="h3c-4S-guS">
@@ -434,7 +376,7 @@
         <!--Headed Navigation Controller-->
         <scene sceneID="Zxs-dG-jf8">
             <objects>
-                <navigationController storyboardIdentifier="ModalNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vF2-xN-q65" customClass="HeadedNavigationController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="CommentNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" hidesBarsOnSwipe="YES" id="vF2-xN-q65" customClass="HeadedNavigationController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gnE-Ev-SPM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -505,6 +447,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="EUp-Xc-vc7"/>
         <segue reference="HsG-pr-k34"/>
-        <segue reference="wbG-d0-Ezm"/>
     </inferredMetricsTieBreakers>
+    <color key="tintColor" red="0.81568627450980391" green="0.18823529411764706" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
 </document>
