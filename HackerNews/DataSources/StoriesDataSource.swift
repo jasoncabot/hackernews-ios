@@ -165,12 +165,12 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                     .stringByReplacingOccurrencesOfString("\n+", withString: "\n\n", options: .RegularExpressionSearch, range: nil)
                     .stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())) ?? ""
 
-                let links = thing.css(".comment a").map({ element -> AnyObject in
-                    return [
+                let links = thing.css(".comment a").map({ element -> AnyObject? in
+                    return (element.text == "reply") ? nil : [
                         "name": element.text!,
                         "value": element["href"]!
                     ] as NSDictionary
-                })
+                }).filter({$0 != nil}).map({$0!})
                 
                 let data: [String: AnyObject] = [
                     "text": text,
