@@ -12,7 +12,11 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
 
     @IBOutlet var storiesTableView: UITableView!
     @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var sortButton: UIBarButtonItem!
 
+    @IBOutlet weak var toastView: UIView!
+    @IBOutlet weak var sortingLabel: UILabel!
+    
     var storiesSource:StoriesDataSource!
     var currentPage:Int = 0
     
@@ -22,6 +26,8 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
         self.title = storiesSource.title
         storiesTableView.estimatedRowHeight = 72
         storiesTableView.rowHeight = UITableViewAutomaticDimension
+        
+        toastView.layer.cornerRadius = 20
         
         storiesTableView.dataSource = storiesSource
         
@@ -56,6 +62,41 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
         }
     }
 
+    @IBAction func changeSortOrder(sender: UIBarButtonItem) {
+        
+        storiesTableView.scrollToRowAtIndexPath(NSIndexPath(forItem: 0, inSection: 0), atScrollPosition: .Top, animated: true)
+        
+        let updates = storiesSource.updatedIndexPathsByChangingSortOrdering()
+        
+        storiesTableView.beginUpdates()
+        updates.forEach { (from, to) in
+            self.storiesTableView.moveRowAtIndexPath(from, toIndexPath: to)
+        }
+        storiesTableView.endUpdates()
+        
+        if let visiblePaths = storiesTableView.indexPathsForVisibleRows {
+            for path in visiblePaths {
+                if let cell = storiesTableView.cellForRowAtIndexPath(path) as? StoryCell, let story = storiesSource.storyForIndexPath(path) {
+                    cell.updateWithStory(story)
+                }
+            }
+        }
+        
+        self.sortingLabel.text = "\(storiesSource.sorting)"
+        self.toastView.alpha = 0
+        UIView.animateWithDuration(0.25, animations: { 
+            self.toastView.alpha = 1
+        }) { done in
+            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
+            dispatch_after(delayTime, dispatch_get_main_queue()) {
+                UIView.animateWithDuration(0.25) {
+                    self.toastView.alpha = 0
+                }
+            }
+        }
+
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 

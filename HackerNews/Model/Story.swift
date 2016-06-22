@@ -9,6 +9,7 @@
 import Foundation
 
 class Story : Equatable {
+    var position: Int!
     var id: Int!
     var title: String!
     var points: Int!
@@ -19,7 +20,8 @@ class Story : Equatable {
     var unread: Bool
     var commentsUnread: Bool
     
-    init(id: Int, title: String, points: Int, by: String, timeAgo: String, numberOfComments: Int, url: NSURL?, unread: Bool, commentsUnread: Bool) {
+    init(position: Int, id: Int, title: String, points: Int, by: String, timeAgo: String, numberOfComments: Int, url: NSURL?, unread: Bool, commentsUnread: Bool) {
+        self.position = position
         self.id = id
         self.title = title
         self.points = points
@@ -32,7 +34,9 @@ class Story : Equatable {
     }
     
     init?(data: AnyObject) {
-        guard let id = data["id"] as? Int,
+        guard
+            let position = data["position"] as? Int,
+            let id = data["id"] as? Int,
             let title = data["title"] as? String,
             let points = data["score"] as? Int,
             let author = data["by"] as? String,
@@ -41,6 +45,7 @@ class Story : Equatable {
                 return nil
         }
         
+        self.position = position
         self.id = id
         self.title = title
         self.points = points

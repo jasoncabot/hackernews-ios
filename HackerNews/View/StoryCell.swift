@@ -14,8 +14,8 @@ class StoryCell: UITableViewCell {
     @IBOutlet var subtitleLabel: UILabel!;
     @IBOutlet var viewCommentsButton: ViewCommentsButton!;
     
-    func updateWithStory(position:Int, story: Story) {
-        self.storyTitleLabel.text = "\(position). \(story.title)"
+    func updateWithStory(story: Story) {
+        self.storyTitleLabel.text = "\(story.position). \(story.title)"
         self.subtitleLabel.text = makeSubtitle(story)
         self.viewCommentsButton.setTitle("\(story.numberOfComments)", forState: .Normal)
         self.viewCommentsButton.key = story.id

@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="80q-Ix-oBT">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Hacker News-->
@@ -256,25 +257,54 @@
                                     <constraint firstItem="8ue-T5-S5P" firstAttribute="centerY" secondItem="6gs-XS-gd0" secondAttribute="centerY" id="uAf-84-AgU"/>
                                 </constraints>
                             </view>
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nTD-66-os2">
+                                <rect key="frame" x="70" y="459" width="460" height="41"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort Order" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dhn-gu-86e">
+                                        <rect key="frame" x="10" y="10" width="440" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Dhn-gu-86e" secondAttribute="bottom" constant="10" id="76E-OY-75M"/>
+                                    <constraint firstItem="Dhn-gu-86e" firstAttribute="top" secondItem="nTD-66-os2" secondAttribute="top" constant="10" id="9Ah-1Q-F26"/>
+                                    <constraint firstAttribute="trailing" secondItem="Dhn-gu-86e" secondAttribute="trailing" constant="10" id="D04-O3-3UE"/>
+                                    <constraint firstItem="Dhn-gu-86e" firstAttribute="leading" secondItem="nTD-66-os2" secondAttribute="leading" constant="10" id="TMp-x5-DbO"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="6gs-XS-gd0" secondAttribute="trailing" id="4Vw-tR-oli"/>
                             <constraint firstItem="MrZ-fq-fm3" firstAttribute="top" secondItem="fX8-Vm-Roo" secondAttribute="bottom" id="9Cx-PZ-gvm"/>
+                            <constraint firstItem="6gs-XS-gd0" firstAttribute="top" secondItem="nTD-66-os2" secondAttribute="bottom" constant="50" id="BUw-ft-Chb"/>
                             <constraint firstAttribute="trailing" secondItem="fX8-Vm-Roo" secondAttribute="trailing" id="Bbq-LM-v72"/>
+                            <constraint firstItem="nTD-66-os2" firstAttribute="leading" secondItem="x0Z-B7-Y3b" secondAttribute="leadingMargin" constant="50" id="KLQ-EM-HaQ"/>
                             <constraint firstItem="fX8-Vm-Roo" firstAttribute="leading" secondItem="x0Z-B7-Y3b" secondAttribute="leading" id="MCS-CT-Pdy"/>
                             <constraint firstItem="fX8-Vm-Roo" firstAttribute="top" secondItem="x0Z-B7-Y3b" secondAttribute="top" id="c2n-FY-7Zw"/>
                             <constraint firstItem="MrZ-fq-fm3" firstAttribute="top" secondItem="6gs-XS-gd0" secondAttribute="bottom" id="csf-QU-Dsu"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="nTD-66-os2" secondAttribute="trailing" constant="50" id="eMG-0E-4vv"/>
                             <constraint firstItem="6gs-XS-gd0" firstAttribute="leading" secondItem="x0Z-B7-Y3b" secondAttribute="leading" id="xSj-wG-gFk"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="tMT-Ug-W6J">
                         <barButtonItem key="backBarButtonItem" title="Back" id="bxc-a7-6W1"/>
+                        <barButtonItem key="rightBarButtonItem" image="sort" id="KlT-Zb-ffI">
+                            <connections>
+                                <action selector="changeSortOrder:" destination="CjD-1p-D4e" id="SDV-4e-dar"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="loadingView" destination="6gs-XS-gd0" id="gRu-lx-GwO"/>
+                        <outlet property="sortButton" destination="KlT-Zb-ffI" id="S0e-fF-V1M"/>
+                        <outlet property="sortingLabel" destination="Dhn-gu-86e" id="tiU-5c-GUh"/>
                         <outlet property="storiesTableView" destination="fX8-Vm-Roo" id="60n-Oi-Oe1"/>
+                        <outlet property="toastView" destination="nTD-66-os2" id="NGy-dF-laX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hw7-aW-hGx" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -379,7 +409,7 @@
         <!--Headed Navigation Controller-->
         <scene sceneID="Zxs-dG-jf8">
             <objects>
-                <navigationController storyboardIdentifier="CommentNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" hidesBarsOnSwipe="YES" id="vF2-xN-q65" customClass="HeadedNavigationController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="CommentNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vF2-xN-q65" customClass="HeadedNavigationController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gnE-Ev-SPM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -446,6 +476,7 @@
     </scenes>
     <resources>
         <image name="comment" width="44" height="44"/>
+        <image name="sort" width="22" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="EUp-Xc-vc7"/>

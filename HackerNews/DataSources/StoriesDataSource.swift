@@ -16,9 +16,16 @@ enum StoryType : String {
     case Ask = "Ask"
 }
 
+enum StorySortOrder {
+    case Position
+    case Comments
+    case Points
+}
+
 class StoriesDataSource: NSObject, UITableViewDataSource {
     
     var type:StoryType
+    var sorting: StorySortOrder = .Position
     var stories:[Story]
     var isLoading:Bool
     
@@ -45,10 +52,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
             let task = NSURLSession.sharedSession().dataTaskWithURL(url) { (data, _, _) in
                 
                 if let result = data {
-                    let x = self.stories.count
                     self.stories += self.parseStories(result)
-                    let y = self.stories.count
-                    print("Stories went from \(x) to \(y)")
                 }
                 
                 dispatch_async(dispatch_get_main_queue()) {
@@ -65,6 +69,29 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         stories.removeAll()
         load(completion);
     }
+    
+    func updatedIndexPathsByChangingSortOrdering() -> [(NSIndexPath, NSIndexPath)] {
+        
+        switch sorting {
+        case .Position: sorting = .Comments
+        case .Comments: sorting = .Points
+        case .Points: sorting = .Position
+        }
+        
+        let old = stories.map { indexPathForStory($0)! }
+        
+        let sortedStories: [Story]
+        switch self.sorting {
+        case .Position: sortedStories = stories.sort { (a, b) in a.position <= b.position }
+        case .Comments: sortedStories =  stories.sort { (a, b) in a.numberOfComments > b.numberOfComments }
+        case .Points: sortedStories = stories.sort { (a, b) in a.points > b.points }
+        }
+        let new = sortedStories.map { indexPathForStory($0)! }
+        
+        stories = sortedStories
+        
+        return Array(zip(old, new))
+    }
 
     private func parseStories(data:NSData) -> [Story] {
         
@@ -72,6 +99,8 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         if let doc = Kanna.HTML(html: data, encoding: NSUTF8StringEncoding) {
             
             let rows = doc.css(".itemlist tr")
+            var position = self.stories.endIndex
+            
 
             for idx in 0.stride(to: rows.count - 3, by: 3) {
                 
@@ -115,8 +144,11 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                         .stringByReplacingOccurrencesOfString("item?id=", withString: "") as NSString)
                         .integerValue
                 }
+                
+                position += 1
 
-                stories.append(Story(id: identifier
+                stories.append(Story(position: position
+                    , id: identifier
                     , title: title
                     , points: score
                     , by: author ?? "unknown"
@@ -215,7 +247,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         let cell:StoryCell = tableView.dequeueReusableCellWithIdentifier("StoryCellIdentifier", forIndexPath: indexPath) as! StoryCell
 
         if let story = self.storyForIndexPath(indexPath) {
-            cell.updateWithStory(indexPath.row + 1, story: story)
+            cell.updateWithStory(story)
         }
         
         return cell;
