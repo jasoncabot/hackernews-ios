@@ -137,7 +137,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
             return
         }
         
-        let browser = BrowserViewController(URL: url, entersReaderIfAvailable: true)
+        let browser = BrowserViewController(URL: url, entersReaderIfAvailable: false)
         
         browser.story = story
         browser.storiesSource = storiesSource
