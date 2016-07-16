@@ -258,7 +258,7 @@
                                 </constraints>
                             </view>
                             <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nTD-66-os2">
-                                <rect key="frame" x="70" y="459" width="460" height="41"/>
+                                <rect key="frame" x="70" y="489" width="460" height="41"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort Order" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dhn-gu-86e">
                                         <rect key="frame" x="10" y="10" width="440" height="21"/>
@@ -267,7 +267,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="Dhn-gu-86e" secondAttribute="bottom" constant="10" id="76E-OY-75M"/>
                                     <constraint firstItem="Dhn-gu-86e" firstAttribute="top" secondItem="nTD-66-os2" secondAttribute="top" constant="10" id="9Ah-1Q-F26"/>
@@ -281,7 +281,7 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="6gs-XS-gd0" secondAttribute="trailing" id="4Vw-tR-oli"/>
                             <constraint firstItem="MrZ-fq-fm3" firstAttribute="top" secondItem="fX8-Vm-Roo" secondAttribute="bottom" id="9Cx-PZ-gvm"/>
-                            <constraint firstItem="6gs-XS-gd0" firstAttribute="top" secondItem="nTD-66-os2" secondAttribute="bottom" constant="50" id="BUw-ft-Chb"/>
+                            <constraint firstItem="6gs-XS-gd0" firstAttribute="top" secondItem="nTD-66-os2" secondAttribute="bottom" constant="20" id="BUw-ft-Chb"/>
                             <constraint firstAttribute="trailing" secondItem="fX8-Vm-Roo" secondAttribute="trailing" id="Bbq-LM-v72"/>
                             <constraint firstItem="nTD-66-os2" firstAttribute="leading" secondItem="x0Z-B7-Y3b" secondAttribute="leadingMargin" constant="50" id="KLQ-EM-HaQ"/>
                             <constraint firstItem="fX8-Vm-Roo" firstAttribute="leading" secondItem="x0Z-B7-Y3b" secondAttribute="leading" id="MCS-CT-Pdy"/>

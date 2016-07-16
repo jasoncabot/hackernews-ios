@@ -27,7 +27,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
         storiesTableView.estimatedRowHeight = 72
         storiesTableView.rowHeight = UITableViewAutomaticDimension
         
-        toastView.layer.cornerRadius = 20
+        toastView.layer.cornerRadius = 15
         
         storiesTableView.dataSource = storiesSource
         
