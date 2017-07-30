@@ -10,11 +10,11 @@ import UIKit
 
 class MenuViewController: UITableViewController {
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         if let path = tableView.indexPathForSelectedRow {
-            tableView.deselectRowAtIndexPath(path, animated: animated)
+            tableView.deselectRow(at: path, animated: animated)
         }
 
         if let nav = self.navigationController {
@@ -22,9 +22,9 @@ class MenuViewController: UITableViewController {
         }
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        guard let id = segue.identifier where ["FrontPage", "New", "Show", "Ask"].contains(id) else {
+        guard let id = segue.identifier, ["FrontPage", "New", "Show", "Ask"].contains(id) else {
             return
         }
         
@@ -32,6 +32,6 @@ class MenuViewController: UITableViewController {
             return
         }
         
-        (segue.destinationViewController as! StoryListViewController).storiesSource = StoriesDataSource(type: type)
+        (segue.destination as! StoryListViewController).storiesSource = StoriesDataSource(type: type)
     }
 }

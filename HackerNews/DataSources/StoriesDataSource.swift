@@ -9,203 +9,246 @@
 import UIKit
 import Kanna
 
+enum PageType {
+    case first
+    case next
+}
+
 enum StoryType : String {
-    case FrontPage = "FrontPage"
-    case New = "New"
-    case Show = "Show"
-    case Ask = "Ask"
+    case front = "FrontPage"
+    case new = "New"
+    case show = "Show"
+    case ask = "Ask"
+
+    func endpoint(for page: Int) -> String {
+        switch self {
+        case .front: return "https://news.ycombinator.com/news?p=\(page)"
+        case .new: return "https://news.ycombinator.com/newest?p=\(page)"
+        case .show: return "https://news.ycombinator.com/show?p=\(page)"
+        case .ask: return "https://news.ycombinator.com/ask?p=\(page)"
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .front: return "Front Page"
+        case .new: return "New"
+        case .show: return "Show HN"
+        case .ask: return "Ask HN"
+        }
+    }
 }
 
 enum StorySortOrder {
-    case Position
-    case Comments
-    case Points
+    case position
+    case comments
+    case points
+}
+
+extension Story {
+    var commentEndpoint: String {
+        return "https://news.ycombinator.com/item?id=\(id)"
+    }
 }
 
 class StoriesDataSource: NSObject, UITableViewDataSource {
-    
-    var type:StoryType
-    var sorting: StorySortOrder = .Position
-    var stories:[Story]
-    var isLoading:Bool
-    
+
+    let storyQueue = DispatchQueue(label: "com.jasoncabot.hn.stories", attributes: .concurrent)
+    let commentQueue = DispatchQueue(label: "com.jasoncabot.hn.comments", attributes: .concurrent)
+
+    var page: Int = 1
+    var type: StoryType
+    var sorting: StorySortOrder = .position
+    var stories: [Story]
+    var isLoading: Bool
+
     init(type:StoryType) {
         self.type = type
         self.stories = []
         self.isLoading = false
     }
 
-    func load(completion:dispatch_block_t) {
-        load(1, onComplete: completion)
-    }
+    func load(page: PageType, completionHandler:@escaping ()->()) {
 
-    func load(page: Int, onComplete:dispatch_block_t) {
-        
-        guard let url = NSURL(string: self.endpointForPage(page)) else {
-            return
-        }
+        storyQueue.async(flags: .barrier) { [weak self] in
+            guard let strongSelf = self else { return }
 
-        isLoading = true
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { [unowned self] in
-
-            let task = NSURLSession.sharedSession().dataTaskWithURL(url) { (data, _, _) in
-                
-                if let result = data {
-                    self.stories += self.parseStories(result)
-                }
-                
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.isLoading = false
-                    onComplete();
-                }
+            switch page {
+            case .first:
+                strongSelf.page = 1
+                strongSelf.stories.removeAll()
+            case .next:
+                strongSelf.page = strongSelf.page + 1
             }
-            
+
+            guard let url = URL(string: strongSelf.type.endpoint(for: strongSelf.page)) else {
+                return
+            }
+
+            strongSelf.isLoading = true
+
+            let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, _, _) in
+
+                if let result = data {
+                    strongSelf.stories += strongSelf.parseStories(result)
+                }
+
+                strongSelf.isLoading = false
+
+                DispatchQueue.main.async {
+                    completionHandler();
+                }
+            })
+
             task.resume()
         }
     }
-    
-    func refresh(completion:dispatch_block_t) {
-        stories.removeAll()
-        load(completion);
+
+    func refresh(_ completionHandler:@escaping ()->()) {
+        load(page: .first, completionHandler: completionHandler)
     }
-    
-    func updatedIndexPathsByChangingSortOrdering() -> [(NSIndexPath, NSIndexPath)] {
-        
+
+    func updatedIndexPathsByChangingSortOrdering() -> [(IndexPath, IndexPath)] {
+
         switch sorting {
-        case .Position: sorting = .Comments
-        case .Comments: sorting = .Points
-        case .Points: sorting = .Position
+        case .position: sorting = .comments
+        case .comments: sorting = .points
+        case .points: sorting = .position
         }
-        
-        let old = stories.map { indexPathForStory($0)! }
-        
-        let sortedStories: [Story]
-        switch self.sorting {
-        case .Position: sortedStories = stories.sort { (a, b) in a.position <= b.position }
-        case .Comments: sortedStories =  stories.sort { (a, b) in a.numberOfComments > b.numberOfComments }
-        case .Points: sortedStories = stories.sort { (a, b) in a.points > b.points }
+
+        var updates: [(IndexPath, IndexPath)] = []
+
+        storyQueue.sync(flags: .barrier) { [weak self] in
+            guard let strongSelf = self else { return }
+
+            let sortedStories: [Story]
+            switch strongSelf.sorting {
+            case .position: sortedStories = strongSelf.stories.sorted { (a, b) in a.position <= b.position }
+            case .comments: sortedStories =  strongSelf.stories.sorted { (a, b) in a.numberOfComments > b.numberOfComments }
+            case .points: sortedStories = strongSelf.stories.sorted { (a, b) in a.points > b.points }
+            }
+
+            updates = strongSelf.stories.enumerated().map { (index, story) in
+                return (
+                    IndexPath(row: index, section: 0),
+                    IndexPath(row: sortedStories.index(of: story)!, section: 0)
+                )
+            }
+
+            strongSelf.stories = sortedStories
         }
-        let new = sortedStories.map { indexPathForStory($0)! }
-        
-        stories = sortedStories
-        
-        return Array(zip(old, new))
+
+        return updates
     }
 
-    private func parseStories(data:NSData) -> [Story] {
-        
-        var stories: [Story] = []
-        if let doc = Kanna.HTML(html: data, encoding: NSUTF8StringEncoding) {
-            
-            let rows = doc.css(".itemlist tr")
-            var position = self.stories.endIndex
-            
+    fileprivate func parseStories(_ data:Data) -> [Story] {
 
-            for idx in 0.stride(to: rows.count - 3, by: 3) {
-                
-                let thing = rows[idx]
-                
-                let anchor = thing.css("td.title a").first
-                var url = anchor?["href"] ?? ""
-                
-                if url.hasPrefix("item?id=") {
-                    url = "https://news.ycombinator.com/\(url)"
-                }
+        guard let doc = Kanna.HTML(html: data, encoding: .utf8) else { return [] }
 
-                guard let title = anchor?.text else {
-                    continue
-                }
-                
-                let metaThing = rows[idx + 1]
-                
-                let score = (metaThing.css(".score").text?
-                    .stringByReplacingOccurrencesOfString(" points", withString: "")
-                    .stringByReplacingOccurrencesOfString(" point", withString: "") as NSString?)!
-                    .integerValue
-                let timeAgo = metaThing.css(".subtext a:nth-child(3)").text?
-                    .stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-                let author = metaThing.css(".subtext a:nth-child(2)").text?
-                    .stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-                
-                
-                var numComments: Int = 0
-                if let value = metaThing.css(".subtext a:nth-child(6)").text {
-                    numComments = (value
-                        .stringByReplacingOccurrencesOfString(" discuss", withString: "")
-                        .stringByReplacingOccurrencesOfString(" comments", withString: "")
-                        .stringByReplacingOccurrencesOfString(" comment", withString: "") as NSString)
-                        .integerValue
-                    
-                }
-                var identifier: Int = 0
-                if let value = metaThing.css("a").at(1)?["href"] {
-                    identifier = (value
-                        .stringByReplacingOccurrencesOfString("item?id=", withString: "") as NSString)
-                        .integerValue
-                }
-                
-                position += 1
 
-                stories.append(Story(position: position
-                    , id: identifier
-                    , title: title
-                    , points: score
-                    , by: author ?? "unknown"
-                    , timeAgo: timeAgo ?? "a little while ago"
-                    , numberOfComments: numComments
-                    , url: NSURL(string: url)
-                    , unread: true
-                    , commentsUnread: true))
-                
+        let rows = doc.css(".itemlist tr")
+        var position = self.stories.endIndex
+
+        let stories: [Story] = stride(from: 0, to: rows.count - 3, by: 3).map({ idx in
+            let thing = rows[idx]
+
+            let anchor = thing.css("td.title a").first
+            var url = anchor?["href"] ?? ""
+
+            if url.hasPrefix("item?id=") {
+                url = "https://news.ycombinator.com/\(url)"
             }
-        }
-        
+
+            guard let title = anchor?.text else {
+                return nil
+            }
+
+            let metaThing = rows[idx + 1]
+
+            let score = Int((metaThing.css(".score").first?.text ?? "0")
+                .replacingOccurrences(of: " points", with: "")
+                .replacingOccurrences(of: " point", with: ""))!
+            let timeAgo = metaThing.css(".subtext a:nth-child(1)").first?.text?
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            let author = metaThing.css(".subtext a:nth-child(2)").first?.text?
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+
+
+            var numComments: Int = 0
+            if let value = metaThing.css(".subtext a:nth-child(6)").first?.text {
+                numComments = (value
+                    .replacingOccurrences(of: " discuss", with: "")
+                    .replacingOccurrences(of: " comments", with: "")
+                    .replacingOccurrences(of: " comment", with: "") as NSString)
+                    .integerValue
+
+            }
+            var identifier: Int = 0
+
+            if let value = metaThing.css("a")[1]["href"] {
+                identifier = Int(value.replacingOccurrences(of: "item?id=", with: "")) ?? 0
+            }
+
+            position += 1
+
+            return Story(position: position
+                , id: identifier
+                , title: title
+                , points: score
+                , by: author ?? "unknown"
+                , timeAgo: timeAgo ?? "a little while ago"
+                , numberOfComments: numComments
+                , url: URL(string: url)
+                , unread: true
+                , commentsUnread: true)
+        }).filter { $0 != nil }.map { $0! }
+
         return stories
     }
-    
-    private func parseComments(data:NSData) -> [Comment] {
+
+    fileprivate func parseComments(_ data:Data) -> [Comment] {
         var comments: [Comment] = []
-        if let doc = Kanna.HTML(html: data, encoding: NSUTF8StringEncoding) {
+        if let doc = Kanna.HTML(html: data, encoding: String.Encoding.utf8) {
 
             for thing in doc.css(".comment-tree .athing") {
-                
+
                 var indent = 0
                 if let value = thing.css(".ind img").first?["width"] {
-                     indent = (value as NSString).integerValue / 40
+                    indent = (value as NSString).integerValue / 40
                 }
-                
+
                 let comhead = thing.css(".comhead a")
                 let by: String = comhead.first?.text ?? "someone"
                 var when: String = "a while ago"
                 if (comhead.count > 1) {
-                    when = comhead.last?.text ?? when
+                    when = comhead[comhead.count - 1].text ?? when
                 }
 
-                var text = thing.css(".comment").innerHTML ?? ""
+                var text = thing.css(".comment").first?.innerHTML ?? ""
 
-                let startOfReply = text.rangeOfString("<div class=\"reply\">")?.startIndex ?? text.endIndex
-                text = (text.stringByReplacingCharactersInRange(startOfReply ..< text.endIndex, withString: "")
-                    .stringByRemovingPercentEncoding?
-                    .stringByReplacingOccurrencesOfString("&gt;", withString: ">")
-                    .stringByReplacingOccurrencesOfString("&lt;", withString: "<")
-                    .stringByReplacingOccurrencesOfString("&amp;", withString: "&")
-                    .stringByReplacingOccurrencesOfString("&quot;", withString: "\"")
-                    .stringByReplacingOccurrencesOfString("&apos;", withString: "'")
-                    .stringByReplacingOccurrencesOfString("<[/]?([bi]|em)>", withString: "", options: .RegularExpressionSearch, range: nil)
-                    .stringByReplacingOccurrencesOfString("<[/]?a[^>]+>", withString: "", options: .RegularExpressionSearch, range: nil)
-                    .stringByReplacingOccurrencesOfString("<[^>]+>", withString: "\n\n", options: .RegularExpressionSearch, range: nil)
-                    .stringByReplacingOccurrencesOfString("\n+", withString: "\n\n", options: .RegularExpressionSearch, range: nil)
-                    .stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())) ?? ""
+                let startOfReply = text.range(of: "<div class=\"reply\">")?.lowerBound ?? text.endIndex
+                text = (text.replacingCharacters(in: startOfReply ..< text.endIndex, with: "")
+                    .removingPercentEncoding?
+                    .replacingOccurrences(of: "<[^>]+>", with: "\n\n", options: .regularExpression, range: nil)
+                    .replacingOccurrences(of: "&gt;", with: ">")
+                    .replacingOccurrences(of: "&lt;", with: "<")
+                    .replacingOccurrences(of: "&amp;", with: "&")
+                    .replacingOccurrences(of: "&quot;", with: "\"")
+                    .replacingOccurrences(of: "&apos;", with: "'")
+                    .replacingOccurrences(of: "<[/]?([bi]|em|pre|code)>", with: "", options: .regularExpression, range: nil)
+                    .replacingOccurrences(of: "<[/]?a[^>]+>", with: "", options: .regularExpression, range: nil)
+
+                    .replacingOccurrences(of: "\n+", with: "\n\n", options: .regularExpression, range: nil)
+                    .trimmingCharacters(in: .whitespacesAndNewlines)) ?? ""
 
                 let links = thing.css(".comment a").map({ element -> AnyObject? in
                     return (element.text == "reply") ? nil : [
                         "name": element.text!,
                         "value": element["href"]!
-                    ] as NSDictionary
+                        ] as NSDictionary
                 }).filter({$0 != nil}).map({$0!})
-                
-                let data: [String: AnyObject] = [
+
+                let data: [String: Any] = [
                     "text": text,
                     "by": by,
                     "when": when,
@@ -213,7 +256,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                     "external_links": links
                 ]
 
-                if let comment = Comment(data: data) where !text.isEmpty {
+                if let comment = Comment(data: data as AnyObject), !text.isEmpty {
                     comments.append(comment)
                 }
             }
@@ -221,87 +264,80 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         return comments
     }
 
-    func endpointForPage(page: Int) -> String {
-        switch type {
-        case .FrontPage: return "https://news.ycombinator.com/news?p=\(page)"
-        case .New: return "https://news.ycombinator.com/newest?p=\(page)"
-        case .Show: return "https://news.ycombinator.com/show?p=\(page)"
-        case .Ask: return "https://news.ycombinator.com/ask?p=\(page)"
-        }
-    }
-    
-    func endpointForComments(storyId: Int) -> String {
-        return "https://news.ycombinator.com/item?id=\(storyId)"
-    }
-        
     var title: String {
-        switch type {
-        case .FrontPage: return "Front Page"
-        case .New: return "New"
-        case .Show: return "Show HN"
-        case .Ask: return "Ask HN"
-        }
+        return type.title
     }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell:StoryCell = tableView.dequeueReusableCellWithIdentifier("StoryCellIdentifier", forIndexPath: indexPath) as! StoryCell
 
-        if let story = self.storyForIndexPath(indexPath) {
-            cell.updateWithStory(story)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell:StoryCell = tableView.dequeueReusableCell(withIdentifier: "StoryCellIdentifier", for: indexPath) as! StoryCell
+
+        if let story = storyForIndexPath(indexPath) {
+            cell.update(with: story)
         }
-        
+
         return cell;
     }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return stories.count
-    }
-    
-    func indexPathForStory(story:Story) -> NSIndexPath? {
-        if let row = stories.indexOf(story) {
-            return NSIndexPath(forRow: row, inSection: 0)
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var count: Int = 0
+        storyQueue.sync {
+            count = stories.count
         }
-        return nil
+        return count
     }
-    
-    func storyForIndexPath(indexPath:NSIndexPath?) -> Story? {
-        if let path = indexPath where stories.count > path.row {
-            return stories[path.row]
-        }
-        return nil
-    }
-    
-    func findStory(key:Int) -> Story? {
-        for story in stories {
-            if key == story.id {
-                return story
+
+    func indexPathForStory(_ story:Story) -> IndexPath? {
+        var path: IndexPath?
+        storyQueue.sync {
+            if let row = stories.index(of: story) {
+                path = IndexPath(row: row, section: 0)
             }
         }
-        return nil
+        return path
     }
-    
-    func retrieveComments(story: Story, completion: ([Comment]) -> Void) -> Void {
-        
-        guard let url = NSURL(string: self.endpointForComments(story.id)) else {
+
+    func storyForIndexPath(_ indexPath:IndexPath?) -> Story? {
+        var story: Story?
+        storyQueue.sync {
+            if let path = indexPath, stories.count > path.row {
+                story = stories[path.row]
+            }
+        }
+        return story
+    }
+
+    func findStory(_ key:Int) -> Story? {
+        var story: Story?
+        storyQueue.sync {
+            story = stories.first(where: { $0.id == key })
+        }
+        return story
+    }
+
+    func retrieveComments(_ story: Story, completionHandler: @escaping ([Comment]) -> Void) -> Void {
+
+        guard let url = URL(string: story.commentEndpoint) else {
             return
         }
-        
-        isLoading = true
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { [unowned self] in
-            
-            let task = NSURLSession.sharedSession().dataTaskWithURL(url) {(data, _, _) in
-                
-                let comments = data != nil ? self.parseComments(data!) : []
-                
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.isLoading = false
-                    completion(comments)
-                }
-            }
 
+        commentQueue.async(flags: .barrier) { [weak self] in
+            guard let strongSelf = self else { return; }
+            
+            strongSelf.isLoading = true
+            
+            let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, _, _) in
+                
+                let comments = data != nil ? strongSelf.parseComments(data!) : []
+                
+                DispatchQueue.main.async {
+                    strongSelf.isLoading = false
+                    completionHandler(comments)
+                }
+            })
+            
             task.resume()
         }
+        
     }
     
 }

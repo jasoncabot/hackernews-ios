@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct Comment {
+struct Comment: Equatable, Hashable {
     var text: String
     var by: String
     var timeAgo: String
     var indent: Int
     var externalLinks: [Link]
     
-    init?(data:AnyObject) {
+    init?(data: AnyObject) {
         
         guard
             let text = data["text"] as? String,
@@ -32,5 +32,13 @@ struct Comment {
         self.timeAgo = timeAgo
         self.indent = indent
         self.externalLinks = links.map() { Link(data: $0) }.filter() { $0 != nil }.map() { $0! }
+    }
+
+    var hashValue: Int {
+        return by.hashValue ^ timeAgo.hashValue
+    }
+
+    static func == (lhs: Comment, rhs: Comment) -> Bool {
+        return lhs.text == rhs.text && lhs.by == rhs.by && lhs.timeAgo == rhs.timeAgo
     }
 }

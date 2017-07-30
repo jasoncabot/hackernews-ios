@@ -14,24 +14,24 @@ class StoryCell: UITableViewCell {
     @IBOutlet var subtitleLabel: UILabel!;
     @IBOutlet var viewCommentsButton: ViewCommentsButton!;
     
-    func updateWithStory(story: Story) {
+    func update(with story: Story, store: ReadStore = ReadStore.memory) {
         self.storyTitleLabel.text = "\(story.position). \(story.title)"
         self.subtitleLabel.text = makeSubtitle(story)
-        self.viewCommentsButton.setTitle("\(story.numberOfComments)", forState: .Normal)
+        self.viewCommentsButton.setTitle("\(story.numberOfComments)", for: UIControlState())
         self.viewCommentsButton.key = story.id
         
-        if story.unread {
-            self.storyTitleLabel.textColor = UIColor.blackColor()
-            self.storyTitleLabel.font = UIFont.boldSystemFontOfSize(self.storyTitleLabel.font.pointSize)
+        if store.hasRead(story) {
+            self.storyTitleLabel.textColor = UIColor.darkGray
+            self.storyTitleLabel.font = UIFont.systemFont(ofSize: self.storyTitleLabel.font.pointSize)
         } else {
-            self.storyTitleLabel.textColor = UIColor.darkGrayColor()
-            self.storyTitleLabel.font = UIFont.systemFontOfSize(self.storyTitleLabel.font.pointSize)
+            self.storyTitleLabel.textColor = UIColor.black
+            self.storyTitleLabel.font = UIFont.boldSystemFont(ofSize: self.storyTitleLabel.font.pointSize)
         }
         
-        self.viewCommentsButton.selected = story.commentsUnread
+        self.viewCommentsButton.isSelected = !store.hasReadComments(story)
     }
     
-    private func makeSubtitle(story:Story) -> String {
+    fileprivate func makeSubtitle(_ story:Story) -> String {
         return "\(story.points) points by \(story.by) \(story.timeAgo)"
     }
 }

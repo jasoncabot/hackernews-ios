@@ -10,16 +10,16 @@ import UIKit
 
 class NetworkIndicator {
     
-    private var numberOfNetworkRequests = 0
+    fileprivate var numberOfNetworkRequests = 0
 
-    func displayNetworkIndicator(display:Bool) -> Void {
-        dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+    func displayNetworkIndicator(_ display:Bool) -> Void {
+        DispatchQueue.main.async { [unowned self] in
             if (display) {
                 self.numberOfNetworkRequests += 1
             } else {
                 self.numberOfNetworkRequests = max(0, self.numberOfNetworkRequests - 1)
             }
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = self.numberOfNetworkRequests > 0
+            UIApplication.shared.isNetworkActivityIndicatorVisible = self.numberOfNetworkRequests > 0
         }
     }
 }

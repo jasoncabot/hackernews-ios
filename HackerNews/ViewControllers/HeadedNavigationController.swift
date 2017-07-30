@@ -16,39 +16,39 @@ class HeadedNavigationController : UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        barHideOnSwipeGestureRecognizer.addTarget(self, action: #selector(HeadedNavigationController.onBarsToggled(_:)))
-        barHideOnTapGestureRecognizer.addTarget(self, action: #selector(HeadedNavigationController.onBarsToggled(_:)))
+        barHideOnSwipeGestureRecognizer.addTarget(self, action: #selector(HeadedNavigationController.toggleBars(_:)))
+        barHideOnTapGestureRecognizer.addTarget(self, action: #selector(HeadedNavigationController.toggleBars(_:)))
         startingAlpha = statusBarBackground.alpha
         statusBarBackground.alpha = 0
         view.addSubview(statusBarBackground)
-        UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.positionStatusBarBackgroundView()
 
-        orientationObserver = NSNotificationCenter.defaultCenter().addObserverForName(UIDeviceOrientationDidChangeNotification, object: nil, queue: nil) { _ in
-            UIView.animateWithDuration(0.25) {
+        orientationObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIDeviceOrientationDidChange, object: nil, queue: nil) { _ in
+            UIView.animate(withDuration: 0.25, animations: {
                 self.positionStatusBarBackgroundView()
-            }
+            }) 
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(orientationObserver!)
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(orientationObserver!)
         super.viewWillDisappear(animated)
     }
     
-    func onBarsToggled(swipeGestureRecognizer: UISwipeGestureRecognizer) {
+    func toggleBars(_ swipeGestureRecognizer: UISwipeGestureRecognizer) {
         self.positionStatusBarBackgroundView()
 
-        UIView.animateWithDuration(0.25) {
-            self.statusBarBackground.alpha = self.navigationBarHidden ? self.startingAlpha : 0
-        }
+        UIView.animate(withDuration: 0.25, animations: {
+            self.statusBarBackground.alpha = self.isNavigationBarHidden ? self.startingAlpha : 0
+        }) 
     }
     
     func positionStatusBarBackgroundView() -> Void {
-        self.statusBarBackground.frame = UIApplication.sharedApplication().statusBarFrame;
+        self.statusBarBackground.frame = UIApplication.shared.statusBarFrame;
     }
 }

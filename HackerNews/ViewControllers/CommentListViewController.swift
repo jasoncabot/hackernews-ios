@@ -9,12 +9,22 @@
 import UIKit
 
 class CommentListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+
     @IBOutlet weak var commentsTableView: UITableView!
     
-    var story:Story?
-    var comments:[Comment]?
-    
+    var store = ReadStore.memory
+    var story: Story?
+    var comments: [Comment]?
+    var dismissHandler: ((Void) -> Void)?
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -22,75 +32,80 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
         commentsTableView.rowHeight = UITableViewAutomaticDimension
     }
 
-    func onCommentsLoaded(story:Story, receivedComments:[Comment]) {
+    func onCommentsLoaded(_ story:Story, receivedComments:[Comment]) {
         self.story = story
         self.comments = receivedComments
-        
-        story.commentsUnread = false
-        
+
+        store.viewedComments(of: story)
+
         commentsTableView.reloadData()
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell:CommentCell = tableView.dequeueReusableCellWithIdentifier("CommentCellIdentifier", forIndexPath: indexPath) as! CommentCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell:CommentCell = tableView.dequeueReusableCell(withIdentifier: "CommentCellIdentifier", for: indexPath) as! CommentCell
 
-        if let comment = self.commentForRow(indexPath.row) {
-            cell.updateWithComment(comment)
+        if let comment = comment(for: indexPath.row) {
+            cell.update(with: comment)
         }
         
         return cell;
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        guard let comment = commentForRow(indexPath.row) where comment.externalLinks.count > 0 else {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let comment = comment(for: indexPath.row), comment.externalLinks.count > 0 else {
             return
         }
 
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         for externalLink in comment.externalLinks {
-            alertController.addAction(UIAlertAction(title: externalLink.title, style: .Default, handler: { (action:UIAlertAction) -> Void in
-                if let url = NSURL(string: externalLink.url) {
-                    UIApplication.sharedApplication().openURL(url)
+            alertController.addAction(UIAlertAction(title: externalLink.title, style: .default, handler: { (action:UIAlertAction) -> Void in
+                if let url = URL(string: externalLink.url) {
+                    UIApplication.shared.openURL(url)
                 }
             }))
         }
         
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return (comments ?? []).count
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return story?.title
     }
     
-    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
-            header.textLabel!.shadowOffset = CGSizeZero
-            header.textLabel!.font = UIFont.systemFontOfSize(12)
+            header.textLabel!.shadowOffset = CGSize.zero
+            header.textLabel!.font = UIFont.systemFont(ofSize: 12)
             
             if let nav = self.navigationController as? HeadedNavigationController {
                 header.alpha = nav.startingAlpha
             }
         }
     }
-    
-    func commentForRow(index:Int) -> Comment? {
-        return comments?[index]
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+
+        guard tableView.indexPathsForVisibleRows!.contains(indexPath) else { return }
+
+        let store = ReadStore.memory
+
+        if let comment = comment(for: indexPath.row) { store.viewed(comment: comment) }
     }
     
-    var onDismissed:dispatch_block_t?
-    
-    @IBAction func dismiss(sender: AnyObject) {
-        if let closed = onDismissed {
-            closed()
-        }
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func comment(for row:Int) -> Comment? {
+        return comments?[row]
+    }
+
+    @IBAction func dismiss(_ sender: AnyObject) {
+        dismiss(animated: true)
+        dismissHandler?()
     }
     
     

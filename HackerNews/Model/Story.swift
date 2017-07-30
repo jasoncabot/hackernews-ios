@@ -8,19 +8,17 @@
 
 import Foundation
 
-class Story : Equatable {
-    var position: Int!
-    var id: Int!
-    var title: String!
-    var points: Int!
-    var by: String!
-    var timeAgo: String!
-    var numberOfComments: Int!
-    var url: NSURL?
-    var unread: Bool
-    var commentsUnread: Bool
+struct Story : Equatable {
+    let position: Int
+    let id: Int
+    let title: String
+    let points: Int
+    let by: String
+    let timeAgo: String
+    let numberOfComments: Int
+    let url: URL?
     
-    init(position: Int, id: Int, title: String, points: Int, by: String, timeAgo: String, numberOfComments: Int, url: NSURL?, unread: Bool, commentsUnread: Bool) {
+    init(position: Int, id: Int, title: String, points: Int, by: String, timeAgo: String, numberOfComments: Int, url: URL?, unread: Bool, commentsUnread: Bool) {
         self.position = position
         self.id = id
         self.title = title
@@ -29,8 +27,6 @@ class Story : Equatable {
         self.timeAgo = timeAgo
         self.numberOfComments = numberOfComments
         self.url = url
-        self.unread = unread
-        self.commentsUnread = commentsUnread
     }
     
     init?(data: AnyObject) {
@@ -52,9 +48,7 @@ class Story : Equatable {
         self.by = author
         self.timeAgo = timeAgo
         self.numberOfComments = data["comments"] as? Int ?? 0
-        self.url = NSURL(string: urlString)
-        self.unread = true
-        self.commentsUnread = true
+        self.url = URL(string: urlString)
     }
 }
 

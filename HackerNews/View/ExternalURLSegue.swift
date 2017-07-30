@@ -12,6 +12,6 @@ import UIKit
 class ExternalURLSegue : UIStoryboardSegue {
     
     override func perform() {
-        UIApplication.sharedApplication().openURL(NSURL(string: "https://github.com/jasoncabot/hackernews-ios")!)
+        UIApplication.shared.openURL(URL(string: "https://github.com/jasoncabot/hackernews-ios")!)
     }
 }

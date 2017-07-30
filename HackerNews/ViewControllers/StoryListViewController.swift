@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import SafariServices
 
-class StoryListViewController: UIViewController, UITableViewDelegate {
+class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariViewControllerDelegate {
 
     @IBOutlet var storiesTableView: UITableView!
     @IBOutlet weak var loadingView: UIView!
@@ -18,8 +19,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
     @IBOutlet weak var sortingLabel: UILabel!
     
     var storiesSource:StoriesDataSource!
-    var currentPage:Int = 0
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,78 +32,76 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
         storiesTableView.dataSource = storiesSource
         
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(StoryListViewController.refreshStories(_:)), forControlEvents: .ValueChanged)
-        storiesTableView.insertSubview(refreshControl, atIndex: 0)
+        refreshControl.addTarget(self, action: #selector(StoryListViewController.refreshStories(_:)), for: .valueChanged)
+        storiesTableView.insertSubview(refreshControl, at: 0)
 
-        displayLoadingActivity(true)
-        storiesSource.load {
-            self.currentPage = 1
-            self.displayLoadingActivity(false)
+        showLoadingActivity(true)
+        storiesSource.load(page: .first) {
+            self.showLoadingActivity(false)
             self.storiesTableView.reloadData()
         }
     }
     
-    @IBAction func refreshStories(sender: UIRefreshControl) {
+    @IBAction func refreshStories(_ sender: UIRefreshControl) {
         
         // fade out our old stories
-        UIView.animateWithDuration(1) {
+        UIView.animate(withDuration: 1, animations: {
             self.storiesTableView.alpha = 0.2
-        }
+        }) 
         
         // load in our new ones
         storiesSource.refresh {
             sender.endRefreshing()
-            self.currentPage = 1
             self.storiesTableView.reloadData()
             self.storiesTableView.flashScrollIndicators()
-            UIView.animateWithDuration(0.25) {
+            UIView.animate(withDuration: 0.25, animations: {
                 self.storiesTableView.alpha = 1
-            }
+            }) 
         }
     }
 
-    @IBAction func changeSortOrder(sender: UIBarButtonItem) {
+    @IBAction func changeSortOrder(_ sender: UIBarButtonItem) {
         
-        storiesTableView.scrollToRowAtIndexPath(NSIndexPath(forItem: 0, inSection: 0), atScrollPosition: .Top, animated: true)
+        storiesTableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
         
         let updates = storiesSource.updatedIndexPathsByChangingSortOrdering()
         
         storiesTableView.beginUpdates()
         updates.forEach { (from, to) in
-            self.storiesTableView.moveRowAtIndexPath(from, toIndexPath: to)
+            self.storiesTableView.moveRow(at: from as IndexPath, to: to as IndexPath)
         }
         storiesTableView.endUpdates()
         
         if let visiblePaths = storiesTableView.indexPathsForVisibleRows {
             for path in visiblePaths {
-                if let cell = storiesTableView.cellForRowAtIndexPath(path) as? StoryCell, let story = storiesSource.storyForIndexPath(path) {
-                    cell.updateWithStory(story)
+                if let cell = storiesTableView.cellForRow(at: path) as? StoryCell, let story = storiesSource.storyForIndexPath(path) {
+                    cell.update(with: story)
                 }
             }
         }
         
         self.sortingLabel.text = "\(storiesSource.sorting)"
         self.toastView.alpha = 0
-        UIView.animateWithDuration(0.25, animations: { 
+        UIView.animate(withDuration: 0.25, animations: { 
             self.toastView.alpha = 1
-        }) { done in
-            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
-            dispatch_after(delayTime, dispatch_get_main_queue()) {
-                UIView.animateWithDuration(0.25) {
+        }, completion: { done in
+            let delayTime = DispatchTime.now() + Double(Int64(2 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+            DispatchQueue.main.asyncAfter(deadline: delayTime) {
+                UIView.animate(withDuration: 0.25, animations: {
                     self.toastView.alpha = 0
-                }
+                }) 
             }
-        }
+        }) 
 
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         if let path = storiesTableView.indexPathForSelectedRow {
-            storiesTableView.deselectRowAtIndexPath(path, animated: animated)
+            storiesTableView.deselectRow(at: path, animated: animated)
             
-            self.storiesTableView.reloadRowsAtIndexPaths([path], withRowAnimation: .Automatic)
+            self.storiesTableView.reloadRows(at: [path], with: .automatic)
         }
         
         if let nav = self.navigationController {
@@ -114,56 +112,56 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
     func shouldDisplayToolbar() -> Bool {
         return false;
     }
-    
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if !storiesSource.isLoading {
-            let shouldLoadMore = indexPath.row >= storiesSource.stories.count - 10
 
-            if shouldLoadMore {
-                
-                displayLoadingActivity(true)
-                currentPage = currentPage + 1
-                storiesSource.load(currentPage) {
-                    self.storiesTableView.reloadData()
-                    self.storiesTableView.flashScrollIndicators()
-                    self.displayLoadingActivity(false)
-                }
-            }
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard !storiesSource.isLoading else { return }
+        let shouldLoadMore = indexPath.row >= storiesSource.stories.count - 10
+
+        if !shouldLoadMore { return }
+
+        showLoadingActivity(true)
+        storiesSource.load(page: .next) {
+            self.storiesTableView.reloadData()
+            self.storiesTableView.flashScrollIndicators()
+            self.showLoadingActivity(false)
         }
     }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        guard let story = storiesSource.storyForIndexPath(storiesTableView.indexPathForSelectedRow), url = story.url else {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let story = storiesSource.storyForIndexPath(storiesTableView.indexPathForSelectedRow), let url = story.url else {
             return
         }
         
-        let browser = BrowserViewController(URL: url, entersReaderIfAvailable: false)
-        
+        let browser = BrowserViewController(url: url, entersReaderIfAvailable: false)
+
+        browser.delegate = self
         browser.story = story
         browser.storiesSource = storiesSource
         
         self.navigationController?.pushViewController(browser, animated: true)
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .default }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if let id = segue.identifier {
             switch id {
                 
             case "ShowComments":
-                let storyId = (sender as! ViewCommentsButton).key
+                let storyId = (sender as? Story)?.id ?? (sender as? ViewCommentsButton)?.key ?? 0
 
                 guard let story = storiesSource.findStory(storyId) else {
                     return
                 }
                 
-                let navigationController:UINavigationController = segue.destinationViewController as! UINavigationController;
+                let navigationController:UINavigationController = segue.destination as! UINavigationController;
                 let commentsViewController:CommentListViewController = navigationController.viewControllers.first as! CommentListViewController;
                 
-                commentsViewController.onDismissed = {
-                    commentsViewController.onDismissed = nil
+                commentsViewController.dismissHandler = {
+                    commentsViewController.dismissHandler = nil
                     if let path = self.storiesSource.indexPathForStory(story) {
-                        self.storiesTableView.reloadRowsAtIndexPaths([path], withRowAnimation: .Automatic)
+                        self.storiesTableView.reloadRows(at: [path], with: .automatic)
                     }
                 }
                 
@@ -180,11 +178,11 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
         }
     }
 
-    private func showNetworkIndicator(show:Bool) {
-        (UIApplication.sharedApplication().delegate as! AppDelegate).networkIndicator.displayNetworkIndicator(show)
+    fileprivate func showNetworkIndicator(_ show:Bool) {
+        (UIApplication.shared.delegate as! AppDelegate).networkIndicator.displayNetworkIndicator(show)
     }
     
-    private func displayLoadingActivity(show:Bool) {
+    fileprivate func showLoadingActivity(_ show:Bool) {
         showNetworkIndicator(show)
 
         var inset = storiesTableView.contentInset
@@ -192,9 +190,47 @@ class StoryListViewController: UIViewController, UITableViewDelegate {
         storiesTableView.contentInset = inset
         
         loadingView.alpha = show ? 0 : 1
-        UIView.animateWithDuration(0.25) {
+        UIView.animate(withDuration: 0.25, animations: {
             self.loadingView.alpha = show ? 1.0 : 0.0
-        }
+        }) 
     }
+
+    // MARK: SFSafariViewControllerDelegate
+
+    func safariViewController(_ controller: SFSafariViewController, activityItemsFor URL: URL, title: String?) -> [UIActivity] {
+
+        guard let browser = controller as? BrowserViewController, let story = browser.story else { return [] }
+
+        return [ViewComments(handler: {
+            self.performSegue(withIdentifier: "ShowComments", sender: story)
+        })]
+    }
+
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        self.navigationController?.popViewController(animated: true)
+    }
+}
+
+class ViewComments : UIActivity {
+
+    private let handler: () -> ()
+
+    init(handler: @escaping () -> ()) {
+        self.handler = handler
+    }
+
+    override var activityTitle: String? { return "View Comments" }
+    override var activityImage: UIImage? { return UIImage(named: "comment") }
+    override var activityType: UIActivityType? { return nil }
+    override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
+        return true
+    }
+    override func prepare(withActivityItems activityItems: [Any]) {
+
+    }
+    override func perform() {
+        handler()
+    }
+
 
 }

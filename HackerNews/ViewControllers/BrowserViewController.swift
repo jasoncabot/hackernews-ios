@@ -9,30 +9,48 @@
 import SafariServices
 
 class BrowserViewController : SFSafariViewController {
-    
+
+    var store: ReadStore = ReadStore.memory
     var story:Story?
     var storiesSource:StoriesDataSource?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.tintColor = UIColor(colorLiteralRed: 0xD0 / 0xFF, green: 0x30 / 0xFF, blue: 0x44 / 0xFF, alpha: 1.0)
+        if #available(iOS 10.0, *) {
+            self.preferredControlTintColor = UIColor(colorLiteralRed: 0xD0 / 0xFF, green: 0x30 / 0xFF, blue: 0x44 / 0xFF, alpha: 1.0)
+        } else {
+            self.view.tintColor = UIColor(colorLiteralRed: 0xD0 / 0xFF, green: 0x30 / 0xFF, blue: 0x44 / 0xFF, alpha: 1.0)
+        }
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Comments", style: .Plain, target: self, action: #selector(BrowserViewController.showComments(_:)))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Comments", style: .plain, target: self, action: #selector(BrowserViewController.showComments(_:)))
     }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.story?.unread = false
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if let story = story { store.viewed(story: story) }
+
+        if isMovingToParentViewController {
+            UIApplication.shared.statusBarStyle = .default
+            navigationController?.setNavigationBarHidden(true, animated: animated)
+        }
     }
-    
-    @IBAction func showComments(sender: UIBarButtonItem) {
-        guard let story = self.story, source = self.storiesSource else {
+
+    override func viewWillDisappear(_ animated: Bool) {
+        if isMovingFromParentViewController {
+            UIApplication.shared.statusBarStyle = .lightContent
+            navigationController?.setNavigationBarHidden(false, animated: animated)
+        }
+        super.viewWillDisappear(animated)
+    }
+
+    @IBAction func showComments(_ sender: UIBarButtonItem) {
+        guard let story = self.story, let source = self.storiesSource else {
             return
         }
 
-        let navigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CommentNavigationController") as! UINavigationController
+        let navigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CommentNavigationController") as! UINavigationController
         let commentsViewController = navigationController.viewControllers.first as! CommentListViewController
         
         showNetworkIndicator(true)
@@ -41,10 +59,10 @@ class BrowserViewController : SFSafariViewController {
             commentsViewController.onCommentsLoaded(story, receivedComments: comments)
         }
         
-        self.navigationController?.presentViewController(navigationController, animated: true, completion: nil)
+        self.navigationController?.present(navigationController, animated: true, completion: nil)
     }
     
-    private func showNetworkIndicator(show:Bool) {
-        (UIApplication.sharedApplication().delegate as! AppDelegate).networkIndicator.displayNetworkIndicator(show)
+    fileprivate func showNetworkIndicator(_ show:Bool) {
+        (UIApplication.shared.delegate as! AppDelegate).networkIndicator.displayNetworkIndicator(show)
     }
 }
