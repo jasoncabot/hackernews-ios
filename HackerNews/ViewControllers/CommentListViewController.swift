@@ -38,7 +38,9 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
 
         store.viewedComments(of: story)
 
-        commentsTableView.reloadData()
+        if isViewLoaded {
+            commentsTableView.reloadData()
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -68,7 +70,7 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
             }))
         }
         
-        self.present(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -84,7 +86,7 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
             header.textLabel!.shadowOffset = CGSize.zero
             header.textLabel!.font = UIFont.systemFont(ofSize: 12)
             
-            if let nav = self.navigationController as? HeadedNavigationController {
+            if let nav = navigationController as? HeadedNavigationController {
                 header.alpha = nav.startingAlpha
             }
         }

@@ -31,15 +31,15 @@ class BrowserViewController : SFSafariViewController {
 
         if let story = story { store.viewed(story: story) }
 
-        if isMovingToParentViewController {
-            UIApplication.shared.statusBarStyle = .default
+        UIApplication.shared.statusBarStyle = .default
+        if isBeingPresented {
             navigationController?.setNavigationBarHidden(true, animated: animated)
         }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        if isMovingFromParentViewController {
-            UIApplication.shared.statusBarStyle = .lightContent
+        UIApplication.shared.statusBarStyle = .lightContent
+        if isBeingDismissed {
             navigationController?.setNavigationBarHidden(false, animated: animated)
         }
         super.viewWillDisappear(animated)

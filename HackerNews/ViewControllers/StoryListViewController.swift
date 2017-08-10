@@ -137,40 +137,44 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
         browser.delegate = self
         browser.story = story
         browser.storiesSource = storiesSource
-        
-        self.navigationController?.pushViewController(browser, animated: true)
+
+        present(browser, animated: true, completion: nil)
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle { return .default }
+    func prepareComments(for story: Story, in viewController: CommentListViewController) {
+        viewController.dismissHandler = { [weak self] in
+            guard let strongSelf = self else { return }
+
+            if let path = strongSelf.storiesSource.indexPathForStory(story) {
+                strongSelf.storiesTableView.reloadRows(at: [path], with: .automatic)
+            }
+        }
+
+        showNetworkIndicator(true)
+        storiesSource.retrieveComments(story) { comments in
+            self.showNetworkIndicator(false)
+            viewController.onCommentsLoaded(story, receivedComments: comments)
+        }
+    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+
         if let id = segue.identifier {
             switch id {
                 
             case "ShowComments":
-                let storyId = (sender as? Story)?.id ?? (sender as? ViewCommentsButton)?.key ?? 0
+                let storyId = (sender as? ViewCommentsButton)?.key ?? 0
 
                 guard let story = storiesSource.findStory(storyId) else {
                     return
                 }
                 
-                let navigationController:UINavigationController = segue.destination as! UINavigationController;
-                let commentsViewController:CommentListViewController = navigationController.viewControllers.first as! CommentListViewController;
-                
-                commentsViewController.dismissHandler = {
-                    commentsViewController.dismissHandler = nil
-                    if let path = self.storiesSource.indexPathForStory(story) {
-                        self.storiesTableView.reloadRows(at: [path], with: .automatic)
-                    }
+                guard let nav = segue.destination as? UINavigationController, let commentListViewController = nav.viewControllers.first as? CommentListViewController else {
+                    return
                 }
-                
-                showNetworkIndicator(true)
-                storiesSource.retrieveComments(story) { comments in
-                    self.showNetworkIndicator(false)
-                    commentsViewController.onCommentsLoaded(story, receivedComments: comments)
-                }
-                
+
+                prepareComments(for: story, in: commentListViewController)
+
             default:
                 break
                 
@@ -201,13 +205,17 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
 
         guard let browser = controller as? BrowserViewController, let story = browser.story else { return [] }
 
-        return [ViewComments(handler: {
-            self.performSegue(withIdentifier: "ShowComments", sender: story)
-        })]
-    }
+        return [ViewComments(handler: { [weak self] in
+            guard let strongSelf = self else { return }
 
-    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        self.navigationController?.popViewController(animated: true)
+            guard let nav = strongSelf.storyboard?.instantiateViewController(withIdentifier: "CommentNavigationController") as? UINavigationController, let commentListViewController = nav.viewControllers.first as? CommentListViewController else {
+                return
+            }
+
+            strongSelf.prepareComments(for: story, in: commentListViewController)
+
+            strongSelf.presentedViewController?.present(nav, animated: true)
+        })]
     }
 }
 
