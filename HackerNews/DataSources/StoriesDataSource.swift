@@ -178,7 +178,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
 
 
             var numComments: Int = 0
-            if let value = metaThing.css(".subtext a:nth-child(6)").first?.text {
+            if let value = metaThing.css(".subtext a").reversed().first?.text {
                 numComments = (value
                     .replacingOccurrences(of: " discuss", with: "")
                     .replacingOccurrences(of: " comments", with: "")
