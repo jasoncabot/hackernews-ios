@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Crashlytics
 
 class ReadStore {
 
@@ -18,10 +19,14 @@ class ReadStore {
 
     func viewedComments(of story: Story) {
         comments.insert(story.id)
+
+        Answers.logCustomEvent(withName: "Comments Viewed", customAttributes: ["Story":"\(story.id)"])
     }
 
     func viewed(story: Story) {
         stories.insert(story.id)
+
+        Answers.logCustomEvent(withName: "Story Viewed", customAttributes: ["Story":"\(story.id)"])
     }
 
     func viewed(comment: Comment) {

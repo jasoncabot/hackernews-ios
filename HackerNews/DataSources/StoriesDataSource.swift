@@ -8,6 +8,7 @@
 
 import UIKit
 import Kanna
+import Crashlytics
 
 enum PageType {
     case first
@@ -80,6 +81,8 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
             case .next:
                 strongSelf.page = strongSelf.page + 1
             }
+
+            Answers.logCustomEvent(withName: "Page Loaded", customAttributes: ["Page":"\(page)"])
 
             guard let url = URL(string: strongSelf.type.endpoint(for: strongSelf.page)) else {
                 return

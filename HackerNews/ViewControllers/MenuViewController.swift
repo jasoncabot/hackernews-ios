@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Crashlytics
 
 class MenuViewController: UITableViewController {
     
@@ -32,6 +33,8 @@ class MenuViewController: UITableViewController {
             return
         }
         
+        Answers.logCustomEvent(withName: "Section Loaded", customAttributes: ["Section":"\(id)"])
+
         (segue.destination as! StoryListViewController).storiesSource = StoriesDataSource(type: type)
     }
 }
