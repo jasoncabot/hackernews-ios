@@ -18,6 +18,8 @@
 		F61DF1DF1A9A29CF0077BFA2 /* StoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1DB1A9A29CF0077BFA2 /* StoryCell.swift */; };
 		F61DF1E01A9A29CF0077BFA2 /* ViewCommentsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1DC1A9A29CF0077BFA2 /* ViewCommentsButton.swift */; };
 		F61DF1E21A9A29DB0077BFA2 /* NetworkIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1E11A9A29DB0077BFA2 /* NetworkIndicator.swift */; };
+		F627E0721FD4B07300C6DA6E /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F627E0701FD4B07300C6DA6E /* Crashlytics.framework */; };
+		F627E0731FD4B07300C6DA6E /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F627E0711FD4B07300C6DA6E /* Fabric.framework */; };
 		F629A63A1D11EDE10062C1F5 /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F629A6391D11EDE10062C1F5 /* BrowserViewController.swift */; };
 		F69BB5C01AE583A10022DC2C /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69BB5BF1AE583A10022DC2C /* Link.swift */; };
 		F69FE0531F3127EE00F9C0E5 /* ReadStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69FE0521F3127EE00F9C0E5 /* ReadStore.swift */; };
@@ -50,6 +52,8 @@
 		F61DF1DB1A9A29CF0077BFA2 /* StoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoryCell.swift; path = View/StoryCell.swift; sourceTree = "<group>"; };
 		F61DF1DC1A9A29CF0077BFA2 /* ViewCommentsButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewCommentsButton.swift; path = View/ViewCommentsButton.swift; sourceTree = "<group>"; };
 		F61DF1E11A9A29DB0077BFA2 /* NetworkIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkIndicator.swift; path = Util/NetworkIndicator.swift; sourceTree = "<group>"; };
+		F627E0701FD4B07300C6DA6E /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		F627E0711FD4B07300C6DA6E /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		F629A6391D11EDE10062C1F5 /* BrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BrowserViewController.swift; path = ViewControllers/BrowserViewController.swift; sourceTree = "<group>"; };
 		F64EA9081F2E798800D45FF4 /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		F69BB5BF1AE583A10022DC2C /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Link.swift; path = Model/Link.swift; sourceTree = "<group>"; };
@@ -69,7 +73,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F627E0721FD4B07300C6DA6E /* Crashlytics.framework in Frameworks */,
 				F6F3517E1C050A2B00F7F772 /* Kanna.framework in Frameworks */,
+				F627E0731FD4B07300C6DA6E /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +100,8 @@
 		F64EA9071F2E798800D45FF4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F627E0701FD4B07300C6DA6E /* Crashlytics.framework */,
+				F627E0711FD4B07300C6DA6E /* Fabric.framework */,
 				F64EA9081F2E798800D45FF4 /* libxml2.2.tbd */,
 			);
 			name = Frameworks;
@@ -194,7 +202,8 @@
 				F6E21C051A91087A00AF25EF /* Sources */,
 				F6E21C061A91087A00AF25EF /* Frameworks */,
 				F6E21C071A91087A00AF25EF /* Resources */,
-				F6F3517F1C050A6400F7F772 /* ShellScript */,
+				F6F3517F1C050A6400F7F772 /* Copy Carthage Frameworks */,
+				F627E06F1FD4B05200C6DA6E /* Fabric Upload */,
 			);
 			buildRules = (
 			);
@@ -285,7 +294,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		F6F3517F1C050A6400F7F772 /* ShellScript */ = {
+		F627E06F1FD4B05200C6DA6E /* Fabric Upload */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Fabric Upload";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 5a65c4c7309d5a09f680649cfa879a6585b72348 $CRASHLYTICS_SECRET";
+			showEnvVarsInLog = 0;
+		};
+		F6F3517F1C050A6400F7F772 /* Copy Carthage Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -293,6 +317,7 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Kanna.framework",
 			);
+			name = "Copy Carthage Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -466,6 +491,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = HackerNews/Info.plist;
@@ -484,6 +510,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = HackerNews/Info.plist;
