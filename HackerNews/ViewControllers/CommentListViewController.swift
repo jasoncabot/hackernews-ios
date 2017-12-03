@@ -11,11 +11,11 @@ import UIKit
 class CommentListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var commentsTableView: UITableView!
-    
+    @IBOutlet weak var doneButton: UIBarButtonItem!
+
     var store = ReadStore.memory
     var story: Story?
     var comments: [Comment]?
-    var dismissHandler: ((Void) -> Void)?
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -25,6 +25,8 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
         super.init(coder: aDecoder)
     }
 
+    // MARK: - UIViewController
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,17 +34,16 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
         commentsTableView.rowHeight = UITableViewAutomaticDimension
     }
 
-    func onCommentsLoaded(_ story:Story, receivedComments:[Comment]) {
-        self.story = story
-        self.comments = receivedComments
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
-        store.viewedComments(of: story)
+        guard let nav = navigationController else { return }
 
-        if isViewLoaded {
-            commentsTableView.reloadData()
-        }
+        navigationItem.rightBarButtonItem = nav.isBeingPresented ? doneButton : nil
     }
-    
+
+    // MARK: - UITableView
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:CommentCell = tableView.dequeueReusableCell(withIdentifier: "CommentCellIdentifier", for: indexPath) as! CommentCell
 
@@ -85,10 +86,6 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel!.shadowOffset = CGSize.zero
             header.textLabel!.font = UIFont.systemFont(ofSize: 12)
-            
-            if let nav = navigationController as? HeadedNavigationController {
-                header.alpha = nav.startingAlpha
-            }
         }
     }
 
@@ -100,6 +97,19 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
 
         if let comment = comment(for: indexPath.row) { store.viewed(comment: comment) }
     }
+
+    // MARK: -
+
+    func onCommentsLoaded(_ story:Story, receivedComments:[Comment]) {
+        self.story = story
+        self.comments = receivedComments
+
+        store.viewedComments(of: story)
+
+        if isViewLoaded {
+            commentsTableView.reloadData()
+        }
+    }
     
     func comment(for row:Int) -> Comment? {
         return comments?[row]
@@ -107,7 +117,6 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
 
     @IBAction func dismiss(_ sender: AnyObject) {
         dismiss(animated: true)
-        dismissHandler?()
     }
     
     

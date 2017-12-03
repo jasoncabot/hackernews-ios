@@ -17,20 +17,20 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
 
     @IBOutlet weak var toastView: UIView!
     @IBOutlet weak var sortingLabel: UILabel!
-    
+
     var storiesSource:StoriesDataSource!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.title = storiesSource.title
         storiesTableView.estimatedRowHeight = 72
         storiesTableView.rowHeight = UITableViewAutomaticDimension
-        
+
         toastView.layer.cornerRadius = 15
-        
+
         storiesTableView.dataSource = storiesSource
-        
+
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(StoryListViewController.refreshStories(_:)), for: .valueChanged)
         storiesTableView.insertSubview(refreshControl, at: 0)
@@ -41,14 +41,14 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
             self.storiesTableView.reloadData()
         }
     }
-    
+
     @IBAction func refreshStories(_ sender: UIRefreshControl) {
-        
+
         // fade out our old stories
         UIView.animate(withDuration: 1, animations: {
             self.storiesTableView.alpha = 0.2
-        }) 
-        
+        })
+
         // load in our new ones
         storiesSource.refresh {
             sender.endRefreshing()
@@ -56,22 +56,22 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
             self.storiesTableView.flashScrollIndicators()
             UIView.animate(withDuration: 0.25, animations: {
                 self.storiesTableView.alpha = 1
-            }) 
+            })
         }
     }
 
     @IBAction func changeSortOrder(_ sender: UIBarButtonItem) {
-        
+
         storiesTableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
-        
+
         let updates = storiesSource.updatedIndexPathsByChangingSortOrdering()
-        
+
         storiesTableView.beginUpdates()
         updates.forEach { (from, to) in
             self.storiesTableView.moveRow(at: from as IndexPath, to: to as IndexPath)
         }
         storiesTableView.endUpdates()
-        
+
         if let visiblePaths = storiesTableView.indexPathsForVisibleRows {
             for path in visiblePaths {
                 if let cell = storiesTableView.cellForRow(at: path) as? StoryCell, let story = storiesSource.storyForIndexPath(path) {
@@ -79,38 +79,30 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
                 }
             }
         }
-        
-        self.sortingLabel.text = "\(storiesSource.sorting)"
-        self.toastView.alpha = 0
-        UIView.animate(withDuration: 0.25, animations: { 
+
+        sortingLabel.text = "\(storiesSource.sorting)"
+        toastView.alpha = 0
+        UIView.animate(withDuration: 0.25, animations: {
             self.toastView.alpha = 1
         }, completion: { done in
             let delayTime = DispatchTime.now() + Double(Int64(2 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
             DispatchQueue.main.asyncAfter(deadline: delayTime) {
                 UIView.animate(withDuration: 0.25, animations: {
                     self.toastView.alpha = 0
-                }) 
+                })
             }
-        }) 
+        })
 
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         if let path = storiesTableView.indexPathForSelectedRow {
             storiesTableView.deselectRow(at: path, animated: animated)
-            
+
             self.storiesTableView.reloadRows(at: [path], with: .automatic)
         }
-        
-        if let nav = self.navigationController {
-            nav.setToolbarHidden(true, animated: animated)
-        }
-    }
-
-    func shouldDisplayToolbar() -> Bool {
-        return false;
     }
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -131,7 +123,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
         guard let story = storiesSource.storyForIndexPath(storiesTableView.indexPathForSelectedRow), let url = story.url else {
             return
         }
-        
+
         let browser = BrowserViewController(url: url, entersReaderIfAvailable: false)
 
         browser.delegate = self
@@ -142,18 +134,14 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
     }
 
     func prepareComments(for story: Story, in viewController: CommentListViewController) {
-        viewController.dismissHandler = { [weak self] in
-            guard let strongSelf = self else { return }
-
-            if let path = strongSelf.storiesSource.indexPathForStory(story) {
-                strongSelf.storiesTableView.reloadRows(at: [path], with: .automatic)
-            }
-        }
-
         showNetworkIndicator(true)
         storiesSource.retrieveComments(story) { comments in
             self.showNetworkIndicator(false)
             viewController.onCommentsLoaded(story, receivedComments: comments)
+
+            if let path = self.storiesSource.indexPathForStory(story) {
+                self.storiesTableView.reloadRows(at: [path], with: .automatic)
+            }
         }
     }
 
@@ -161,15 +149,15 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
 
         if let id = segue.identifier {
             switch id {
-                
+
             case "ShowComments":
                 let storyId = (sender as? ViewCommentsButton)?.key ?? 0
 
                 guard let story = storiesSource.findStory(storyId) else {
                     return
                 }
-                
-                guard let nav = segue.destination as? UINavigationController, let commentListViewController = nav.viewControllers.first as? CommentListViewController else {
+
+                guard let commentListViewController = segue.destination as? CommentListViewController else {
                     return
                 }
 
@@ -177,7 +165,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
 
             default:
                 break
-                
+
             }
         }
     }
@@ -185,18 +173,18 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
     fileprivate func showNetworkIndicator(_ show:Bool) {
         (UIApplication.shared.delegate as! AppDelegate).networkIndicator.displayNetworkIndicator(show)
     }
-    
+
     fileprivate func showLoadingActivity(_ show:Bool) {
         showNetworkIndicator(show)
 
         var inset = storiesTableView.contentInset
         inset.bottom = show ? loadingView.bounds.size.height : 0
         storiesTableView.contentInset = inset
-        
+
         loadingView.alpha = show ? 0 : 1
         UIView.animate(withDuration: 0.25, animations: {
             self.loadingView.alpha = show ? 1.0 : 0.0
-        }) 
+        })
     }
 
     // MARK: SFSafariViewControllerDelegate
@@ -208,13 +196,19 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
         return [ViewComments(handler: { [weak self] in
             guard let strongSelf = self else { return }
 
-            guard let nav = strongSelf.storyboard?.instantiateViewController(withIdentifier: "CommentNavigationController") as? UINavigationController, let commentListViewController = nav.viewControllers.first as? CommentListViewController else {
+            guard let commentListViewController = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "CommentListViewController") as? CommentListViewController else {
                 return
             }
 
             strongSelf.prepareComments(for: story, in: commentListViewController)
 
-            strongSelf.presentedViewController?.present(nav, animated: true)
+            let commentContainer = UINavigationController(rootViewController: commentListViewController)
+            commentContainer.navigationBar.tintColor = strongSelf.navigationController?.navigationBar.tintColor
+            commentContainer.navigationBar.barTintColor = strongSelf.navigationController?.navigationBar.barTintColor
+            commentContainer.navigationBar.titleTextAttributes = strongSelf.navigationController?.navigationBar.titleTextAttributes
+            browser.present(commentContainer,
+                            animated: true,
+                            completion: nil)
         })]
     }
 }
@@ -242,3 +236,4 @@ class ViewComments : UIActivity {
 
 
 }
+

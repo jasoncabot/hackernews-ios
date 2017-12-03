@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 47;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,7 +11,6 @@
 		F61DF1CA1A9A29B00077BFA2 /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1C71A9A29B00077BFA2 /* Story.swift */; };
 		F61DF1CC1A9A29BA0077BFA2 /* StoriesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1CB1A9A29BA0077BFA2 /* StoriesDataSource.swift */; };
 		F61DF1D31A9A29C50077BFA2 /* CommentListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1CD1A9A29C50077BFA2 /* CommentListViewController.swift */; };
-		F61DF1D41A9A29C50077BFA2 /* HeadedNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1CE1A9A29C50077BFA2 /* HeadedNavigationController.swift */; };
 		F61DF1D51A9A29C50077BFA2 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1CF1A9A29C50077BFA2 /* MenuViewController.swift */; };
 		F61DF1D71A9A29C50077BFA2 /* StoryListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1D11A9A29C50077BFA2 /* StoryListViewController.swift */; };
 		F61DF1DD1A9A29CF0077BFA2 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1D91A9A29CF0077BFA2 /* CommentCell.swift */; };
@@ -44,7 +43,6 @@
 		F61DF1C71A9A29B00077BFA2 /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Story.swift; path = Model/Story.swift; sourceTree = "<group>"; };
 		F61DF1CB1A9A29BA0077BFA2 /* StoriesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoriesDataSource.swift; path = DataSources/StoriesDataSource.swift; sourceTree = "<group>"; };
 		F61DF1CD1A9A29C50077BFA2 /* CommentListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentListViewController.swift; path = ViewControllers/CommentListViewController.swift; sourceTree = "<group>"; };
-		F61DF1CE1A9A29C50077BFA2 /* HeadedNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HeadedNavigationController.swift; path = ViewControllers/HeadedNavigationController.swift; sourceTree = "<group>"; };
 		F61DF1CF1A9A29C50077BFA2 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuViewController.swift; path = ViewControllers/MenuViewController.swift; sourceTree = "<group>"; };
 		F61DF1D11A9A29C50077BFA2 /* StoryListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoryListViewController.swift; path = ViewControllers/StoryListViewController.swift; sourceTree = "<group>"; };
 		F61DF1D91A9A29CF0077BFA2 /* CommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentCell.swift; path = View/CommentCell.swift; sourceTree = "<group>"; };
@@ -149,7 +147,6 @@
 			isa = PBXGroup;
 			children = (
 				F61DF1CD1A9A29C50077BFA2 /* CommentListViewController.swift */,
-				F61DF1CE1A9A29C50077BFA2 /* HeadedNavigationController.swift */,
 				F61DF1CF1A9A29C50077BFA2 /* MenuViewController.swift */,
 				F61DF1D11A9A29C50077BFA2 /* StoryListViewController.swift */,
 				F629A6391D11EDE10062C1F5 /* BrowserViewController.swift */,
@@ -234,13 +231,13 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = "Jason Cabot";
 				TargetAttributes = {
 					F6E21C081A91087A00AF25EF = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 2V62Z49VFD;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 0910;
 					};
 					F6E21C1D1A91087A00AF25EF = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -249,7 +246,7 @@
 				};
 			};
 			buildConfigurationList = F6E21C041A91087900AF25EF /* Build configuration list for PBXProject "HackerNews" */;
-			compatibilityVersion = "Xcode 6.3";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -322,7 +319,6 @@
 				F61DF1CC1A9A29BA0077BFA2 /* StoriesDataSource.swift in Sources */,
 				F61DF1CA1A9A29B00077BFA2 /* Story.swift in Sources */,
 				F61DF1D51A9A29C50077BFA2 /* MenuViewController.swift in Sources */,
-				F61DF1D41A9A29C50077BFA2 /* HeadedNavigationController.swift in Sources */,
 				F6E21C0F1A91087A00AF25EF /* AppDelegate.swift in Sources */,
 				F61DF1DF1A9A29CF0077BFA2 /* StoryCell.swift in Sources */,
 			);
@@ -373,14 +369,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -419,14 +421,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -464,7 +472,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jasoncabot.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -482,7 +490,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jasoncabot.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
