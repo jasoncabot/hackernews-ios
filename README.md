@@ -5,9 +5,9 @@ After my favourite reader app stopped working I decided to write my own as every
 
 ## Screenshots
 
-![Stories](/fastlane/screenshots/iPhone X-01StoryList_framed.png?raw=true)
-![Comments](/fastlane/screenshots/iPhone X-02CommentList_framed.png?raw=true)
-![Menu](/fastlane/screenshots/iPhone X-03MainMenu_framed.png?raw=true)
+![Stories](/fastlane/screenshots/en-US/iPhone%20X-01StoryList_framed.png)
+![Comments](/fastlane/screenshots/en-US/iPhone%20X-02CommentList_framed.png?raw=true)
+![Menu](/fastlane/screenshots/en-US/iPhone%20X-03MainMenu_framed.png?raw=true)
 
 
 ## License
