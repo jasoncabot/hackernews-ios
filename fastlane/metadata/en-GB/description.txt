@@ -1,0 +1,7 @@
+Quickly browse and read stories from Hacker News
+
+After my favourite reader stopped working and not finding a suitable alternative I decided to make my own
+
+This app is completely Open Source and Licensed under the MIT license.
+
+You can find it https://github.com/jasoncabot/hackernews-ios

@@ -18,3 +18,10 @@ DerivedData
 *.xcuserstate
 Carthage/Checkouts
 Carthage/Build
+Preview.html
+HackerNews.app.dSYM.zip
+report.xml
+fastlane/metadata/review_information
+fastlane/metadata/trade_representative_contact_information
+screenshots.html
+fastlane/test_output

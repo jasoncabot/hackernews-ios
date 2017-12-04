@@ -1,0 +1,30 @@
+{
+  "device_frame_version": "latest",
+  "default": {
+    "keyword": {
+      "font": "./fonts/OpenSansCondensed-Bold.ttf",
+      "color": "#D03044"
+    },
+    "title": {
+      "font": "./fonts/OpenSansCondensed-Light.ttf",
+      "color": "#545454"
+    },
+    "background": "./background.jpg",
+    "padding": 50,
+    "show_complete_frame": false,
+    "stack_title" : true,
+    "title_below_image": false
+  },
+
+  "data": [
+    {
+      "filter": "StoryList"
+    },
+    {
+      "filter": "CommentList"
+    },
+    {
+      "filter": "MainMenu"
+    }
+  ]
+}

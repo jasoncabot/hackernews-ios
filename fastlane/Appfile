@@ -1,0 +1,4 @@
+app_identifier "com.jasoncabot.HackerNews" # The bundle identifier of your app
+apple_id "jasoncabot+apple@gmail.com" # Your Apple email address
+
+team_id "2V62Z49VFD" # Developer Portal Team ID
