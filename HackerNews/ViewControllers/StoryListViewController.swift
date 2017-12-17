@@ -20,6 +20,8 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
 
     var storiesSource:StoriesDataSource!
 
+    // MARK: - UIViewController
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -41,6 +43,43 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
             self.storiesTableView.reloadData()
         }
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if let path = storiesTableView.indexPathForSelectedRow {
+            storiesTableView.deselectRow(at: path, animated: animated)
+
+            self.storiesTableView.reloadRows(at: [path], with: .automatic)
+        }
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        if let id = segue.identifier {
+            switch id {
+
+            case "ShowComments":
+                let storyId = (sender as? ViewCommentsButton)?.key ?? 0
+
+                guard let story = storiesSource.findStory(storyId) else {
+                    return
+                }
+
+                guard let commentListViewController = segue.destination as? CommentListViewController else {
+                    return
+                }
+
+                prepareComments(for: story, in: commentListViewController)
+
+            default:
+                break
+
+            }
+        }
+    }
+
+    // MARK: - IBAction
 
     @IBAction func refreshStories(_ sender: UIRefreshControl) {
 
@@ -95,15 +134,38 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
 
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    func prepareComments(for story: Story, in viewController: CommentListViewController) {
+        showNetworkIndicator(true)
+        storiesSource.retrieveComments(story) { comments in
+            self.showNetworkIndicator(false)
+            viewController.onCommentsLoaded(story, receivedComments: comments)
 
-        if let path = storiesTableView.indexPathForSelectedRow {
-            storiesTableView.deselectRow(at: path, animated: animated)
-
-            self.storiesTableView.reloadRows(at: [path], with: .automatic)
+            if let path = self.storiesSource.indexPathForStory(story) {
+                self.storiesTableView.reloadRows(at: [path], with: .automatic)
+            }
         }
     }
+
+    // MARK: - StoryListViewController
+
+    fileprivate func showNetworkIndicator(_ show:Bool) {
+        (UIApplication.shared.delegate as! AppDelegate).networkIndicator.displayNetworkIndicator(show)
+    }
+
+    fileprivate func showLoadingActivity(_ show:Bool) {
+        showNetworkIndicator(show)
+
+        var inset = storiesTableView.contentInset
+        inset.bottom = show ? loadingView.bounds.size.height : 0
+        storiesTableView.contentInset = inset
+
+        loadingView.alpha = show ? 0 : 1
+        UIView.animate(withDuration: 0.25, animations: {
+            self.loadingView.alpha = show ? 1.0 : 0.0
+        })
+    }
+
+    // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard !storiesSource.isLoading else { return }
@@ -133,61 +195,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
         present(browser, animated: true, completion: nil)
     }
 
-    func prepareComments(for story: Story, in viewController: CommentListViewController) {
-        showNetworkIndicator(true)
-        storiesSource.retrieveComments(story) { comments in
-            self.showNetworkIndicator(false)
-            viewController.onCommentsLoaded(story, receivedComments: comments)
-
-            if let path = self.storiesSource.indexPathForStory(story) {
-                self.storiesTableView.reloadRows(at: [path], with: .automatic)
-            }
-        }
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        if let id = segue.identifier {
-            switch id {
-
-            case "ShowComments":
-                let storyId = (sender as? ViewCommentsButton)?.key ?? 0
-
-                guard let story = storiesSource.findStory(storyId) else {
-                    return
-                }
-
-                guard let commentListViewController = segue.destination as? CommentListViewController else {
-                    return
-                }
-
-                prepareComments(for: story, in: commentListViewController)
-
-            default:
-                break
-
-            }
-        }
-    }
-
-    fileprivate func showNetworkIndicator(_ show:Bool) {
-        (UIApplication.shared.delegate as! AppDelegate).networkIndicator.displayNetworkIndicator(show)
-    }
-
-    fileprivate func showLoadingActivity(_ show:Bool) {
-        showNetworkIndicator(show)
-
-        var inset = storiesTableView.contentInset
-        inset.bottom = show ? loadingView.bounds.size.height : 0
-        storiesTableView.contentInset = inset
-
-        loadingView.alpha = show ? 0 : 1
-        UIView.animate(withDuration: 0.25, animations: {
-            self.loadingView.alpha = show ? 1.0 : 0.0
-        })
-    }
-
-    // MARK: SFSafariViewControllerDelegate
+    // MARK: - SFSafariViewControllerDelegate
 
     func safariViewController(_ controller: SFSafariViewController, activityItemsFor URL: URL, title: String?) -> [UIActivity] {
 

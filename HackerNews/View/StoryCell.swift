@@ -12,13 +12,15 @@ class StoryCell: UITableViewCell {
     
     @IBOutlet var storyTitleLabel: UILabel!;
     @IBOutlet var subtitleLabel: UILabel!;
+    @IBOutlet var siteLabel: UILabel!;
     @IBOutlet var viewCommentsButton: ViewCommentsButton!;
     
     func update(with story: Story, store: ReadStore = ReadStore.memory) {
         self.storyTitleLabel.text = "\(story.position). \(story.title)"
         self.subtitleLabel.text = makeSubtitle(story)
-        self.viewCommentsButton.setTitle("\(story.numberOfComments)", for: UIControlState())
+        self.viewCommentsButton.setTitle("\(story.numberOfComments)", for: .normal)
         self.viewCommentsButton.key = story.id
+        self.siteLabel.text = "From \(story.site)"
         
         if store.hasRead(story) {
             self.storyTitleLabel.textColor = UIColor.darkGray

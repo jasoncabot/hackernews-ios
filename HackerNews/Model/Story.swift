@@ -17,8 +17,9 @@ struct Story : Equatable {
     let timeAgo: String
     let numberOfComments: Int
     let url: URL?
+    let site: String
     
-    init(position: Int, id: Int, title: String, points: Int, by: String, timeAgo: String, numberOfComments: Int, url: URL?, unread: Bool, commentsUnread: Bool) {
+    init(position: Int, id: Int, title: String, points: Int, by: String, timeAgo: String, numberOfComments: Int, url: URL?, site: String, unread: Bool, commentsUnread: Bool) {
         self.position = position
         self.id = id
         self.title = title
@@ -27,6 +28,7 @@ struct Story : Equatable {
         self.timeAgo = timeAgo
         self.numberOfComments = numberOfComments
         self.url = url
+        self.site = site
     }
     
     init?(data: AnyObject) {
@@ -37,7 +39,8 @@ struct Story : Equatable {
             let points = data["score"] as? Int,
             let author = data["by"] as? String,
             let timeAgo = data["when"] as? String,
-            let urlString = data["url"] as? String else {
+            let urlString = data["url"] as? String,
+            let site = data["site"] as? String else {
                 return nil
         }
         
@@ -49,6 +52,7 @@ struct Story : Equatable {
         self.timeAgo = timeAgo
         self.numberOfComments = data["comments"] as? Int ?? 0
         self.url = URL(string: urlString)
+        self.site = site
     }
 }
 

@@ -2,12 +2,12 @@
   "device_frame_version": "latest",
   "default": {
     "keyword": {
-      "font": "./fonts/OpenSansCondensed-Bold.ttf",
-      "color": "#D03044"
+      "font": "./../fonts/OpenSansCondensed-Light.ttf",
+      "color": "#ED4D1E"
     },
     "title": {
-      "font": "./fonts/OpenSansCondensed-Light.ttf",
-      "color": "#545454"
+      "font": "./../fonts/OpenSansCondensed-Light.ttf",
+      "color": "#ED4D1E"
     },
     "background": "./background.jpg",
     "padding": 50,

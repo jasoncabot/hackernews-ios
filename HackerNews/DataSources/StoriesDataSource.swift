@@ -69,6 +69,10 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
         self.isLoading = false
     }
 
+    var title: String {
+        return type.title
+    }
+
     func load(page: PageType, completionHandler:@escaping ()->()) {
 
         storyQueue.async(flags: .barrier) { [weak self] in
@@ -162,6 +166,8 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                 url = "https://news.ycombinator.com/\(url)"
             }
 
+            let site = thing.css(".sitestr").first?.text ?? ""
+
             guard let title = anchor?.text else {
                 return nil
             }
@@ -202,6 +208,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                 , timeAgo: timeAgo ?? "a little while ago"
                 , numberOfComments: numComments
                 , url: URL(string: url)
+                , site: site
                 , unread: true
                 , commentsUnread: true)
         }).filter { $0 != nil }.map { $0! }
@@ -232,15 +239,14 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                 let startOfReply = text.range(of: "<div class=\"reply\">")?.lowerBound ?? text.endIndex
                 text = (text.replacingCharacters(in: startOfReply ..< text.endIndex, with: "")
                     .removingPercentEncoding?
+                    .replacingOccurrences(of: "<[/]?([bi]|em|pre|code)>", with: "", options: .regularExpression, range: nil)
+                    .replacingOccurrences(of: "<[/]?a[^>]*>", with: "", options: .regularExpression, range: nil)
                     .replacingOccurrences(of: "<[^>]+>", with: "\n\n", options: .regularExpression, range: nil)
                     .replacingOccurrences(of: "&gt;", with: ">")
                     .replacingOccurrences(of: "&lt;", with: "<")
                     .replacingOccurrences(of: "&amp;", with: "&")
                     .replacingOccurrences(of: "&quot;", with: "\"")
                     .replacingOccurrences(of: "&apos;", with: "'")
-                    .replacingOccurrences(of: "<[/]?([bi]|em|pre|code)>", with: "", options: .regularExpression, range: nil)
-                    .replacingOccurrences(of: "<[/]?a[^>]+>", with: "", options: .regularExpression, range: nil)
-
                     .replacingOccurrences(of: "\n+", with: "\n\n", options: .regularExpression, range: nil)
                     .trimmingCharacters(in: .whitespacesAndNewlines)) ?? ""
 
@@ -265,28 +271,6 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
             }
         }
         return comments
-    }
-
-    var title: String {
-        return type.title
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:StoryCell = tableView.dequeueReusableCell(withIdentifier: "StoryCellIdentifier", for: indexPath) as! StoryCell
-
-        if let story = storyForIndexPath(indexPath) {
-            cell.update(with: story)
-        }
-
-        return cell;
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var count: Int = 0
-        storyQueue.sync {
-            count = stories.count
-        }
-        return count
     }
 
     func indexPathForStory(_ story:Story) -> IndexPath? {
@@ -340,7 +324,26 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
             
             task.resume()
         }
-        
+    }
+
+    // MARK: UITableViewDataSource
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell:StoryCell = tableView.dequeueReusableCell(withIdentifier: "StoryCellIdentifier", for: indexPath) as! StoryCell
+
+        if let story = storyForIndexPath(indexPath) {
+            cell.update(with: story)
+        }
+
+        return cell;
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var count: Int = 0
+        storyQueue.sync {
+            count = stories.count
+        }
+        return count
     }
     
 }
