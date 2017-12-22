@@ -105,33 +105,64 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Contact" id="cfZ-K9-awd">
+                            <tableViewSection headerTitle="Settings" id="cfZ-K9-awd" userLabel="Settings">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="jPO-sU-jtp" detailTextLabel="RVt-gg-1qW" style="IBUITableViewCellStyleValue1" id="MPs-ab-dxH">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="jPO-sU-jtp" detailTextLabel="fr0-xQ-7ab" style="IBUITableViewCellStyleValue1" id="MPs-ab-dxH">
                                         <rect key="frame" x="0.0" y="259" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MPs-ab-dxH" id="usf-U8-pyF">
+                                            <rect key="frame" x="0.0" y="0.0" width="341" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Article Links" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jPO-sU-jtp">
+                                                    <rect key="frame" x="16" y="12" width="94" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="External" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fr0-xQ-7ab">
+                                                    <rect key="frame" x="278" y="12" width="62" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="vUn-pM-goN" kind="show" id="48k-ov-h3x"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Contact" id="ipP-MK-RFj">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Uhf-So-cYY" detailTextLabel="1Qq-yG-wsC" style="IBUITableViewCellStyleValue1" id="ENK-IQ-pFh">
+                                        <rect key="frame" x="0.0" y="351" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ENK-IQ-pFh" id="yv8-eP-qnq">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="GitHub" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jPO-sU-jtp">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="GitHub" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Uhf-So-cYY">
                                                     <rect key="frame" x="16" y="12" width="51" height="19.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="jasoncabot/hackernews-ios" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RVt-gg-1qW">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="jasoncabot/hackernews-ios" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1Qq-yG-wsC">
                                                     <rect key="frame" x="159" y="12" width="200" height="19.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="ZjJ-xU-e0F" kind="custom" identifier="GitHub" customClass="ExternalURLSegue" customModule="HackerNews" customModuleProvider="target" id="2rP-vO-S8Q"/>
+                                            <segue destination="ZjJ-xU-e0F" kind="custom" identifier="GitHub" customClass="ExternalURLSegue" customModule="HackerNews" customModuleProvider="target" id="Lna-CQ-wDp"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -145,6 +176,9 @@
                     <navigationItem key="navigationItem" title="Hacker News" id="cn9-GF-C39">
                         <barButtonItem key="backBarButtonItem" title="Back" id="gQm-0O-4Z3"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="linkHandlingDetail" destination="fr0-xQ-7ab" id="UX9-08-4xJ"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3FV-Sg-MfF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -170,16 +204,16 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is a story title That goes over 3 separate lines" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yu0-EE-nbS" userLabel="Title">
-                                                    <rect key="frame" x="15" y="10" width="301" height="50.5"/>
+                                                    <rect key="frame" x="15" y="5" width="301" height="50.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7QC-w4-N0b" userLabel="Site">
-                                                    <rect key="frame" x="15" y="72" width="301" height="13.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="From WWWWW" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7QC-w4-N0b" userLabel="Site">
+                                                    <rect key="frame" x="15" y="75" width="301" height="13.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
                                                     <color key="textColor" red="0.38036197420000001" green="0.38040977720000002" blue="0.38033998009999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8888 points by WWWWW 88 wwww ago" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBh-2e-Jwh" userLabel="Subtitle">
                                                     <rect key="frame" x="15" y="90.5" width="301" height="13"/>
@@ -213,11 +247,11 @@
                                                 <constraint firstAttribute="bottom" secondItem="FBh-2e-Jwh" secondAttribute="bottom" constant="5" id="4Vx-nv-xit"/>
                                                 <constraint firstItem="FBh-2e-Jwh" firstAttribute="leading" secondItem="Yu0-EE-nbS" secondAttribute="leading" id="C97-AL-AxD"/>
                                                 <constraint firstItem="Yu0-EE-nbS" firstAttribute="leading" secondItem="p4r-GY-uBv" secondAttribute="leading" constant="15" id="GMO-Bn-3rO"/>
-                                                <constraint firstItem="Yu0-EE-nbS" firstAttribute="top" secondItem="p4r-GY-uBv" secondAttribute="top" constant="10" id="Qv1-NR-GYF"/>
+                                                <constraint firstItem="Yu0-EE-nbS" firstAttribute="top" secondItem="p4r-GY-uBv" secondAttribute="top" constant="5" id="Qv1-NR-GYF"/>
                                                 <constraint firstItem="FBh-2e-Jwh" firstAttribute="trailing" secondItem="Yu0-EE-nbS" secondAttribute="trailing" id="Soh-Nv-1UD"/>
                                                 <constraint firstItem="7QC-w4-N0b" firstAttribute="trailing" secondItem="Yu0-EE-nbS" secondAttribute="trailing" id="TGu-Do-zyf"/>
-                                                <constraint firstItem="7QC-w4-N0b" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Yu0-EE-nbS" secondAttribute="bottom" constant="5" id="W3O-91-Xuo"/>
-                                                <constraint firstItem="FBh-2e-Jwh" firstAttribute="top" secondItem="7QC-w4-N0b" secondAttribute="bottom" constant="5" id="Wrw-2g-bTO"/>
+                                                <constraint firstItem="7QC-w4-N0b" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Yu0-EE-nbS" secondAttribute="bottom" constant="2" id="W3O-91-Xuo"/>
+                                                <constraint firstItem="FBh-2e-Jwh" firstAttribute="top" secondItem="7QC-w4-N0b" secondAttribute="bottom" constant="2" id="Wrw-2g-bTO"/>
                                                 <constraint firstItem="d8D-OL-ZEh" firstAttribute="leading" secondItem="Yu0-EE-nbS" secondAttribute="trailing" constant="5" id="hPN-1j-0NJ"/>
                                                 <constraint firstItem="d8D-OL-ZEh" firstAttribute="top" secondItem="p4r-GY-uBv" secondAttribute="top" id="mYS-6o-pse"/>
                                                 <constraint firstAttribute="trailing" secondItem="d8D-OL-ZEh" secondAttribute="trailing" id="ma5-c0-T2K"/>
@@ -318,6 +352,89 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hw7-aW-hGx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1025" y="-699"/>
+        </scene>
+        <!--Link Handling-->
+        <scene sceneID="UaG-yJ-EsU">
+            <objects>
+                <tableViewController id="vUn-pM-goN" userLabel="Link Handling" customClass="LinkHandlingViewController" customModule="HackerNews" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="fCx-1E-GFn">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.95572155709999995" green="0.95677191019999996" blue="0.92160230880000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="sectionIndexBackgroundColor" red="0.95572155709999995" green="0.95677191019999996" blue="0.92160230880000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <sections>
+                            <tableViewSection headerTitle="News Article Link Handling" id="Egs-Fc-kEN">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" textLabel="Bow-ii-WDG" detailTextLabel="zXE-0c-Cgx" style="IBUITableViewCellStyleSubtitle" id="FVy-9U-gbL">
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="FVy-9U-gbL" id="Dq7-2A-Eve">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="External" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Bow-ii-WDG">
+                                                    <rect key="frame" x="16" y="5" width="62" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Articles open in a web browser outside of the app" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zXE-0c-Cgx">
+                                                    <rect key="frame" x="16" y="25.5" width="260" height="13.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                    <color key="textColor" red="0.43470591310000001" green="0.43469288950000001" blue="0.4347003102" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="vUn-pM-goN" kind="custom" identifier="External" customClass="LinkHandlingSegue" customModule="HackerNews" customModuleProvider="target" id="VpN-M6-6qv"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" textLabel="oBp-CO-nmc" detailTextLabel="gQL-Qq-atd" style="IBUITableViewCellStyleSubtitle" id="K99-me-DBF">
+                                        <rect key="frame" x="0.0" y="99.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="K99-me-DBF" id="Dql-LU-uXN">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="InApp" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oBp-CO-nmc">
+                                                    <rect key="frame" x="16" y="5" width="45" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Articles open in a web browser inside of the app" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gQL-Qq-atd">
+                                                    <rect key="frame" x="16" y="25.5" width="252.5" height="13.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                    <color key="textColor" red="0.43470591310000001" green="0.43469288950000001" blue="0.4347003102" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="vUn-pM-goN" kind="custom" identifier="InApp" customClass="LinkHandlingSegue" customModule="HackerNews" customModuleProvider="target" id="jSb-8O-Pos"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="vUn-pM-goN" id="P3k-zk-PlX"/>
+                            <outlet property="delegate" destination="vUn-pM-goN" id="2iX-JN-XrJ"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <outlet property="external" destination="FVy-9U-gbL" id="pB9-Em-vWX"/>
+                        <outlet property="inapp" destination="K99-me-DBF" id="En9-QW-MSj"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7fr-mZ-tM0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1025" y="72"/>
         </scene>
         <!--Comments-->
         <scene sceneID="h3c-4S-guS">

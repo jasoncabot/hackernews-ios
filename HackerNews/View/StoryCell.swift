@@ -20,8 +20,12 @@ class StoryCell: UITableViewCell {
         self.subtitleLabel.text = makeSubtitle(story)
         self.viewCommentsButton.setTitle("\(story.numberOfComments)", for: .normal)
         self.viewCommentsButton.key = story.id
-        self.siteLabel.text = "From \(story.site)"
-        
+        if !story.site.isEmpty {
+            self.siteLabel.text = "From \(story.site)"
+        } else {
+            self.siteLabel.text = ""
+        }
+
         if store.hasRead(story) {
             self.storyTitleLabel.textColor = UIColor.darkGray
             self.storyTitleLabel.font = UIFont.systemFont(ofSize: self.storyTitleLabel.font.pointSize)

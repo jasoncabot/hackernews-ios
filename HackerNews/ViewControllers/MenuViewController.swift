@@ -11,6 +11,8 @@ import Crashlytics
 
 class MenuViewController: UITableViewController {
     
+    @IBOutlet weak var linkHandlingDetail: UILabel!
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -18,9 +20,7 @@ class MenuViewController: UITableViewController {
             tableView.deselectRow(at: path, animated: animated)
         }
 
-        if let nav = self.navigationController {
-            nav.setToolbarHidden(true, animated: animated)
-        }
+        linkHandlingDetail.text = UserDefaults.standard.string(forKey: LinkHandlingSegue.key) ?? LinkHandlingSegue.defaultValue
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

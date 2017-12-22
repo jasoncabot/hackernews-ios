@@ -26,6 +26,8 @@
 		F66D46221FD6011D004638B3 /* StoriesDataSourceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66D46201FD6011D004638B3 /* StoriesDataSourceTest.swift */; };
 		F69BB5C01AE583A10022DC2C /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69BB5BF1AE583A10022DC2C /* Link.swift */; };
 		F69FE0531F3127EE00F9C0E5 /* ReadStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69FE0521F3127EE00F9C0E5 /* ReadStore.swift */; };
+		F6CB331D1FED40A0005FC5A1 /* LinkHandlingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6CB331C1FED40A0005FC5A1 /* LinkHandlingViewController.swift */; };
+		F6CB331F1FED5361005FC5A1 /* LinkHandlingSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6CB331E1FED5361005FC5A1 /* LinkHandlingSegue.swift */; };
 		F6E21C0F1A91087A00AF25EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E21C0E1A91087A00AF25EF /* AppDelegate.swift */; };
 		F6E21C141A91087A00AF25EF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F6E21C121A91087A00AF25EF /* Main.storyboard */; };
 		F6E21C161A91087A00AF25EF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F6E21C151A91087A00AF25EF /* Images.xcassets */; };
@@ -75,6 +77,8 @@
 		F66D46201FD6011D004638B3 /* StoriesDataSourceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoriesDataSourceTest.swift; sourceTree = "<group>"; };
 		F69BB5BF1AE583A10022DC2C /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Link.swift; path = Model/Link.swift; sourceTree = "<group>"; };
 		F69FE0521F3127EE00F9C0E5 /* ReadStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadStore.swift; sourceTree = "<group>"; };
+		F6CB331C1FED40A0005FC5A1 /* LinkHandlingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinkHandlingViewController.swift; path = ViewControllers/LinkHandlingViewController.swift; sourceTree = "<group>"; };
+		F6CB331E1FED5361005FC5A1 /* LinkHandlingSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinkHandlingSegue.swift; path = View/LinkHandlingSegue.swift; sourceTree = "<group>"; };
 		F6E21C091A91087A00AF25EF /* HackerNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6E21C0D1A91087A00AF25EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F6E21C0E1A91087A00AF25EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -205,6 +209,7 @@
 				F61DF1CF1A9A29C50077BFA2 /* MenuViewController.swift */,
 				F61DF1D11A9A29C50077BFA2 /* StoryListViewController.swift */,
 				F629A6391D11EDE10062C1F5 /* BrowserViewController.swift */,
+				F6CB331C1FED40A0005FC5A1 /* LinkHandlingViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -235,6 +240,7 @@
 				F61DF1DA1A9A29CF0077BFA2 /* ExternalURLSegue.swift */,
 				F61DF1DB1A9A29CF0077BFA2 /* StoryCell.swift */,
 				F61DF1DC1A9A29CF0077BFA2 /* ViewCommentsButton.swift */,
+				F6CB331E1FED5361005FC5A1 /* LinkHandlingSegue.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -427,8 +433,10 @@
 				F61DF1D31A9A29C50077BFA2 /* CommentListViewController.swift in Sources */,
 				F61DF1C81A9A29B00077BFA2 /* Comment.swift in Sources */,
 				F61DF1D71A9A29C50077BFA2 /* StoryListViewController.swift in Sources */,
+				F6CB331F1FED5361005FC5A1 /* LinkHandlingSegue.swift in Sources */,
 				F61DF1DE1A9A29CF0077BFA2 /* ExternalURLSegue.swift in Sources */,
 				F61DF1E21A9A29DB0077BFA2 /* NetworkIndicator.swift in Sources */,
+				F6CB331D1FED40A0005FC5A1 /* LinkHandlingViewController.swift in Sources */,
 				F61DF1CC1A9A29BA0077BFA2 /* StoriesDataSource.swift in Sources */,
 				F61DF1CA1A9A29B00077BFA2 /* Story.swift in Sources */,
 				F61DF1D51A9A29C50077BFA2 /* MenuViewController.swift in Sources */,
@@ -632,7 +640,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 11;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -653,7 +661,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 11;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",

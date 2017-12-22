@@ -186,13 +186,19 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
             return
         }
 
-        let browser = BrowserViewController(url: url, entersReaderIfAvailable: false)
+        if UserDefaults.standard.string(forKey: LinkHandlingSegue.key) == LinkHandlingSegue.InApp {
+            let browser = BrowserViewController(url: url, entersReaderIfAvailable: false)
 
-        browser.delegate = self
-        browser.story = story
-        browser.storiesSource = storiesSource
+            browser.delegate = self
+            browser.story = story
+            browser.storiesSource = storiesSource
 
-        present(browser, animated: true, completion: nil)
+            present(browser, animated: true, completion: nil)
+        } else {
+            ReadStore.memory.viewed(story: story)
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+            UIApplication.shared.openURL(url)
+        }
     }
 
     // MARK: - SFSafariViewControllerDelegate
