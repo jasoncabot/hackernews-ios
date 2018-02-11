@@ -89,10 +89,13 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
         })
 
         // load in our new ones
+        storiesTableView.beginUpdates()
+        storiesTableView.deleteRows(at: storiesSource.allIndexPaths, with: .none)
         storiesSource.refresh {
             sender.endRefreshing()
-            self.storiesTableView.reloadData()
+            self.storiesTableView.insertRows(at: self.storiesSource.allIndexPaths, with: .none)
             self.storiesTableView.flashScrollIndicators()
+            self.storiesTableView.endUpdates()
             UIView.animate(withDuration: 0.25, animations: {
                 self.storiesTableView.alpha = 1
             })
@@ -100,12 +103,11 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
     }
 
     @IBAction func changeSortOrder(_ sender: UIBarButtonItem) {
-
         storiesTableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
-
-        let updates = storiesSource.updatedIndexPathsByChangingSortOrdering()
+        storiesTableView.flashScrollIndicators()
 
         storiesTableView.beginUpdates()
+        let updates = storiesSource.updatedIndexPathsByChangingSortOrdering()
         updates.forEach { (from, to) in
             self.storiesTableView.moveRow(at: from as IndexPath, to: to as IndexPath)
         }
@@ -124,8 +126,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
         UIView.animate(withDuration: 0.25, animations: {
             self.toastView.alpha = 1
         }, completion: { done in
-            let delayTime = DispatchTime.now() + Double(Int64(2 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-            DispatchQueue.main.asyncAfter(deadline: delayTime) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
                 UIView.animate(withDuration: 0.25, animations: {
                     self.toastView.alpha = 0
                 })

@@ -95,15 +95,18 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
             strongSelf.isLoading = true
 
             let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, _, _) in
+                guard let strongSelf = self else { return }
 
-                if let result = data {
-                    strongSelf.stories += strongSelf.parseStories(result)
-                }
+                strongSelf.storyQueue.async(flags: .barrier) {
 
-                strongSelf.isLoading = false
+                    if let result = data {
+                        strongSelf.stories += strongSelf.parseStories(result)
+                    }
 
-                DispatchQueue.main.async {
-                    completionHandler();
+                    DispatchQueue.main.async {
+                        strongSelf.isLoading = false
+                        completionHandler();
+                    }
                 }
             })
 
@@ -125,7 +128,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
 
         var updates: [(IndexPath, IndexPath)] = []
 
-        storyQueue.sync(flags: .barrier) { [weak self] in
+        storyQueue.async(flags: .barrier) { [weak self] in
             guard let strongSelf = self else { return }
 
             let sortedStories: [Story]
@@ -281,6 +284,14 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
             }
         }
         return path
+    }
+
+    var allIndexPaths: [IndexPath] {
+        var paths: [IndexPath] = []
+        storyQueue.sync {
+            paths = stories.enumerated().map { (offset, _) in IndexPath(row: offset, section: 0) }
+        }
+        return paths
     }
 
     func storyForIndexPath(_ indexPath:IndexPath?) -> Story? {
