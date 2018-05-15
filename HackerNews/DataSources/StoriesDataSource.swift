@@ -153,7 +153,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
 
     fileprivate func parseStories(_ data:Data) -> [Story] {
 
-        guard let doc = Kanna.HTML(html: data, encoding: .utf8) else { return [] }
+        guard let doc = try? HTML(html: data, encoding: .utf8) else { return [] }
 
 
         let rows = doc.css(".itemlist tr")
@@ -221,7 +221,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
 
     fileprivate func parseComments(_ data:Data) -> [Comment] {
         var comments: [Comment] = []
-        if let doc = Kanna.HTML(html: data, encoding: String.Encoding.utf8) {
+        if let doc = try? HTML(html: data, encoding: String.Encoding.utf8) {
 
             for thing in doc.css(".comment-tree .athing") {
 
