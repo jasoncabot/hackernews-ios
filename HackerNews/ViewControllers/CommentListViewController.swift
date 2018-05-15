@@ -13,6 +13,8 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var commentsTableView: UITableView!
     @IBOutlet weak var doneButton: UIBarButtonItem!
 
+    weak var commentLoader: CommentLoader!
+
     var store = ReadStore.memory
     var story: Story?
     var comments: [Comment]?
@@ -29,6 +31,10 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshComments(_:)), for: .valueChanged)
+        commentsTableView.insertSubview(refreshControl, at: 0)
         
         commentsTableView.estimatedRowHeight = 68
         commentsTableView.rowHeight = UITableViewAutomaticDimension
@@ -79,7 +85,11 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return story?.title
+        if let title = story?.title {
+            let commentCount = comments?.count ?? 0
+            return "\(title) - \(commentCount) \( commentCount == 1 ? "comment" : "comments" )"
+        }
+        return nil
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -96,6 +106,43 @@ class CommentListViewController: UIViewController, UITableViewDelegate, UITableV
         let store = ReadStore.memory
 
         if let comment = comment(for: indexPath.row) { store.viewed(comment: comment) }
+    }
+
+    // MARK: - IBAction
+
+    private func indexPaths(_ comments: [Comment]) -> [IndexPath] {
+        return comments.enumerated().map { (row, _) -> IndexPath in IndexPath(row: row, section: 0) }
+    }
+
+    @IBAction func refreshComments(_ sender: UIRefreshControl) {
+
+        guard let story = story, let comments = comments else { return }
+
+        let paths = indexPaths(comments)
+
+        // fade out our old stories
+        UIView.animate(withDuration: 1, animations: {
+            self.commentsTableView.alpha = 0.2
+        })
+
+        // load in our new ones
+        commentsTableView.beginUpdates()
+        commentsTableView.deleteRows(at: paths, with: .none)
+        commentLoader.loadComments(story: story) { [weak self] (receivedComments) in
+            guard let strongSelf = self else { return }
+
+            strongSelf.comments = receivedComments
+
+            let paths = strongSelf.indexPaths(receivedComments)
+
+            sender.endRefreshing()
+            strongSelf.commentsTableView.insertRows(at: paths, with: .none)
+            strongSelf.commentsTableView.flashScrollIndicators()
+            strongSelf.commentsTableView.endUpdates()
+            UIView.animate(withDuration: 0.25, animations: {
+                strongSelf.commentsTableView.alpha = 1
+            })
+        }
     }
 
     // MARK: -

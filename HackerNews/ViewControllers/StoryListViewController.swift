@@ -9,7 +9,12 @@
 import UIKit
 import SafariServices
 
-class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariViewControllerDelegate {
+protocol CommentLoader: class {
+    func loadComments(story: Story, completion: @escaping (([Comment]) -> Void))
+}
+
+class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariViewControllerDelegate, CommentLoader {
+
 
     @IBOutlet var storiesTableView: UITableView!
     @IBOutlet weak var loadingView: UIView!
@@ -140,6 +145,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
         storiesSource.retrieveComments(story) { comments in
             self.showNetworkIndicator(false)
             viewController.onCommentsLoaded(story, receivedComments: comments)
+            viewController.commentLoader = self
 
             if let path = self.storiesSource.indexPathForStory(story) {
                 self.storiesTableView.reloadRows(at: [path], with: .automatic)
@@ -199,6 +205,21 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
             ReadStore.memory.viewed(story: story)
             tableView.reloadRows(at: [indexPath], with: .automatic)
             UIApplication.shared.openURL(url)
+        }
+    }
+
+    // MARK: - CommentLoader
+
+    func loadComments(story: Story, completion: @escaping (([Comment]) -> Void)) {
+        showNetworkIndicator(true)
+        storiesSource.retrieveComments(story) { comments in
+            self.showNetworkIndicator(false)
+
+            completion(comments)
+
+            if let path = self.storiesSource.indexPathForStory(story) {
+                self.storiesTableView.reloadRows(at: [path], with: .automatic)
+            }
         }
     }
 
