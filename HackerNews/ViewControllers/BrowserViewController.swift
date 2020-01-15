@@ -18,9 +18,9 @@ class BrowserViewController : SFSafariViewController {
         super.viewDidLoad()
 
         if #available(iOS 10.0, *) {
-            self.preferredControlTintColor = #colorLiteral(red: 0.8593307137, green: 0.2792493105, blue: 0.3347397447, alpha: 1)
+            self.preferredControlTintColor = #colorLiteral(red: 1, green: 0.4, blue: 0, alpha: 1)
         } else {
-            self.view.tintColor = #colorLiteral(red: 0.8593307137, green: 0.2792493105, blue: 0.3347397447, alpha: 1)
+            self.view.tintColor = #colorLiteral(red: 1, green: 0.4, blue: 0, alpha: 1)
         }
     }
 
@@ -28,12 +28,9 @@ class BrowserViewController : SFSafariViewController {
         super.viewWillAppear(animated)
 
         if let story = story { store.viewed(story: story) }
-
-        UIApplication.shared.statusBarStyle = .default
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        UIApplication.shared.statusBarStyle = .lightContent
-        super.viewWillDisappear(animated)
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
     }
 }

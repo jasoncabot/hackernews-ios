@@ -16,28 +16,26 @@ class StoryCell: UITableViewCell {
     @IBOutlet var viewCommentsButton: ViewCommentsButton!;
     
     func update(with story: Story, store: ReadStore = ReadStore.memory) {
-        self.storyTitleLabel.text = "\(story.position). \(story.title)"
-        self.subtitleLabel.text = makeSubtitle(story)
-        self.viewCommentsButton.setTitle("\(story.numberOfComments)", for: .normal)
-        self.viewCommentsButton.key = story.id
+        storyTitleLabel.text = "\(story.position). \(story.title)"
+        subtitleLabel.text = "\(story.points) points by \(story.by) \(story.timeAgo)"
+        viewCommentsButton.setTitle("\(story.numberOfComments)", for: .normal)
+        viewCommentsButton.key = story.id
         if !story.site.isEmpty {
-            self.siteLabel.text = "From \(story.site)"
+            siteLabel.text = "From \(story.site)"
         } else {
-            self.siteLabel.text = ""
+            siteLabel.text = ""
         }
 
         if store.hasRead(story) {
-            self.storyTitleLabel.textColor = UIColor.darkGray
-            self.storyTitleLabel.font = UIFont.systemFont(ofSize: self.storyTitleLabel.font.pointSize)
+            storyTitleLabel.textColor = UIColor.darkGray
+            storyTitleLabel.font = UIFont.systemFont(ofSize: storyTitleLabel.font.pointSize)
         } else {
-            self.storyTitleLabel.textColor = UIColor.black
-            self.storyTitleLabel.font = UIFont.boldSystemFont(ofSize: self.storyTitleLabel.font.pointSize)
+            storyTitleLabel.textColor = UIColor.black
+            storyTitleLabel.font = UIFont.boldSystemFont(ofSize: storyTitleLabel.font.pointSize)
         }
         
-        self.viewCommentsButton.isSelected = !store.hasReadComments(story)
-    }
-    
-    fileprivate func makeSubtitle(_ story:Story) -> String {
-        return "\(story.points) points by \(story.by) \(story.timeAgo)"
+        viewCommentsButton.isSelected = !store.hasReadComments(story)
+
+        setNeedsUpdateConstraints()
     }
 }

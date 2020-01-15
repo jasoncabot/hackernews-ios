@@ -32,7 +32,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
 
         self.title = storiesSource.title
         storiesTableView.estimatedRowHeight = 72
-        storiesTableView.rowHeight = UITableViewAutomaticDimension
+        storiesTableView.rowHeight = UITableView.automaticDimension
 
         toastView.layer.cornerRadius = 15
 
@@ -40,7 +40,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
 
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(StoryListViewController.refreshStories(_:)), for: .valueChanged)
-        storiesTableView.insertSubview(refreshControl, at: 0)
+        storiesTableView.refreshControl = refreshControl
 
         showLoadingActivity(true)
         storiesSource.load(page: .first) {
@@ -49,14 +49,12 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
+    override func viewDidAppear(_ animated: Bool) {
         if let path = storiesTableView.indexPathForSelectedRow {
             storiesTableView.deselectRow(at: path, animated: animated)
-
-            self.storiesTableView.reloadRows(at: [path], with: .automatic)
         }
+
+        super.viewDidAppear(animated)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -84,6 +82,10 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
         }
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+
     // MARK: - IBAction
 
     @IBAction func refreshStories(_ sender: UIRefreshControl) {
@@ -108,7 +110,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
     }
 
     @IBAction func changeSortOrder(_ sender: UIBarButtonItem) {
-        storiesTableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+        storiesTableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
         storiesTableView.flashScrollIndicators()
 
         storiesTableView.beginUpdates()
@@ -116,7 +118,6 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
         updates.forEach { (from, to) in
             self.storiesTableView.moveRow(at: from as IndexPath, to: to as IndexPath)
         }
-        storiesTableView.endUpdates()
 
         if let visiblePaths = storiesTableView.indexPathsForVisibleRows {
             for path in visiblePaths {
@@ -125,6 +126,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
                 }
             }
         }
+        storiesTableView.endUpdates()
 
         sortingLabel.text = "\(storiesSource.sorting)"
         toastView.alpha = 0
@@ -176,6 +178,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard !storiesSource.isLoading else { return }
+        guard !storiesSource.hasReachedEnd else { return }
         let shouldLoadMore = indexPath.row >= storiesSource.stories.count - 10
 
         if !shouldLoadMore { return }
@@ -194,7 +197,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
         }
 
         if UserDefaults.standard.string(forKey: LinkHandlingSegue.key) == LinkHandlingSegue.InApp {
-            let browser = BrowserViewController(url: url, entersReaderIfAvailable: false)
+            let browser = BrowserViewController(url: url, configuration: SFSafariViewController.Configuration())
 
             browser.delegate = self
             browser.story = story
@@ -204,7 +207,7 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
         } else {
             ReadStore.memory.viewed(story: story)
             tableView.reloadRows(at: [indexPath], with: .automatic)
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
 
@@ -242,6 +245,18 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
             commentContainer.navigationBar.tintColor = strongSelf.navigationController?.navigationBar.tintColor
             commentContainer.navigationBar.barTintColor = strongSelf.navigationController?.navigationBar.barTintColor
             commentContainer.navigationBar.titleTextAttributes = strongSelf.navigationController?.navigationBar.titleTextAttributes
+            commentContainer.navigationBar.barStyle = strongSelf.navigationController?.navigationBar.barStyle ?? .default
+
+            if #available(iOS 13.0, *) {
+                let navBarAppearance = UINavigationBarAppearance()
+                navBarAppearance.configureWithOpaqueBackground()
+                navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+                navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+                navBarAppearance.backgroundColor = #colorLiteral(red: 1, green: 0.4, blue: 0, alpha: 1)
+                commentContainer.navigationBar.standardAppearance = navBarAppearance
+                commentContainer.navigationBar.scrollEdgeAppearance = navBarAppearance
+            }
+
             browser.present(commentContainer,
                             animated: true,
                             completion: nil)
@@ -259,7 +274,7 @@ class ViewComments : UIActivity {
 
     override var activityTitle: String? { return "View Comments" }
     override var activityImage: UIImage? { return UIImage(named: "comment") }
-    override var activityType: UIActivityType? { return nil }
+    override var activityType: UIActivity.ActivityType? { return nil }
     override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         return true
     }
