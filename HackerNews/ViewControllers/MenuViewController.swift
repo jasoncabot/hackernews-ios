@@ -7,11 +7,24 @@
 //
 
 import UIKit
-import Crashlytics
 
 class MenuViewController: UITableViewController {
     
     @IBOutlet weak var linkHandlingDetail: UILabel!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        if #available(iOS 13.0, *) {
+            let navBarAppearance = UINavigationBarAppearance()
+            navBarAppearance.configureWithOpaqueBackground()
+            navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+            navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+            navBarAppearance.backgroundColor = #colorLiteral(red: 1, green: 0.4, blue: 0, alpha: 1)
+            navigationController?.navigationBar.standardAppearance = navBarAppearance
+            navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        }
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -21,6 +34,10 @@ class MenuViewController: UITableViewController {
         }
 
         linkHandlingDetail.text = UserDefaults.standard.string(forKey: LinkHandlingSegue.key) ?? LinkHandlingSegue.defaultValue
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -33,8 +50,10 @@ class MenuViewController: UITableViewController {
             return
         }
         
-        Answers.logCustomEvent(withName: "Section Loaded", customAttributes: ["Section":"\(id)"])
-
         (segue.destination as! StoryListViewController).storiesSource = StoriesDataSource(type: type)
+    }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 }

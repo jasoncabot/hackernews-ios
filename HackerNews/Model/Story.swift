@@ -19,7 +19,7 @@ struct Story : Equatable {
     let url: URL?
     let site: String
     
-    init(position: Int, id: Int, title: String, points: Int, by: String, timeAgo: String, numberOfComments: Int, url: URL?, site: String, unread: Bool, commentsUnread: Bool) {
+    init(position: Int, id: Int, title: String, points: Int, by: String, timeAgo: String, numberOfComments: Int, url: URL?, site: String) {
         self.position = position
         self.id = id
         self.title = title

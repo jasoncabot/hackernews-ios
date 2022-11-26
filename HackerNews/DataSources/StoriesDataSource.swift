@@ -8,7 +8,6 @@
 
 import UIKit
 import Kanna
-import Crashlytics
 
 enum PageType {
     case first
@@ -62,11 +61,13 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
     var sorting: StorySortOrder = .position
     var stories: [Story]
     var isLoading: Bool
+    var hasReachedEnd: Bool
 
     init(type:StoryType) {
         self.type = type
         self.stories = []
         self.isLoading = false
+        self.hasReachedEnd = false
     }
 
     var title: String {
@@ -86,21 +87,21 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                 strongSelf.page = strongSelf.page + 1
             }
 
-            Answers.logCustomEvent(withName: "Page Loaded", customAttributes: ["Page":"\(page)"])
-
             guard let url = URL(string: strongSelf.type.endpoint(for: strongSelf.page)) else {
                 return
             }
 
             strongSelf.isLoading = true
 
-            let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, _, _) in
+            let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, a, b) in
                 guard let strongSelf = self else { return }
 
                 strongSelf.storyQueue.async(flags: .barrier) {
 
                     if let result = data {
-                        strongSelf.stories += strongSelf.parseStories(result)
+                        let newStories = strongSelf.parseStories(result)
+                        strongSelf.hasReachedEnd = newStories.count == 0
+                        strongSelf.stories += newStories
                     }
 
                     DispatchQueue.main.async {
@@ -141,7 +142,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
             updates = strongSelf.stories.enumerated().map { (index, story) in
                 return (
                     IndexPath(row: index, section: 0),
-                    IndexPath(row: sortedStories.index(of: story)!, section: 0)
+                    IndexPath(row: sortedStories.firstIndex(of: story)!, section: 0)
                 )
             }
 
@@ -155,8 +156,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
 
         guard let doc = try? HTML(html: data, encoding: .utf8) else { return [] }
 
-
-        let rows = doc.css(".itemlist tr")
+        let rows = doc.css("table#hnmain tr:nth-child(3) table tr")
         var position = self.stories.endIndex
 
         let stories: [Story] = stride(from: 0, to: rows.count - 3, by: 3).map({ idx in
@@ -211,9 +211,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                 , timeAgo: timeAgo ?? "a little while ago"
                 , numberOfComments: numComments
                 , url: URL(string: url)
-                , site: site
-                , unread: true
-                , commentsUnread: true)
+                , site: site)
         }).filter { $0 != nil }.map { $0! }
 
         return stories
@@ -279,7 +277,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
     func indexPathForStory(_ story:Story) -> IndexPath? {
         var path: IndexPath?
         storyQueue.sync {
-            if let row = stories.index(of: story) {
+            if let row = stories.firstIndex(of: story) {
                 path = IndexPath(row: row, section: 0)
             }
         }

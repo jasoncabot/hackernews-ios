@@ -34,9 +34,11 @@ struct Comment: Equatable, Hashable {
         self.externalLinks = links.map() { Link(data: $0) }.filter() { $0 != nil }.map() { $0! }
     }
 
-    var hashValue: Int {
-        return by.hashValue ^ timeAgo.hashValue
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(by)
+        hasher.combine(timeAgo)
     }
+
 
     static func == (lhs: Comment, rhs: Comment) -> Bool {
         return lhs.text == rhs.text && lhs.by == rhs.by && lhs.timeAgo == rhs.timeAgo

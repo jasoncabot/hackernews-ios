@@ -27,7 +27,9 @@ class LinkHandlingViewController: UITableViewController {
         reload()
     }
 
-
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 
     // MARK: LinkHandlingViewController
 

@@ -14,7 +14,9 @@ class CommentCell : UITableViewCell {
     @IBOutlet weak var userLabel: UILabel!
     @IBOutlet weak var timeAgoLabel: UILabel!
     @IBOutlet weak var commentLabel: UILabel!
-    
+
+
+    var currentLeading: CGFloat!
     var defaultLeading: CGFloat!
     var defaultTextColour: UIColor!
     var readTextColour: UIColor!
@@ -25,13 +27,16 @@ class CommentCell : UITableViewCell {
         defaultLeading = indentationConstraint.constant
         defaultTextColour = commentLabel.textColor
         readTextColour = UIColor.darkGray
+        currentLeading = defaultLeading
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         
         commentLabel.textColor = defaultTextColour
-        indentationConstraint.constant = defaultLeading
+        currentLeading = defaultLeading
+
+        setNeedsUpdateConstraints()
     }
     
     func update(with comment: Comment, store: ReadStore = ReadStore.memory) {
@@ -39,8 +44,14 @@ class CommentCell : UITableViewCell {
         timeAgoLabel.text = comment.timeAgo
         commentLabel.text = comment.text
         commentLabel.textColor = store.hasRead(comment) ? readTextColour : defaultTextColour
-        let indent = defaultLeading * CGFloat(comment.indent)
-        indentationConstraint.constant = defaultLeading + indent
+
+        currentLeading = defaultLeading * CGFloat(comment.indent + 1)
+        setNeedsUpdateConstraints()
     }
 
+    override func updateConstraints() {
+        super.updateConstraints()
+
+        indentationConstraint.constant = currentLeading
+    }
 }
