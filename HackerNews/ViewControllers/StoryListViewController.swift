@@ -9,7 +9,7 @@
 import UIKit
 import SafariServices
 
-protocol CommentLoader: class {
+protocol CommentLoader: AnyObject {
     func loadComments(story: Story, completion: @escaping (([Comment]) -> Void))
 }
 
@@ -196,6 +196,9 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
             return
         }
 
+        ReadStore.memory.viewed(story: story)
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+
         if UserDefaults.standard.string(forKey: LinkHandlingSegue.key) == LinkHandlingSegue.InApp {
             let browser = BrowserViewController(url: url, configuration: SFSafariViewController.Configuration())
 
@@ -205,8 +208,6 @@ class StoryListViewController: UIViewController, UITableViewDelegate, SFSafariVi
 
             present(browser, animated: true, completion: nil)
         } else {
-            ReadStore.memory.viewed(story: story)
-            tableView.reloadRows(at: [indexPath], with: .automatic)
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }

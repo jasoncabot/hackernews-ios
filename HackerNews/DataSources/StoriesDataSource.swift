@@ -156,8 +156,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
 
         guard let doc = try? HTML(html: data, encoding: .utf8) else { return [] }
 
-
-        let rows = doc.css(".itemlist tr")
+        let rows = doc.css("table#hnmain tr:nth-child(3) table tr")
         var position = self.stories.endIndex
 
         let stories: [Story] = stride(from: 0, to: rows.count - 3, by: 3).map({ idx in
@@ -212,9 +211,7 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
                 , timeAgo: timeAgo ?? "a little while ago"
                 , numberOfComments: numComments
                 , url: URL(string: url)
-                , site: site
-                , unread: true
-                , commentsUnread: true)
+                , site: site)
         }).filter { $0 != nil }.map { $0! }
 
         return stories
