@@ -156,7 +156,10 @@ class StoriesDataSource: NSObject, UITableViewDataSource {
 
         guard let doc = try? HTML(html: data, encoding: .utf8) else { return [] }
 
-        let rows = doc.css("table#hnmain tr:nth-child(3) table tr")
+        var rows = doc.css("table#hnmain tr:nth-child(3) table tr")
+        if rows.count == 0 {
+            rows = doc.css("table#hnmain tr:nth-child(4) table tr")
+        }
         var position = self.stories.endIndex
 
         let stories: [Story] = stride(from: 0, to: rows.count - 3, by: 3).map({ idx in
