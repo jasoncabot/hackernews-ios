@@ -3,10 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		966CE3D82CA9623700D704DF /* Kanna.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6F3517D1C050A2B00F7F772 /* Kanna.framework */; };
+		96B13D712CA7616B00A9451A /* Kanna.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F6F3517D1C050A2B00F7F772 /* Kanna.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		96F3478D2EBD4B070038BEAB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F3478C2EBD4B000038BEAB /* SceneDelegate.swift */; };
 		F61DF1C81A9A29B00077BFA2 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1C51A9A29B00077BFA2 /* Comment.swift */; };
 		F61DF1CA1A9A29B00077BFA2 /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1C71A9A29B00077BFA2 /* Story.swift */; };
 		F61DF1CC1A9A29BA0077BFA2 /* StoriesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61DF1CB1A9A29BA0077BFA2 /* StoriesDataSource.swift */; };
@@ -32,7 +35,6 @@
 		F6E21C141A91087A00AF25EF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F6E21C121A91087A00AF25EF /* Main.storyboard */; };
 		F6E21C161A91087A00AF25EF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F6E21C151A91087A00AF25EF /* Images.xcassets */; };
 		F6E21C191A91087A00AF25EF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F6E21C171A91087A00AF25EF /* LaunchScreen.xib */; };
-		F6F3517E1C050A2B00F7F772 /* Kanna.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6F3517D1C050A2B00F7F772 /* Kanna.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +54,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		96B13D722CA7616B00A9451A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				96B13D712CA7616B00A9451A /* Kanna.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		96F3478C2EBD4B000038BEAB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F61DF1C51A9A29B00077BFA2 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Comment.swift; path = Model/Comment.swift; sourceTree = "<group>"; };
 		F61DF1C71A9A29B00077BFA2 /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Story.swift; path = Model/Story.swift; sourceTree = "<group>"; };
 		F61DF1CB1A9A29BA0077BFA2 /* StoriesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoriesDataSource.swift; path = DataSources/StoriesDataSource.swift; sourceTree = "<group>"; };
@@ -101,7 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F6F3517E1C050A2B00F7F772 /* Kanna.framework in Frameworks */,
+				966CE3D82CA9623700D704DF /* Kanna.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,6 +192,7 @@
 		F6E21C0B1A91087A00AF25EF /* HackerNews */ = {
 			isa = PBXGroup;
 			children = (
+				96F3478C2EBD4B000038BEAB /* SceneDelegate.swift */,
 				F6E21C0E1A91087A00AF25EF /* AppDelegate.swift */,
 				F6E21C3A1A91227100AF25EF /* Model */,
 				F6E21C371A9119F500AF25EF /* DataSources */,
@@ -271,7 +289,7 @@
 				F6E21C051A91087A00AF25EF /* Sources */,
 				F6E21C061A91087A00AF25EF /* Frameworks */,
 				F6E21C071A91087A00AF25EF /* Resources */,
-				F6F3517F1C050A6400F7F772 /* Copy Carthage Frameworks */,
+				96B13D722CA7616B00A9451A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -309,7 +327,7 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0910;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1600;
 				ORGANIZATIONNAME = "Jason Cabot";
 				TargetAttributes = {
 					F627E0771FD5E67C00C6DA6E = {
@@ -376,24 +394,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		F6F3517F1C050A6400F7F772 /* Copy Carthage Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Kanna.framework",
-			);
-			name = "Copy Carthage Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		F627E0741FD5E67C00C6DA6E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -424,6 +424,7 @@
 				F61DF1CA1A9A29B00077BFA2 /* Story.swift in Sources */,
 				F6C0D53C23931F7B008608EB /* CustomSearchBar.swift in Sources */,
 				F61DF1D51A9A29C50077BFA2 /* MenuViewController.swift in Sources */,
+				96F3478D2EBD4B070038BEAB /* SceneDelegate.swift in Sources */,
 				F6E21C0F1A91087A00AF25EF /* AppDelegate.swift in Sources */,
 				F61DF1DF1A9A29CF0077BFA2 /* StoryCell.swift in Sources */,
 			);
@@ -561,6 +562,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -619,6 +621,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -642,7 +645,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 2V62Z49VFD;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -651,13 +655,14 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = HackerNews/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.jasoncabot.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jasoncabot.hackernews;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -666,7 +671,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 2V62Z49VFD;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -675,13 +681,14 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = HackerNews/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.jasoncabot.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jasoncabot.hackernews;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
