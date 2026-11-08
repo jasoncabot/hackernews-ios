@@ -8,29 +8,23 @@
 
 import XCTest
 
-class HackerNewsUITests: XCTestCase {
-        
-    override func setUp() {
-        super.setUp()
+final class HackerNewsUITests: XCTestCase {
 
+    @MainActor
+    func testGeneratingScreenshots() {
         let app = XCUIApplication()
         setupSnapshot(app)
         app.launch()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
-    func testGeneratingScreenshots() {
 
-        let tablesQuery = XCUIApplication().tables
         snapshot("03MainMenu")
-        tablesQuery.staticTexts["Front Page"].tap()
-        snapshot("01StoryList")
-        tablesQuery.cells.firstMatch.buttons.firstMatch.tap()
-        snapshot("02CommentList")
 
+        app.buttons["Front Page"].tap()
+        let comments = app.buttons["comments"].firstMatch
+        XCTAssertTrue(comments.waitForExistence(timeout: 15))
+        snapshot("01StoryList")
+
+        comments.tap()
+        XCTAssertTrue(app.navigationBars["Comments"].waitForExistence(timeout: 5))
+        snapshot("02CommentList")
     }
-    
 }

@@ -1,9 +1,14 @@
-# A list of devices you want to take the screenshots from
+# The App Store needs 6.9" iPhone and 13" iPad screenshots.
+# The 12.9" iPad Pro rather than the 13" M5: its 2048x2732 screenshots are accepted for the
+# 13" slot, and frameit has no device frame yet for the M5's 2064x2752.
 devices([
-  "iPhone X",
-  "iPhone 6 Plus"
+  "iPhone 17 Pro Max",
+  "iPad Pro (12.9-inch) (6th generation)"
 ])
 
 languages([
   "en-US"
 ])
+
+scheme("HackerNews")
+only_testing(["HackerNewsUITests"])

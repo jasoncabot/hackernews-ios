@@ -1,5 +1,6 @@
 # Xcode
 #
+.DS_Store
 build/
 *.pbxuser
 !default.pbxuser
@@ -16,8 +17,6 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-Carthage/Checkouts
-Carthage/Build
 Preview.html
 HackerNews.app.dSYM.zip
 report.xml
@@ -26,3 +25,7 @@ fastlane/metadata/trade_representative_contact_information
 screenshots.html
 fastlane/test_output
 fastlane/README.md
+
+# Swift Package Manager
+.build/
+.swiftpm/
