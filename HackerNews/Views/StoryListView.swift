@@ -44,15 +44,15 @@ struct StoryListView: View {
                     } actions: {
                         Button("Try Again") { Task { await model.refresh() } }
                     }
+                case .idle where model.hasLoaded:
+                    ContentUnavailableView("No Stories", systemImage: "newspaper")
                 case .idle, .loading:
                     ProgressView()
                 }
             }
         }
         .refreshable { await model.refresh() }
-        .task {
-            if model.stories.isEmpty { await model.refresh() }
-        }
+        .onAppear { model.loadIfNeeded() }
         .navigationTitle(model.feed.title)
         // A large title is taller than the inline one on the comments screen, so pushing from the
         // top of the list collapsed the bar mid-transition and shifted the list underneath.

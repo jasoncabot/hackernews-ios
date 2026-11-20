@@ -28,11 +28,27 @@ public final class CommentsModel {
 
     private let client: HackerNewsClient
     private let readStore: ReadStore
+    private var firstLoad: Task<Void, Never>?
 
     public init(story: Story, client: HackerNewsClient, readStore: ReadStore) {
         self.story = story
         self.client = client
         self.readStore = readStore
+    }
+
+    /// Starts loading the thread unless it has loaded or is already loading. Safe to call on every
+    /// appearance, and not tied to a view's `.task`, so a view briefly removed during a navigation
+    /// transition can't cancel the load and leave its spinner up for good.
+    @discardableResult
+    public func loadIfNeeded() -> Task<Void, Never>? {
+        guard !hasLoaded else { return nil }
+        if let firstLoad { return firstLoad }
+        let task = Task {
+            await load()
+            firstLoad = nil
+        }
+        firstLoad = task
+        return task
     }
 
     public func load() async {

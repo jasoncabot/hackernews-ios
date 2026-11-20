@@ -106,6 +106,58 @@ struct StoryFeedModelTests {
         #expect(model.stories.map(\.id) == Array(1...10))
     }
 
+    @Test func loadIfNeededRecoversFromACancelledFirstLoad() async throws {
+        let gate = Gate()
+        let pages = makePages(ids: Array(1...5))
+        let client = HackerNewsClient { url in
+            await gate.wait()
+            try Task.checkCancellation()
+            return try Fixture.response(for: url, from: pages)
+        }
+        let model = StoryFeedModel(feed: .front, client: client)
+
+        // What a view's `.task` did: the view goes away mid-push and its task is cancelled.
+        let viewTask = Task { await model.refresh() }
+        while await gate.waiting == 0 { await Task.yield() }
+        viewTask.cancel()
+        await gate.open()
+        await viewTask.value
+        #expect(model.state == .idle)
+        #expect(model.stories.isEmpty)
+        #expect(!model.hasLoaded)
+
+        // The view appears again: the model starts a load of its own.
+        await model.loadIfNeeded()?.value
+        #expect(model.stories.map(\.id) == [1, 2, 3, 4, 5])
+        #expect(model.hasLoaded)
+    }
+
+    @Test func loadIfNeededOnlyLoadsOnce() async throws {
+        let counter = Counter()
+        let pages = makePages(ids: [1, 2])
+        let client = HackerNewsClient { url in
+            await counter.increment()
+            return try Fixture.response(for: url, from: pages)
+        }
+        let model = StoryFeedModel(feed: .front, client: client)
+
+        let first = model.loadIfNeeded()
+        let second = model.loadIfNeeded()
+        await first?.value
+        await second?.value
+        #expect(model.loadIfNeeded() == nil)
+        #expect(await counter.count == 1)
+        #expect(model.stories.map(\.id) == [1, 2])
+    }
+
+    @Test func loadedEmptyFeedIsNotStillLoading() async {
+        let model = StoryFeedModel(feed: .front, client: .stub(["news": Fixture.feed([])]))
+        await model.loadIfNeeded()?.value
+        #expect(model.hasLoaded)
+        #expect(model.state == .idle)
+        #expect(model.stories.isEmpty)
+    }
+
     @Test func dropsStoriesRepeatedOnTheNextPage() async {
         let client = HackerNewsClient.stub([
             "news": Fixture.feed([.init(id: 1), .init(id: 2)], more: "?p=2"),
@@ -143,6 +195,24 @@ struct CommentsModelTests {
         #expect(!model.isPreviouslyRead(model.comments[1]))
     }
 
+    @Test func loadIfNeededLoadsTheThreadOnce() async {
+        let counter = Counter()
+        let page = Fixture.thread(id: 1, [.init(id: 10, depth: 0, html: "Hi")])
+        let client = HackerNewsClient { _ in
+            await counter.increment()
+            return Data(page.utf8)
+        }
+        let model = CommentsModel(story: Story(id: 1, title: "Story"), client: client, readStore: ReadStore())
+
+        let first = model.loadIfNeeded()
+        let second = model.loadIfNeeded()
+        await first?.value
+        await second?.value
+        #expect(model.loadIfNeeded() == nil)
+        #expect(await counter.count == 1)
+        #expect(model.comments.map(\.id) == [10])
+    }
+
     @Test func filtersBySearchText() async {
         let client = HackerNewsClient.stub([
             "item?id=1": Fixture.thread(id: 1, [.init(id: 10, depth: 0, html: "Swift"), .init(id: 20, depth: 0, html: "Rust")]),
@@ -155,6 +225,11 @@ struct CommentsModelTests {
         model.searchText = ""
         #expect(model.filteredComments.map(\.id) == [10, 20])
     }
+}
+
+private actor Counter {
+    private(set) var count = 0
+    func increment() { count += 1 }
 }
 
 private actor Gate {

@@ -22,6 +22,8 @@ public final class StoryFeedModel {
     public let feed: Feed
     public var sortOrder: StorySortOrder = .rank
     public private(set) var state: LoadState = .idle
+    /// Whether a first page has ever arrived, so an empty feed can be told apart from one still loading.
+    public private(set) var hasLoaded = false
 
     /// Stories in the selected sort order.
     public var stories: [Story] { sortOrder.sorted(loaded) }
@@ -33,10 +35,27 @@ public final class StoryFeedModel {
     private var next: URL?
     /// Bumped on every refresh so results from an older load are discarded.
     private var generation = 0
+    private var firstLoad: Task<Void, Never>?
 
     public init(feed: Feed, client: HackerNewsClient) {
         self.feed = feed
         self.client = client
+    }
+
+    /// Starts loading the first page unless it has loaded or is already loading. Safe to call on
+    /// every appearance. The load belongs to the model rather than to a view's `.task`, because
+    /// SwiftUI can remove and re-add a view while a navigation transition runs; a cancelled first
+    /// load used to leave the list empty and idle, showing a spinner that never went away.
+    @discardableResult
+    public func loadIfNeeded() -> Task<Void, Never>? {
+        guard !hasLoaded else { return nil }
+        if let firstLoad { return firstLoad }
+        let task = Task {
+            await refresh()
+            firstLoad = nil
+        }
+        firstLoad = task
+        return task
     }
 
     /// Reloads the feed from the first page.
@@ -50,6 +69,7 @@ public final class StoryFeedModel {
             loaded = []
             next = nil
             append(page)
+            hasLoaded = true
             state = .idle
         } catch {
             guard generation == self.generation else { return }

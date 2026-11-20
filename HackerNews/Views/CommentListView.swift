@@ -54,9 +54,7 @@ struct CommentListView: View {
             }
         }
         .refreshable { await model.load() }
-        .task {
-            if !model.hasLoaded { await model.load() }
-        }
+        .onAppear { model.loadIfNeeded() }
     }
 
     private var header: String {

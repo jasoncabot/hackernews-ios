@@ -70,7 +70,9 @@ struct RootView: View {
         } set: { feed in
             selection = feed
             guard let feed, feed != shownFeed else { return }
-            path.removeAll()
+            // Only touch the path when there's something to pop: writing it, even to the same
+            // empty value, is a navigation change the split view has to process mid-push.
+            if !path.isEmpty { path.removeAll() }
             shownFeed = feed
         }
     }
