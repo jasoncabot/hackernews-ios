@@ -22,23 +22,40 @@ public final class StoryFeedModel {
     public let feed: Feed
     public var sortOrder: StorySortOrder = .rank
     public private(set) var state: LoadState = .idle
+    /// Whether a first page has ever arrived, so an empty feed can be told apart from one still loading.
+    public private(set) var hasLoaded = false
 
     /// Stories in the selected sort order.
     public var stories: [Story] { sortOrder.sorted(loaded) }
-    public var hasMore: Bool { loadedIDCount < ids.count }
+    public var hasMore: Bool { next != nil }
 
     private let client: HackerNewsClient
-    private let pageSize: Int
     private var loaded: [Story] = []
-    private var ids: [Int] = []
-    private var loadedIDCount = 0
+    /// Hacker News' "More" link from the last page loaded.
+    private var next: URL?
     /// Bumped on every refresh so results from an older load are discarded.
     private var generation = 0
+    private var firstLoad: Task<Void, Never>?
 
-    public init(feed: Feed, client: HackerNewsClient, pageSize: Int = 30) {
+    public init(feed: Feed, client: HackerNewsClient) {
         self.feed = feed
         self.client = client
-        self.pageSize = pageSize
+    }
+
+    /// Starts loading the first page unless it has loaded or is already loading. Safe to call on
+    /// every appearance. The load belongs to the model rather than to a view's `.task`, because
+    /// SwiftUI can remove and re-add a view while a navigation transition runs; a cancelled first
+    /// load used to leave the list empty and idle, showing a spinner that never went away.
+    @discardableResult
+    public func loadIfNeeded() -> Task<Void, Never>? {
+        guard !hasLoaded else { return nil }
+        if let firstLoad { return firstLoad }
+        let task = Task {
+            await refresh()
+            firstLoad = nil
+        }
+        firstLoad = task
+        return task
     }
 
     /// Reloads the feed from the first page.
@@ -47,12 +64,12 @@ public final class StoryFeedModel {
         let generation = generation
         state = .loading
         do {
-            let ids = try await client.storyIDs(for: feed)
-            let firstPage = try await page(of: ids, from: 0)
+            let page = try await client.firstPage(of: feed)
             guard generation == self.generation else { return }
-            self.ids = ids
-            loaded = firstPage
-            loadedIDCount = min(pageSize, ids.count)
+            loaded = []
+            next = nil
+            append(page)
+            hasLoaded = true
             state = .idle
         } catch {
             guard generation == self.generation else { return }
@@ -69,15 +86,13 @@ public final class StoryFeedModel {
     }
 
     public func loadNextPage() async {
-        guard state != .loading, hasMore else { return }
+        guard state != .loading, let url = next else { return }
         let generation = generation
-        let start = loadedIDCount
         state = .loading
         do {
-            let next = try await page(of: ids, from: start)
+            let page = try await client.page(at: url)
             guard generation == self.generation else { return }
-            loaded += next
-            loadedIDCount = min(start + pageSize, ids.count)
+            append(page)
             state = .idle
         } catch {
             guard generation == self.generation else { return }
@@ -85,14 +100,12 @@ public final class StoryFeedModel {
         }
     }
 
-    private func page(of ids: [Int], from start: Int) async throws -> [Story] {
-        let end = min(start + pageSize, ids.count)
-        guard start < end else { return [] }
-        let rankByID = Dictionary(uniqueKeysWithValues: ids[start..<end].enumerated().map { ($1, start + $0 + 1) })
-        return try await client.stories(ids: Array(ids[start..<end])).map { story in
-            var story = story
-            story.rank = rankByID[story.id] ?? 0
-            return story
-        }
+    private func append(_ page: FeedPage) {
+        // Stories move between pages as they're voted on, so a later page can repeat one
+        // already shown. Repeated ids would confuse the list's diffing, so drop them.
+        let seen = Set(loaded.map(\.id))
+        loaded += page.stories.filter { !seen.contains($0.id) }
+        // A page with no stories is the end, whatever its links say, so loading can't loop.
+        next = page.stories.isEmpty ? nil : page.next
     }
 }

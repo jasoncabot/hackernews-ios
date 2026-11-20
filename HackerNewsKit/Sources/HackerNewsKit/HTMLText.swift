@@ -15,6 +15,12 @@ public enum HTMLText {
         var link: URL?
 
         func append(_ text: String) {
+            var text = text
+            // Whitespace between block tags (libxml2 puts a newline after each `</p>` it writes)
+            // shouldn't indent the next paragraph.
+            if preformatted == 0, result.characters.isEmpty || result.characters.last == "\n" {
+                text = String(text.drop { $0 == " " })
+            }
             guard !text.isEmpty else { return }
             var run = AttributedString(text)
             var intent: InlinePresentationIntent = []
@@ -27,6 +33,10 @@ public enum HTMLText {
         }
 
         func appendParagraphBreak() {
+            // Nor should it leave a space at the end of the previous one.
+            while result.characters.last == " " {
+                result.characters.removeLast()
+            }
             guard !result.characters.isEmpty, !result.characters.reversed().starts(with: "\n\n") else { return }
             result += AttributedString(result.characters.last == "\n" ? "\n" : "\n\n")
         }
@@ -67,6 +77,9 @@ public enum HTMLText {
             }
         }
 
+        while result.characters.last == " " {
+            result.characters.removeLast()
+        }
         return result.trimmingNewlines()
     }
 
@@ -89,7 +102,20 @@ public enum HTMLText {
         output += remaining
 
         guard collapsingWhitespace else { return output }
-        return output.replacing(/\s+/, with: " ")
+        // A plain loop rather than a regex: this runs for every run of text in every comment.
+        var collapsed = ""
+        collapsed.reserveCapacity(output.utf8.count)
+        var previousWasWhitespace = false
+        for character in output {
+            if character.isWhitespace {
+                if !previousWasWhitespace { collapsed.append(" ") }
+                previousWasWhitespace = true
+            } else {
+                collapsed.append(character)
+                previousWasWhitespace = false
+            }
+        }
+        return collapsed
     }
 
     private static func decodeEntity(_ name: Substring) -> Character? {

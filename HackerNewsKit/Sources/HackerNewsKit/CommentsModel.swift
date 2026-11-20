@@ -7,14 +7,20 @@ import Observation
 public final class CommentsModel {
 
     public let story: Story
-    public private(set) var comments: [Comment] = []
+    /// Body text for self posts such as Ask HN, which only comes with the thread.
+    public private(set) var storyText: AttributedString?
+    public private(set) var comments: [Comment] = [] {
+        didSet { filter() }
+    }
     public private(set) var state: LoadState = .idle
     public private(set) var hasLoaded = false
-    public var searchText = ""
-
-    public var filteredComments: [Comment] {
-        searchText.isEmpty ? comments : comments.filter { $0.matches(searchText) }
+    public var searchText = "" {
+        didSet { if searchText != oldValue { filter() } }
     }
+
+    /// The comments matching `searchText`, kept up to date as it changes rather than worked
+    /// out on each access: the view reads it several times per update, on every keystroke.
+    public private(set) var filteredComments: [Comment] = []
 
     /// Comments that had already been seen before this load, so they can be dimmed
     /// without dimming each comment the moment it scrolls into view.
@@ -22,6 +28,7 @@ public final class CommentsModel {
 
     private let client: HackerNewsClient
     private let readStore: ReadStore
+    private var firstLoad: Task<Void, Never>?
 
     public init(story: Story, client: HackerNewsClient, readStore: ReadStore) {
         self.story = story
@@ -29,18 +36,39 @@ public final class CommentsModel {
         self.readStore = readStore
     }
 
+    /// Starts loading the thread unless it has loaded or is already loading. Safe to call on every
+    /// appearance, and not tied to a view's `.task`, so a view briefly removed during a navigation
+    /// transition can't cancel the load and leave its spinner up for good.
+    @discardableResult
+    public func loadIfNeeded() -> Task<Void, Never>? {
+        guard !hasLoaded else { return nil }
+        if let firstLoad { return firstLoad }
+        let task = Task {
+            await load()
+            firstLoad = nil
+        }
+        firstLoad = task
+        return task
+    }
+
     public func load() async {
         state = .loading
         do {
-            let comments = try await client.comments(for: story)
+            let thread = try await client.thread(for: story)
             previouslyRead = readStore.readComments
-            self.comments = comments
+            storyText = thread.text
+            comments = thread.comments
             readStore.markCommentsViewed(of: story)
             hasLoaded = true
             state = .idle
         } catch {
             state = error.isCancellation ? .idle : .failed(error.localizedDescription)
         }
+    }
+
+    private func filter() {
+        let keywords = Comment.keywords(in: searchText)
+        filteredComments = keywords.isEmpty ? comments : comments.filter { $0.matches(keywords: keywords) }
     }
 
     public func markRead(_ comment: Comment) {

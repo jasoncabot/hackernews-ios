@@ -8,8 +8,15 @@ let package = Package(
     products: [
         .library(name: "HackerNewsKit", targets: ["HackerNewsKit"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/tid-kijyun/Kanna.git", from: "6.1.0"),
+    ],
     targets: [
-        .target(name: "HackerNewsKit"),
-        .testTarget(name: "HackerNewsKitTests", dependencies: ["HackerNewsKit"]),
+        .target(name: "HackerNewsKit", dependencies: ["Kanna"]),
+        .testTarget(
+            name: "HackerNewsKitTests",
+            dependencies: ["HackerNewsKit"],
+            resources: [.copy("Pages")]
+        ),
     ]
 )
