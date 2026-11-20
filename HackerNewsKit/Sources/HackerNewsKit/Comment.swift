@@ -3,13 +3,14 @@ import Foundation
 public struct Comment: Identifiable, Hashable, Sendable {
     public let id: Int
     public let author: String
-    public let date: Date
+    public let date: Date?
     public let text: AttributedString
     /// 0 for replies to the story, 1 for replies to those, and so on.
     public let depth: Int
+    /// Deleted and flagged comments are kept as placeholders so their replies stay under the right parent.
     public let isDeleted: Bool
 
-    public init(id: Int, author: String, date: Date, text: AttributedString, depth: Int, isDeleted: Bool = false) {
+    public init(id: Int, author: String, date: Date? = nil, text: AttributedString, depth: Int, isDeleted: Bool = false) {
         self.id = id
         self.author = author
         self.date = date
@@ -31,57 +32,26 @@ public struct Comment: Identifiable, Hashable, Sendable {
     }
 }
 
-/// An item from the Algolia API, which returns a whole comment tree in a single request.
-struct AlgoliaItem: Decodable {
-    let id: Int
-    let author: String?
-    let text: String?
-    let createdAt: TimeInterval
-    let children: [AlgoliaItem]
+/// A story's discussion page: the post's own text, if any, and every comment in display order.
+public struct CommentThread: Sendable {
+    /// Body text for self posts such as Ask HN.
+    public var text: AttributedString?
+    public var comments: [Comment]
 
-    enum CodingKeys: String, CodingKey {
-        case id, author, text, children
-        case createdAt = "created_at_i"
+    public init(text: AttributedString? = nil, comments: [Comment] = []) {
+        self.text = text
+        self.comments = comments
     }
+}
 
-    /// Flattens the tree into display order. Top-level comments follow `ranking`
-    /// (Hacker News' own ordering); deeper replies keep Algolia's chronological order.
-    func flattenedComments(ranking: [Int] = []) -> [Comment] {
-        let rank = Dictionary(ranking.enumerated().map { ($1, $0) }, uniquingKeysWith: { first, _ in first })
-        let topLevel = children.enumerated().sorted { lhs, rhs in
-            (rank[lhs.element.id] ?? ranking.count + lhs.offset) < (rank[rhs.element.id] ?? ranking.count + rhs.offset)
-        }
-        var result: [Comment] = []
-        for (_, child) in topLevel {
-            child.append(to: &result, depth: 0)
-        }
-        return result
-    }
+/// One page of a feed, and where the next one is.
+public struct FeedPage: Sendable {
+    public var stories: [Story]
+    /// The page Hacker News' "More" link points to, or nil on the last page.
+    public var next: URL?
 
-    private func append(to comments: inout [Comment], depth: Int) {
-        if let author, let text {
-            comments.append(Comment(
-                id: id,
-                author: author,
-                date: Date(timeIntervalSince1970: createdAt),
-                text: HTMLText.attributedString(from: text),
-                depth: depth
-            ))
-        } else if !children.isEmpty {
-            // Keep a placeholder so replies to a deleted comment aren't attached to the wrong parent.
-            comments.append(Comment(
-                id: id,
-                author: "",
-                date: Date(timeIntervalSince1970: createdAt),
-                text: AttributedString("[deleted]"),
-                depth: depth,
-                isDeleted: true
-            ))
-        } else {
-            return
-        }
-        for child in children {
-            child.append(to: &comments, depth: depth + 1)
-        }
+    public init(stories: [Story], next: URL? = nil) {
+        self.stories = stories
+        self.next = next
     }
 }

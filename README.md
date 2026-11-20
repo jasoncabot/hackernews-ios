@@ -25,12 +25,12 @@ iPad screenshots are alongside them in [`fastlane/screenshots/en-US`](fastlane/s
 ## Building
 Requires Xcode 26 or later. Open `HackerNews.xcodeproj` and run the `HackerNews` scheme; the app has no third-party dependencies.
 
-The app is written in SwiftUI with Swift 6 strict concurrency and targets iOS 18. Stories come from the [official Hacker News API](https://github.com/HackerNews/API) and comment threads from the [Algolia HN Search API](https://hn.algolia.com/api), which returns a whole thread in one request.
+The app is written in SwiftUI with Swift 6 strict concurrency and targets iOS 18. Stories and comment threads are read straight from news.ycombinator.com's pages with [Kanna](https://github.com/tid-kijyun/Kanna), so they appear exactly as the site ranks them, one request per page.
 
 | Folder | Contents |
 |---|---|
 | `HackerNews/` | The SwiftUI app |
-| `HackerNewsKit/` | A Swift package with the models, API client, HTML parsing and view models |
+| `HackerNewsKit/` | A Swift package with the models, Hacker News page parser and client, HTML-to-text conversion and view models |
 | `HackerNewsUITests/` | The UI test that captures App Store screenshots |
 | `fastlane/` | Test, screenshot and release automation, plus App Store metadata |
 

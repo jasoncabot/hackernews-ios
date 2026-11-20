@@ -3,21 +3,20 @@ import SwiftUI
 
 struct StoryListView: View {
 
-    @Environment(\.hackerNews) private var client
-    @Environment(ReadStore.self) private var readStore
     @State private var model: StoryFeedModel
-    @State private var commentsStory: Story?
+    private let showComments: (Story) -> Void
 
     // The model is created here rather than in `.task` so the list, toolbar and title
     // are all in place on the first frame of the push instead of being swapped in mid-animation.
-    init(feed: Feed, client: HackerNewsClient) {
+    init(feed: Feed, client: HackerNewsClient, showComments: @escaping (Story) -> Void) {
         _model = State(initialValue: StoryFeedModel(feed: feed, client: client))
+        self.showComments = showComments
     }
 
     var body: some View {
         List {
             ForEach(model.stories) { story in
-                StoryRow(story: story) { commentsStory = story }
+                StoryRow(story: story) { showComments(story) }
                     .compactListRow()
                     .hackerNewsRowBackground()
                     .onAppear {
@@ -55,9 +54,10 @@ struct StoryListView: View {
             if model.stories.isEmpty { await model.refresh() }
         }
         .navigationTitle(model.feed.title)
-        .navigationDestination(item: $commentsStory) { story in
-            CommentListView(story: story, client: client, readStore: readStore)
-        }
+        // A large title is taller than the inline one on the comments screen, so pushing from the
+        // top of the list collapsed the bar mid-transition and shifted the list underneath.
+        // `.inlineLarge` keeps the title prominent in a bar that's the same height on both screens.
+        .toolbarTitleDisplayMode(.inlineLarge)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu {
@@ -111,7 +111,7 @@ struct StoryRow: View {
                         .fontWeight(hasRead ? .regular : .semibold)
                         .foregroundStyle(hasRead ? .secondary : .primary)
 
-                    Text("\(story.points.counted("point", "points")) by \(story.author) \(story.date, format: .relative(presentation: .named))")
+                    Text(story.byline)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
 
@@ -173,10 +173,23 @@ private struct CommentCountBadge: View {
 
 #Preview {
     NavigationStack {
-        StoryListView(feed: .front, client: .live)
+        StoryListView(feed: .front, client: .live) { _ in }
     }
     .storyBrowser()
     .environment(ReadStore())
+}
+
+extension Story {
+    /// "170 points by pg 2 hours ago". Job ads have no points or author, so they show only their age.
+    var byline: String {
+        [
+            points?.counted("point", "points"),
+            author.map { String(localized: "by \($0)") },
+            date?.formatted(.relative(presentation: .named)),
+        ]
+        .compactMap(\.self)
+        .joined(separator: " ")
+    }
 }
 
 extension Int {

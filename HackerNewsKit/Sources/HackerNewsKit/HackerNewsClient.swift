@@ -1,7 +1,10 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
-/// Talks to the official Hacker News Firebase API for stories and to the Algolia API
-/// for comment threads, which returns a whole thread in one request instead of one per comment.
+/// Reads feeds and comment threads from news.ycombinator.com's HTML pages, which show stories
+/// and comments exactly as the site ranks them, in one request per page.
 public struct HackerNewsClient: Sendable {
 
     public typealias Fetch = @Sendable (URL) async throws -> Data
@@ -20,39 +23,36 @@ public struct HackerNewsClient: Sendable {
         return data
     }
 
-    private static let firebase = URL(string: "https://hacker-news.firebaseio.com/v0/")!
-    private static let algolia = URL(string: "https://hn.algolia.com/api/v1/")!
+    static let site = URL(string: "https://news.ycombinator.com/")!
 
-    /// Story ids for a feed, in the order they appear on the site.
-    public func storyIDs(for feed: Feed) async throws -> [Int] {
-        let data = try await fetch(Self.firebase.appending(path: "\(feed.endpoint).json"))
-        return try JSONDecoder().decode([Int].self, from: data)
+    /// Very large threads used to be split across pages; this caps how many are followed.
+    private static let maxCommentPages = 20
+
+    /// The first page of a feed.
+    public func firstPage(of feed: Feed) async throws -> FeedPage {
+        try await page(at: Self.site.appending(path: feed.path))
     }
 
-    /// Fetches stories concurrently, returning them in the order of `ids`.
-    /// Deleted and dead stories are left out.
-    public func stories(ids: [Int]) async throws -> [Story] {
-        try await withThrowingTaskGroup(of: (Int, Story?).self) { group in
-            for (index, id) in ids.enumerated() {
-                group.addTask { (index, try await story(id: id)) }
-            }
-            var stories = [Story?](repeating: nil, count: ids.count)
-            for try await (index, story) in group {
-                stories[index] = story
-            }
-            return stories.compactMap { $0 }
+    /// A page of stories, such as a previous page's `next`.
+    public func page(at url: URL) async throws -> FeedPage {
+        let data = try await fetch(url)
+        return try PageParser.feedPage(from: data, url: url)
+    }
+
+    /// The story's text and full comment thread, in the order Hacker News shows them.
+    public func thread(for story: Story) async throws -> CommentThread {
+        var thread = CommentThread()
+        var seen = Set<Int>()
+        var next: URL? = story.discussionURL
+        var pages = 0
+        while let url = next, pages < Self.maxCommentPages {
+            let data = try await fetch(url)
+            let page = try PageParser.commentPage(from: data, url: url)
+            if pages == 0 { thread.text = page.thread.text }
+            thread.comments += page.thread.comments.filter { seen.insert($0.id).inserted }
+            next = page.next
+            pages += 1
         }
-    }
-
-    public func story(id: Int) async throws -> Story? {
-        let data = try await fetch(Self.firebase.appending(path: "item/\(id).json"))
-        return try? JSONDecoder().decode(Story?.self, from: data)
-    }
-
-    /// The story's full comment thread, flattened into display order.
-    public func comments(for story: Story) async throws -> [Comment] {
-        let data = try await fetch(Self.algolia.appending(path: "items/\(story.id)"))
-        let item = try JSONDecoder().decode(AlgoliaItem.self, from: data)
-        return item.flattenedComments(ranking: story.commentIDs)
+        return thread
     }
 }

@@ -45,14 +45,17 @@ private struct StoryBrowserModifier: ViewModifier {
     /// Presents Safari through UIKit rather than a SwiftUI cover, so it keeps its own
     /// slide-in-from-the-right transition and can be swiped away from the left edge.
     private func presentSafari(for story: Story) {
-        guard let presenter = UIApplication.shared.topViewController else {
+        // SFSafariViewController raises an exception for anything but http and https.
+        guard ["http", "https"].contains(story.link.scheme?.lowercased()),
+              let presenter = UIApplication.shared.topViewController else {
             openURL(story.link)
             return
         }
 
         safariDelegate.makeComments = { [client, readStore] done in
             // Presented by UIKit from the share sheet, so the environment has to be passed along.
-            UIHostingController(rootView: NavigationStack {
+            // `done` also runs when the sheet is swiped away, not just when Done is tapped.
+            DismissAwareHostingController(onDismiss: done, rootView: NavigationStack {
                 CommentListView(story: story, client: client, readStore: readStore)
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
@@ -89,13 +92,38 @@ private extension UIApplication {
     var topViewController: UIViewController? {
         let window = connectedScenes
             .compactMap { $0 as? UIWindowScene }
+            .filter { $0.activationState == .foregroundActive }
             .flatMap(\.windows)
             .first(where: \.isKeyWindow)
         var top = window?.rootViewController
-        while let presented = top?.presentedViewController {
+        // Something on its way out can't present anything; UIKit just logs a warning and does nothing.
+        while let presented = top?.presentedViewController, !presented.isBeingDismissed {
             top = presented
         }
         return top
+    }
+}
+
+/// Calls `onDismiss` when it goes away, whether that's from a button or a swipe down.
+private final class DismissAwareHostingController<Content: View>: UIHostingController<Content> {
+
+    private let onDismiss: @MainActor () -> Void
+
+    init(onDismiss: @escaping @MainActor () -> Void, rootView: Content) {
+        self.onDismiss = onDismiss
+        super.init(rootView: rootView)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) is not supported")
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if isBeingDismissed || navigationController?.isBeingDismissed == true {
+            onDismiss()
+        }
     }
 }
 
@@ -124,16 +152,20 @@ private nonisolated final class ViewCommentsActivity: UIActivity, @unchecked Sen
 
     // Returning a view controller lets UIKit present it once the share sheet has gone away.
     // It holds the activity strongly so Done still works after the share sheet releases it;
-    // the cycle is broken when Done is tapped.
+    // the cycle is broken when the comments are closed, by Done or by swiping them away.
     override var activityViewController: UIViewController? {
         MainActor.assumeIsolated {
             if viewController == nil {
-                viewController = makeViewController {
-                    self.activityDidFinish(true)
-                    self.viewController = nil
-                }
+                viewController = makeViewController { self.finish() }
             }
             return viewController
         }
+    }
+
+    /// Runs for Done and again as the sheet disappears, so only the first call does anything.
+    @MainActor private func finish() {
+        guard viewController != nil else { return }
+        viewController = nil
+        activityDidFinish(true)
     }
 }

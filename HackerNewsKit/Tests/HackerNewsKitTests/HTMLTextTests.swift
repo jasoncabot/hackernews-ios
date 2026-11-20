@@ -13,6 +13,12 @@ struct HTMLTextTests {
         #expect(String(text.characters) == "First\n\nSecond\n\nThird")
     }
 
+    @Test func whitespaceBetweenParagraphsIsDropped() {
+        // How libxml2 writes Hacker News' unclosed `<p>` tags back out.
+        let text = HTMLText.attributedString(from: "First <p>Second</p>\n<p> Third</p>\n")
+        #expect(String(text.characters) == "First\n\nSecond\n\nThird")
+    }
+
     @Test(arguments: [
         ("&gt; quoted", "> quoted"),
         ("it&#x27;s", "it's"),

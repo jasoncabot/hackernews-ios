@@ -7,6 +7,8 @@ import Observation
 public final class CommentsModel {
 
     public let story: Story
+    /// Body text for self posts such as Ask HN, which only comes with the thread.
+    public private(set) var storyText: AttributedString?
     public private(set) var comments: [Comment] = []
     public private(set) var state: LoadState = .idle
     public private(set) var hasLoaded = false
@@ -32,9 +34,10 @@ public final class CommentsModel {
     public func load() async {
         state = .loading
         do {
-            let comments = try await client.comments(for: story)
+            let thread = try await client.thread(for: story)
             previouslyRead = readStore.readComments
-            self.comments = comments
+            storyText = thread.text
+            comments = thread.comments
             readStore.markCommentsViewed(of: story)
             hasLoaded = true
             state = .idle

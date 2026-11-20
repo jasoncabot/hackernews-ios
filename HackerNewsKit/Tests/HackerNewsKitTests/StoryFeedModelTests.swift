@@ -5,16 +5,29 @@ import Testing
 @MainActor
 struct StoryFeedModelTests {
 
-    private func makeClient(ids: [Int]) -> HackerNewsClient {
-        var responses = ["topstories.json": "[\(ids.map(String.init).joined(separator: ","))]"]
-        for id in ids {
-            responses["item/\(id).json"] = Fixture.story(id: id, score: id, comments: 100 - id)
+    /// A feed split into pages of `pageSize`, each linking to the next like Hacker News does.
+    private func makeClient(ids: [Int], pageSize: Int = 10) -> HackerNewsClient {
+        .stub(makePages(ids: ids, pageSize: pageSize))
+    }
+
+    private func makePages(ids: [Int], pageSize: Int = 10) -> [String: String] {
+        var responses: [String: String] = [:]
+        let pages = stride(from: 0, to: ids.count, by: pageSize).map { Array(ids[$0..<min($0 + pageSize, ids.count)]) }
+        for (index, page) in pages.enumerated() {
+            let key = index == 0 ? "news" : "news?p=\(index + 1)"
+            let rows = page.map { Fixture.Row(id: $0, points: $0, comments: 100 - $0) }
+            var html = Fixture.feed(rows, more: index + 1 < pages.count ? "?p=\(index + 2)" : nil)
+            // Ranks continue across pages on the real site.
+            for (offset, _) in page.enumerated().reversed() {
+                html = html.replacingOccurrences(of: "<span class=\"rank\">\(offset + 1).</span>", with: "<span class=\"rank\">\(index * pageSize + offset + 1).</span>")
+            }
+            responses[key] = html
         }
-        return .stub(responses)
+        return responses
     }
 
     @Test func refreshLoadsFirstPageWithRanks() async {
-        let model = StoryFeedModel(feed: .front, client: makeClient(ids: Array(101...125)), pageSize: 10)
+        let model = StoryFeedModel(feed: .front, client: makeClient(ids: Array(101...125)))
         await model.refresh()
 
         #expect(model.state == .idle)
@@ -24,7 +37,7 @@ struct StoryFeedModelTests {
     }
 
     @Test func loadsFurtherPagesUntilTheEnd() async {
-        let model = StoryFeedModel(feed: .front, client: makeClient(ids: Array(1...25)), pageSize: 10)
+        let model = StoryFeedModel(feed: .front, client: makeClient(ids: Array(1...25)))
         await model.refresh()
         await model.loadNextPage()
         await model.loadNextPage()
@@ -37,7 +50,7 @@ struct StoryFeedModelTests {
     }
 
     @Test func loadMoreOnlyTriggersNearTheEnd() async {
-        let model = StoryFeedModel(feed: .front, client: makeClient(ids: Array(1...60)), pageSize: 30)
+        let model = StoryFeedModel(feed: .front, client: makeClient(ids: Array(1...60), pageSize: 30))
         await model.refresh()
 
         await model.loadMore(ifNeededAfter: model.stories[5])
@@ -73,17 +86,12 @@ struct StoryFeedModelTests {
 
     @Test func refreshDiscardsAnInFlightPage() async throws {
         let gate = Gate()
-        let ids = Array(1...20)
+        let pages = makePages(ids: Array(1...20))
         let client = HackerNewsClient { url in
-            let path = url.path()
-            if path.hasSuffix("topstories.json") {
-                return Data("[\(ids.map(String.init).joined(separator: ","))]".utf8)
-            }
-            let id = Int(url.deletingPathExtension().lastPathComponent)!
-            if id > 10 { await gate.wait() }
-            return Data(Fixture.story(id: id).utf8)
+            if url.query()?.contains("p=2") == true { await gate.wait() }
+            return try Fixture.response(for: url, from: pages)
         }
-        let model = StoryFeedModel(feed: .front, client: client, pageSize: 10)
+        let model = StoryFeedModel(feed: .front, client: client)
         await model.refresh()
 
         let nextPage = Task { await model.loadNextPage() }
@@ -97,6 +105,18 @@ struct StoryFeedModelTests {
 
         #expect(model.stories.map(\.id) == Array(1...10))
     }
+
+    @Test func dropsStoriesRepeatedOnTheNextPage() async {
+        let client = HackerNewsClient.stub([
+            "news": Fixture.feed([.init(id: 1), .init(id: 2)], more: "?p=2"),
+            "news?p=2": Fixture.feed([.init(id: 2), .init(id: 3)]),
+        ])
+        let model = StoryFeedModel(feed: .front, client: client)
+        await model.refresh()
+        await model.loadNextPage()
+        #expect(model.stories.map(\.id) == [1, 2, 3])
+        #expect(!model.hasMore)
+    }
 }
 
 @MainActor
@@ -104,7 +124,7 @@ struct CommentsModelTests {
 
     @Test func dimsOnlyCommentsReadOnAnEarlierLoad() async {
         let client = HackerNewsClient.stub([
-            "items/1": #"{"id":1,"author":"op","created_at_i":0,"children":[{"id":10,"author":"a","text":"Hi","created_at_i":0,"children":[]},{"id":20,"author":"b","text":"Yo","created_at_i":0,"children":[]}]}"#,
+            "item?id=1": Fixture.thread(id: 1, text: "Body", [.init(id: 10, depth: 0, html: "Hi"), .init(id: 20, depth: 0, html: "Yo")]),
         ])
         let store = ReadStore()
         let story = Story(id: 1, title: "Story", author: "op")
@@ -112,6 +132,7 @@ struct CommentsModelTests {
 
         await model.load()
         #expect(store.hasViewedComments(of: story))
+        #expect(model.storyText.map { String($0.characters) } == "Body")
         #expect(!model.isPreviouslyRead(model.comments[0]))
 
         model.markRead(model.comments[0])
@@ -124,7 +145,7 @@ struct CommentsModelTests {
 
     @Test func filtersBySearchText() async {
         let client = HackerNewsClient.stub([
-            "items/1": #"{"id":1,"author":"op","created_at_i":0,"children":[{"id":10,"author":"a","text":"Swift","created_at_i":0,"children":[]},{"id":20,"author":"b","text":"Rust","created_at_i":0,"children":[]}]}"#,
+            "item?id=1": Fixture.thread(id: 1, [.init(id: 10, depth: 0, html: "Swift"), .init(id: 20, depth: 0, html: "Rust")]),
         ])
         let model = CommentsModel(story: Story(id: 1, title: "Story", author: "op"), client: client, readStore: ReadStore())
         await model.load()
