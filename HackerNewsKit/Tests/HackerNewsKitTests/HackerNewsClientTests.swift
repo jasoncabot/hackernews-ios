@@ -163,4 +163,11 @@ struct HackerNewsClientTests {
         #expect(comment.matches("rust concurrency"))
         #expect(!comment.matches("rust python"))
     }
+
+    @Test func searchIgnoresAccents() {
+        let comment = Comment(id: 1, author: "a", text: "Café culture in Zürich", depth: 0)
+        #expect(comment.matches("cafe"))
+        #expect(comment.matches("ZURICH"))
+        #expect(comment.matches("CAFÉ"))
+    }
 }

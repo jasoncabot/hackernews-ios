@@ -9,6 +9,9 @@ public struct Comment: Identifiable, Hashable, Sendable {
     public let depth: Int
     /// Deleted and flagged comments are kept as placeholders so their replies stay under the right parent.
     public let isDeleted: Bool
+    public let plainText: String
+    /// `plainText` folded for searching, worked out once rather than on every keystroke.
+    private let searchKey: String
 
     public init(id: Int, author: String, date: Date? = nil, text: AttributedString, depth: Int, isDeleted: Bool = false) {
         self.id = id
@@ -17,18 +20,28 @@ public struct Comment: Identifiable, Hashable, Sendable {
         self.text = text
         self.depth = depth
         self.isDeleted = isDeleted
+        plainText = String(text.characters)
+        searchKey = Self.fold(plainText)
     }
 
-    public var plainText: String {
-        String(text.characters)
-    }
-
-    /// Whether any of the whitespace-separated keywords appears in the comment, ignoring case.
+    /// Whether any of the whitespace-separated keywords appears in the comment,
+    /// ignoring case and accents.
     public func matches(_ query: String) -> Bool {
-        let keywords = query.split(whereSeparator: \.isWhitespace)
-        guard !keywords.isEmpty else { return true }
-        let text = plainText
-        return keywords.contains { text.localizedCaseInsensitiveContains($0) }
+        matches(keywords: Self.keywords(in: query))
+    }
+
+    /// Like `matches(_:)`, with the query already split by `keywords(in:)`,
+    /// so a search folds it once rather than once per comment.
+    public func matches(keywords: [String]) -> Bool {
+        keywords.isEmpty || keywords.contains { searchKey.contains($0) }
+    }
+
+    public static func keywords(in query: String) -> [String] {
+        query.split(whereSeparator: \.isWhitespace).map { fold(String($0)) }
+    }
+
+    private static func fold(_ text: String) -> String {
+        text.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
     }
 }
 

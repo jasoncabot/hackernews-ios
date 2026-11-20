@@ -179,13 +179,6 @@ private struct CommentRow: View {
         }
         // Deep threads would leave no room for text on a phone, so stop indenting eventually.
         .padding(.leading, CGFloat(min(comment.depth, 6)) * 12)
-        .contextMenu {
-            if !comment.isDeleted {
-                Button("Copy", systemImage: "doc.on.doc") {
-                    UIPasteboard.general.string = comment.plainText
-                }
-            }
-        }
     }
 }
 

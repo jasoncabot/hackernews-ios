@@ -9,14 +9,18 @@ public final class CommentsModel {
     public let story: Story
     /// Body text for self posts such as Ask HN, which only comes with the thread.
     public private(set) var storyText: AttributedString?
-    public private(set) var comments: [Comment] = []
+    public private(set) var comments: [Comment] = [] {
+        didSet { filter() }
+    }
     public private(set) var state: LoadState = .idle
     public private(set) var hasLoaded = false
-    public var searchText = ""
-
-    public var filteredComments: [Comment] {
-        searchText.isEmpty ? comments : comments.filter { $0.matches(searchText) }
+    public var searchText = "" {
+        didSet { if searchText != oldValue { filter() } }
     }
+
+    /// The comments matching `searchText`, kept up to date as it changes rather than worked
+    /// out on each access: the view reads it several times per update, on every keystroke.
+    public private(set) var filteredComments: [Comment] = []
 
     /// Comments that had already been seen before this load, so they can be dimmed
     /// without dimming each comment the moment it scrolls into view.
@@ -44,6 +48,11 @@ public final class CommentsModel {
         } catch {
             state = error.isCancellation ? .idle : .failed(error.localizedDescription)
         }
+    }
+
+    private func filter() {
+        let keywords = Comment.keywords(in: searchText)
+        filteredComments = keywords.isEmpty ? comments : comments.filter { $0.matches(keywords: keywords) }
     }
 
     public func markRead(_ comment: Comment) {
